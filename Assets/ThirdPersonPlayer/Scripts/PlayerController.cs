@@ -50,9 +50,5 @@ public class PlayerController : MonoBehaviour {
         //float animationSpeedPercent = (running ? 1 : .05f) * inputDirection.magnitude;
         //animator.SetFloat("speedPercent", animationSpeedPercent);
 
-        
-
-
-        
 	}
 }
