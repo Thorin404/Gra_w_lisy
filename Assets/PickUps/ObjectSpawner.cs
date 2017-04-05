@@ -2,45 +2,56 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ObjectSpawner : MonoBehaviour {
-
-    public Transform spawnLocation;
+public class ObjectSpawner : MonoBehaviour
+{
+    public Transform spawnSpotTransform;
     public GameObject prefab;
-    public int countX;
-    public int countY;
-    public float offset;
 
+    public int objectsNumber;
+    public float spawnInterval;
+    public bool randomRotation;
+
+    private bool mStartSpawn = false;
     private bool mSpawned = false;
 
-    // Use this for initialization
+    private float mCurrentTime;
+    private int mCurrentObject;
+
     void Start()
     {
-     
+        mCurrentObject = 0;
+        mCurrentTime = 0.0f;
     }
 
-    // Update is called once per frame
-    void Update () {
-		
-	}
+    void Update()
+    {
+        if (mStartSpawn && !mSpawned)
+        {
+            mCurrentTime += Time.deltaTime;
+            if (mCurrentTime > spawnInterval)
+            {
+                SpawnPrefab();
+                mCurrentTime = 0.0f;
+                mCurrentObject++;
+            }
+            if(mCurrentObject > objectsNumber)
+            {
+                mSpawned = true;
+            }
+        }
+    }
 
     void OnTriggerEnter(Collider other)
     {
-        if (!mSpawned)
+        if (!mStartSpawn && !mSpawned)
         {
-            SpawnPrefabs();
-            mSpawned = true;
+            mStartSpawn = true;
         }
     }
 
-    public void SpawnPrefabs()
+    public void SpawnPrefab()
     {
-        for (int z = -countX; z < countX; z++)
-        {
-            for (int x = -countY; x < countY; x++)
-            {
-                Vector3 position = new Vector3(spawnLocation.position.x + (x* offset), spawnLocation.position.y, spawnLocation.position.z + (z * offset));
-                Instantiate(prefab, position, Quaternion.identity);
-            }
-        }
+        Debug.Log("Spawn prefab");
+        Instantiate(prefab, spawnSpotTransform.position, randomRotation ? Random.rotation : Quaternion.identity );
     }
 }

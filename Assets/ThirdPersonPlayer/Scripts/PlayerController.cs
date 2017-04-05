@@ -116,7 +116,7 @@ public class PlayerController : MonoBehaviour
 
     void OnTriggerStay(Collider other)
     {
-        Debug.Log("PlayerTriggerStay");
+        //Debug.Log("PlayerTriggerStay");
         if ((other.gameObject.name == "Barrier") || (other.gameObject.name == "Barrier(Clone)"))
         {
             cover = true;
