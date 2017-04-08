@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour {
 
-	public GameObject player;
+    public Transform cameraTarget;
+    public float distanceFromTarget;
+    public float rotationAngle;
 
-	private Vector3 offset;
-
-	void Start () {
-		offset = transform.position - player.transform.position;
-	}
+    void Start () {
+        transform.rotation = Quaternion.Euler(rotationAngle, rotationAngle, 0.0f);
+    }
 
 	void LateUpdate () {
-		transform.position = player.transform.position + offset;
-	}
+        transform.position = cameraTarget.position - transform.forward * distanceFromTarget;
+    }
 }

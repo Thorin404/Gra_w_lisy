@@ -3,6 +3,7 @@ using System.Collections;
 
 public class PlayerController : MonoBehaviour
 {
+    public GameController gameController;
 
     public float walkSpeed = 2;
     public float runSpeed = 6;
@@ -31,6 +32,8 @@ public class PlayerController : MonoBehaviour
         //animator = GetComponent<Animator>();
         cameraT = Camera.main.transform;
         controller = GetComponent<CharacterController>();
+
+        gameController.SetPlayerStatus("Walking");
     }
 
     void Update()
@@ -113,16 +116,35 @@ public class PlayerController : MonoBehaviour
 
     void OnTriggerStay(Collider other)
     {
-        Debug.Log("PlayerTriggerStay");
-        if ((other.gameObject.name == "Barrier"))
+        //Debug.Log("PlayerTriggerStay");
+        if ((other.gameObject.name == "Barrier") || (other.gameObject.name == "Barrier(Clone)"))
         {
             cover = true;
             coverCollider = other;
+            gameController.SetPlayerStatus("Hiding");
         }
+
     }
+
     void OnTriggerExit(Collider other)
     {
-        cover = false;
+        if (other.gameObject.name == "Barrier")
+        {
+            cover = false;
+            gameController.SetPlayerStatus("Walking");
+        }
+    }
+
+    void OnCollisionEnter(Collision other)
+    {
+        Debug.Log("OnCollisionEnter");
+        Debug.Log(other.gameObject.name);
+        if (other.gameObject.name == "Egg(Clone)" || other.gameObject.name == "Egg")
+        {
+            Destroy(other.gameObject);
+            gameController.AddScore();
+        }
+
     }
 
 
