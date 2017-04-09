@@ -13,6 +13,7 @@ public class CameraSystemController : MonoBehaviour
     public float startDelay = 0.5f;
     public float transitionDelay = 0.8f;
     public bool cycling = false;
+    public bool lerp = true;
 
     private int mCurrentPoint = 0;
     private int mNextPoint = 0;
@@ -20,6 +21,13 @@ public class CameraSystemController : MonoBehaviour
     private float mStartTime;
     private float mJourneyLength;
     private bool mTransitionPending = false;
+    private bool mSystemActive = false;
+
+    public bool CameraSystemIsActive
+    {
+        get { return mSystemActive; }
+        private set { mSystemActive = value; }
+    }
 
     private void SetCameraTransrofm(int i)
     {
@@ -51,22 +59,41 @@ public class CameraSystemController : MonoBehaviour
 
     private float LerpCamera(int fromPoint, int toPoint)
     {
-        float distCovered = (Time.time - mStartTime) * speed;
-        float fracJourney = distCovered / mJourneyLength;
+        float distCovered = 0.0f;
+        float fracJourney = 0.0f;
+        if (lerp)
+        {
+            distCovered = (Time.time - mStartTime) * speed;
+            fracJourney = distCovered / mJourneyLength;
 
-        sceneCamera.transform.position = Vector3.Lerp(cameraPositions[fromPoint].position, cameraPositions[toPoint].position, fracJourney);
-        sceneCamera.transform.rotation = Quaternion.Lerp(cameraPositions[fromPoint].rotation, cameraPositions[toPoint].rotation, fracJourney);
-
+            sceneCamera.transform.position = Vector3.Lerp(cameraPositions[fromPoint].position, cameraPositions[toPoint].position, fracJourney);
+            sceneCamera.transform.rotation = Quaternion.Lerp(cameraPositions[fromPoint].rotation, cameraPositions[toPoint].rotation, fracJourney);
+        }
+        else
+        {
+            SetCameraTransrofm(toPoint);
+            fracJourney = 1.1f;
+        }
         return fracJourney;
     }
 
     void Start()
+    {
+        ResetCameras();
+    }
+
+    public void ResetCameras()
     {
         mCurrentPoint = 0;
         mNextPoint = mCurrentPoint + 1;
 
         SetCameraTransrofm(mCurrentPoint);
         StartCoroutine(NextPoint(startDelay));
+
+        sceneCamera.gameObject.SetActive(true);
+        stageIntroUI.SetActive(true);
+
+        CameraSystemIsActive = true;
     }
 
     void LateUpdate()
@@ -102,5 +129,6 @@ public class CameraSystemController : MonoBehaviour
         mTransitionPending = false;
         sceneCamera.gameObject.SetActive(false);
         stageIntroUI.SetActive(false);
+        CameraSystemIsActive = false;
     }
 }
