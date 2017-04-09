@@ -7,6 +7,7 @@ public class CameraSwitch : MonoBehaviour {
 
     public GameObject[] cameras;
     public Text buttonText;
+    public string button;
 
     private int mActiveObject;
 
@@ -16,7 +17,7 @@ public class CameraSwitch : MonoBehaviour {
 
     void LateUpdate()
     {
-        if (Input.GetButtonDown("Fire1"))
+        if (Input.GetButtonDown(button))
         {
             NextCamera();
         }
