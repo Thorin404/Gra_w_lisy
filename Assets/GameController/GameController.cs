@@ -37,9 +37,11 @@ public class GameController : MonoBehaviour {
 
 
     void Start () {
-        gameStatus.text = "Collected eggs:" + mScore;
 
         cameraSystem = GetComponent<CameraSystemController>();
+        cameraSystem.Reset();
+
+        gameStatus.text = "Collected eggs:" + mScore;
 
         playerController.gameObject.SetActive(false);
         primaryCamera.gameObject.SetActive(false);
@@ -51,7 +53,7 @@ public class GameController : MonoBehaviour {
         {
             StageLogic();
         }
-        else if(!cameraSystem.CameraSystemIsActive)
+        else if(!cameraSystem.SystemIsActive)
         {
             StartStage();
         }

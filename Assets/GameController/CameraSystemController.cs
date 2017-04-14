@@ -9,24 +9,35 @@ public class CameraSystemController : MonoBehaviour
     public Camera sceneCamera;
     public Transform[] cameraPositions;
 
-    public float speed = 1.0f;
-    public float startDelay = 0.5f;
+    public float cameraSpeed = 1.0f;
+    public float rotationSpeed = 1.0f;
     public float transitionDelay = 0.8f;
-    public bool cycling = false;
-    public bool lerp = true;
 
-    private int mCurrentPoint = 0;
-    private int mNextPoint = 0;
+    public bool cycling = true;
 
-    private float mStartTime;
-    private float mJourneyLength;
-    private bool mTransitionPending = false;
+    private IEnumerator mCurrentCoroutine;
     private bool mSystemActive = false;
 
-    public bool CameraSystemIsActive
+    public bool SystemIsActive
     {
         get { return mSystemActive; }
         private set { mSystemActive = value; }
+    }
+
+    void Start()
+    {
+        //Reset();
+    }
+
+    void Update()
+    {
+        if (Input.GetButtonDown(skipButton))
+        {
+            if (mCurrentCoroutine != null)
+            {
+                Skip();
+            }
+        }
     }
 
     private void SetCameraTransrofm(int i)
@@ -35,100 +46,53 @@ public class CameraSystemController : MonoBehaviour
         sceneCamera.transform.rotation = cameraPositions[i].rotation;
     }
 
-    private IEnumerator NextPoint(float time)
+    public void Reset()
     {
-        yield return new WaitForSeconds(time);
-        mTransitionPending = true;
-        SetTimeAndDistance();
-    }
-
-    private void SetTimeAndDistance()
-    {
-        if (mCurrentPoint == cameraPositions.Length)
-        {
-            mCurrentPoint = 0;
-            mNextPoint = mCurrentPoint + 1;
-        }
-        else if (!cycling && mCurrentPoint == cameraPositions.Length - 1)
-        {
-            StopCamera();
-        }
-        mStartTime = Time.time;
-        mJourneyLength = Vector3.Distance(cameraPositions[mCurrentPoint].position, cameraPositions[mNextPoint].position);
-    }
-
-    private float LerpCamera(int fromPoint, int toPoint)
-    {
-        float distCovered = 0.0f;
-        float fracJourney = 0.0f;
-        if (lerp)
-        {
-            distCovered = (Time.time - mStartTime) * speed;
-            fracJourney = distCovered / mJourneyLength;
-
-            sceneCamera.transform.position = Vector3.Lerp(cameraPositions[fromPoint].position, cameraPositions[toPoint].position, fracJourney);
-            sceneCamera.transform.rotation = Quaternion.Lerp(cameraPositions[fromPoint].rotation, cameraPositions[toPoint].rotation, fracJourney);
-        }
-        else
-        {
-            SetCameraTransrofm(toPoint);
-            fracJourney = 1.1f;
-        }
-        return fracJourney;
-    }
-
-    void Start()
-    {
-        ResetCameras();
-    }
-
-    public void ResetCameras()
-    {
-        mCurrentPoint = 0;
-        mNextPoint = mCurrentPoint + 1;
-
-        SetCameraTransrofm(mCurrentPoint);
-        StartCoroutine(NextPoint(startDelay));
-
+        SystemIsActive = true;
+        SetCameraTransrofm(0);
         sceneCamera.gameObject.SetActive(true);
-        stageIntroUI.SetActive(true);
+        stageIntroUI.gameObject.SetActive(true);
 
-        CameraSystemIsActive = true;
+        mCurrentCoroutine = NextPoint();
+        StartCoroutine(mCurrentCoroutine);
     }
 
-    void LateUpdate()
+    public void Skip()
     {
-        if (Input.GetButtonDown(skipButton))
-        {
-            StopCamera();
-        }
-        if (mTransitionPending)
-        {
+        StopCoroutine(mCurrentCoroutine);
+        sceneCamera.gameObject.SetActive(false);
+        stageIntroUI.gameObject.SetActive(false);
+        SystemIsActive = false;
+    }
 
-            if (LerpCamera(mCurrentPoint, mNextPoint) > 1.0f)
+    IEnumerator NextPoint()
+    {
+        while (cycling)
+        {
+            foreach (Transform t in cameraPositions)
             {
-                if (mCurrentPoint == cameraPositions.Length - 2)
-                {
-                    mCurrentPoint = cameraPositions.Length - 1;
-                    mNextPoint = 0;
-                }
-                else
-                {
-                    ++mCurrentPoint;
-                    ++mNextPoint;
-                }
-                mTransitionPending = false;
-                StartCoroutine(NextPoint(transitionDelay));
+                yield return StartCoroutine(MoveCamera(t.position, t.rotation, cameraSpeed));
             }
         }
-
     }
 
-    public void StopCamera()
+    IEnumerator MoveCamera(Vector3 point, Quaternion rotation, float speed)
     {
-        mTransitionPending = false;
-        sceneCamera.gameObject.SetActive(false);
-        stageIntroUI.SetActive(false);
-        CameraSystemIsActive = false;
+        while (sceneCamera.transform.position != point)
+        {
+            sceneCamera.transform.position = Vector3.MoveTowards(sceneCamera.transform.position, point, speed * Time.deltaTime);
+            StartCoroutine(RotateCamera(rotation, rotationSpeed));
+            yield return null;
+        }
+        yield return new WaitForSeconds(transitionDelay);
+    }
+
+    IEnumerator RotateCamera(Quaternion rotation, float speed)
+    {
+        while (sceneCamera.transform.rotation != rotation)
+        {
+            sceneCamera.transform.rotation = Quaternion.RotateTowards(sceneCamera.transform.rotation, rotation, rotationSpeed * Time.deltaTime);
+            yield return null;
+        }
     }
 }
