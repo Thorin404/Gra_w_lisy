@@ -40,6 +40,15 @@ public class CameraSystemController : MonoBehaviour
         }
     }
 
+    void OnDrawGizmos()
+    {
+        foreach (Transform t in cameraPositions)
+        {
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawWireCube(t.position, new Vector3(1, 1, 1));
+        }
+    }
+
     private void SetCameraTransrofm(int i)
     {
         sceneCamera.transform.position = cameraPositions[i].position;
@@ -67,13 +76,15 @@ public class CameraSystemController : MonoBehaviour
 
     IEnumerator NextPoint()
     {
-        while (cycling)
+        do
         {
             foreach (Transform t in cameraPositions)
             {
                 yield return StartCoroutine(MoveCamera(t.position, t.rotation, cameraSpeed));
             }
         }
+        while (cycling);
+        Skip();
     }
 
     IEnumerator MoveCamera(Vector3 point, Quaternion rotation, float speed)

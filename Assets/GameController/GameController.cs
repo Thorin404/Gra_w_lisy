@@ -66,6 +66,10 @@ public class GameController : MonoBehaviour {
         gameUI.SetActive(true);
         primaryCamera.gameObject.SetActive(true);
         //miscUI.SetActive(true);
+
+        //Start timer
+
+        //enable 
     }
 
     private void StageEnd()
@@ -80,6 +84,15 @@ public class GameController : MonoBehaviour {
         {
             StageEnd();
         }
+
+        //if (Input.GetButtonDown("Fire1"))
+        //{
+        //    if (Time.timeScale == 1.0F)
+        //        Time.timeScale = 0.3F;
+        //    else
+        //        Time.timeScale = 1.0F;
+        //    Time.fixedDeltaTime = 0.03F * Time.timeScale;
+        //}
 
         //Debug.Log("Camera system is active" + cameraSystem.CameraSystemIsActive);
     }
