@@ -75,7 +75,7 @@ public class GameController : MonoBehaviour {
     private void StageEnd()
     {
         gameStatus.text = "You won +" + mScore;
-        StartCoroutine(ReloadScene());
+        //StartCoroutine(ReloadScene());
     }
 
     private void StageLogic()
@@ -97,12 +97,12 @@ public class GameController : MonoBehaviour {
         //Debug.Log("Camera system is active" + cameraSystem.CameraSystemIsActive);
     }
 
-    private IEnumerator ReloadScene()
-    {
+    //private IEnumerator ReloadScene()
+    //{
         //Wait and reload scene
-        yield return new WaitForSeconds(gameOverTime);
-        SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
-    }
+        //yield return new WaitForSeconds(gameOverTime);
+        //SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
+    //}
 
     public void AddScore()
     {
