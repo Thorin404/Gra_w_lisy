@@ -4,11 +4,12 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class GameController : MonoBehaviour {
+public class GameController : MonoBehaviour
+{
 
     //Misc
-    public string sceneName;
-    public float gameOverTime;
+    public string pauseButtonName;
+    public string introSkipButton;
 
     //Player related 
 
@@ -17,103 +18,118 @@ public class GameController : MonoBehaviour {
     public Camera secondaryCamera;
 
     //Ui groups 
-
+    public GameObject pauseUI;
     public GameObject gameUI;
     public GameObject miscUI;
-    public GameObject introUI;
-
-    //Ui elements
-
-    public Text gameStatus;
-    public Text playerStatus;
 
     //Script references
 
     private CameraSystemController cameraSystem;
+    private PauseMenu pauseMenu;
 
     //Private members
     private bool mStageStarted = false;
     private int mScore = 0;
+    private bool mGamePaused = false;
 
+    //UI references 
 
-    void Start () {
+    private Text timerText;
 
+    void Start()
+    {
         cameraSystem = GetComponent<CameraSystemController>();
-        cameraSystem.Reset();
+        pauseMenu = pauseUI.GetComponentInChildren<PauseMenu>();
 
-        gameStatus.text = "Collected eggs:" + mScore;
+        timerText = gameUI.GetComponentInChildren<Text>();
 
+        RestartGame();
+
+
+        pauseMenu.EnableRetryButton(false);
         playerController.gameObject.SetActive(false);
         primaryCamera.gameObject.SetActive(false);
         secondaryCamera.gameObject.SetActive(false);
-    }
-	
-	void Update () {
-        if (mStageStarted)
-        {
-            StageLogic();
-        }
-        else if(!cameraSystem.SystemIsActive)
-        {
-            StartStage();
-        }
+
+        //Start intro camera
+        cameraSystem.Reset();
+        StartCoroutine(WaitForStart());
+
+        //Start pause corutine
+        StartCoroutine(WaitForPause());
     }
 
-    private void StartStage()
+    void Update()
     {
-        mStageStarted = true;
-        playerController.gameObject.SetActive(true);
-        gameUI.SetActive(true);
+
+    }
+
+    private IEnumerator WaitForStart()
+    {
+        while (cameraSystem.SystemIsActive)
+        {
+            if (Input.GetButtonDown(introSkipButton) && !mGamePaused)
+            {
+                cameraSystem.Skip();
+            }
+            yield return null;
+            //Debug.Log("Waiting for startGame");
+        }
+        StartCoroutine(StartCountdown());
+    }
+
+    private IEnumerator StartCountdown()
+    {
+        gameUI.gameObject.SetActive(true);
         primaryCamera.gameObject.SetActive(true);
-        //miscUI.SetActive(true);
+        pauseMenu.EnableRetryButton(true);
 
-        //Start timer
+        float timeLeft = 3.0f;
 
-        //enable 
-    }
-
-    private void StageEnd()
-    {
-        gameStatus.text = "You won +" + mScore;
-        //StartCoroutine(ReloadScene());
-    }
-
-    private void StageLogic()
-    {
-        if (mScore > 2)
+        while (timeLeft > 0.1f)
         {
-            StageEnd();
+            timeLeft -= Time.deltaTime;
+            timerText.text = "Get ready : " + timeLeft;
+            yield return new WaitForEndOfFrame();
         }
+        timerText.text = "Time: ";
 
-        //if (Input.GetButtonDown("Fire1"))
-        //{
-        //    if (Time.timeScale == 1.0F)
-        //        Time.timeScale = 0.3F;
-        //    else
-        //        Time.timeScale = 1.0F;
-        //    Time.fixedDeltaTime = 0.03F * Time.timeScale;
-        //}
-
-        //Debug.Log("Camera system is active" + cameraSystem.CameraSystemIsActive);
+        StartCoroutine(StartStage());
     }
 
-    //private IEnumerator ReloadScene()
-    //{
-        //Wait and reload scene
-        //yield return new WaitForSeconds(gameOverTime);
-        //SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
-    //}
-
-    public void AddScore()
+    private IEnumerator StartStage()
     {
-        Debug.Log("AddScore");
-        mScore += 1;
-        gameStatus.text = "Collected eggs:" + mScore;
+        playerController.gameObject.SetActive(true);
+
+        yield return null;
     }
 
-    public void SetPlayerStatus(string s)
+    private IEnumerator WaitForPause()
     {
-        playerStatus.text = "Player: " +s;
+        while (true)
+        {
+            if (Input.GetButtonDown(pauseButtonName) && !mGamePaused)
+            {
+                pauseUI.gameObject.SetActive(true);
+                Time.timeScale = 0.0f;
+                mGamePaused = true;
+            }
+            yield return null;
+        }
     }
+
+    public void ResumeGame()
+    {
+        Time.timeScale = 1.0f;
+        mGamePaused = false;
+        pauseUI.gameObject.SetActive(false);
+    }
+
+    public void RestartGame()
+    {
+        //TODO: Reseting scene state, without reloading it
+       
+    }
+
 
 }

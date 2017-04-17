@@ -6,13 +6,16 @@ using UnityEngine.SceneManagement;
 
 public class LoadSceneOnClick : MonoBehaviour {
 
-    public void LoadSceneByIndex(int sceneIndex)
+    public int sceneIndex;
+    public string sceneName;
+
+    public void LoadSceneByIndex()
     {
         SceneManager.LoadScene(sceneIndex);
     }
 
-    public void LoadSceneByName(string sceneName)
+    public void LoadSceneByName()
     {
-        SceneManager.LoadScene(name);
+        SceneManager.LoadScene(sceneName);
     }
 }

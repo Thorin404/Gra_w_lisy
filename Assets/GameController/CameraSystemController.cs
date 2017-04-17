@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CameraSystemController : MonoBehaviour
 {
-    public string skipButton;
+    //public string skipButton;
     public GameObject stageIntroUI;
     public Camera sceneCamera;
     public Transform[] cameraPositions;
@@ -31,13 +31,13 @@ public class CameraSystemController : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetButtonDown(skipButton))
-        {
-            if (mCurrentCoroutine != null)
-            {
-                Skip();
-            }
-        }
+        //if (Input.GetButtonDown(skipButton))
+        //{
+        //    if (mCurrentCoroutine != null)
+        //    {
+        //        Skip();
+        //    }
+        //}
     }
 
     void OnDrawGizmos()
@@ -91,8 +91,11 @@ public class CameraSystemController : MonoBehaviour
     {
         while (sceneCamera.transform.position != point)
         {
-            sceneCamera.transform.position = Vector3.MoveTowards(sceneCamera.transform.position, point, speed * Time.deltaTime);
-            StartCoroutine(RotateCamera(rotation, rotationSpeed));
+            if (Time.timeScale > 0.1f)
+            {
+                sceneCamera.transform.position = Vector3.MoveTowards(sceneCamera.transform.position, point, speed * Time.deltaTime);
+                StartCoroutine(RotateCamera(rotation, rotationSpeed));
+            }
             yield return null;
         }
         yield return new WaitForSeconds(transitionDelay);
@@ -102,7 +105,10 @@ public class CameraSystemController : MonoBehaviour
     {
         while (sceneCamera.transform.rotation != rotation)
         {
-            sceneCamera.transform.rotation = Quaternion.RotateTowards(sceneCamera.transform.rotation, rotation, rotationSpeed * Time.deltaTime);
+            if (Time.timeScale > 0.1f)
+            {
+                sceneCamera.transform.rotation = Quaternion.RotateTowards(sceneCamera.transform.rotation, rotation, rotationSpeed * Time.deltaTime);
+            }
             yield return null;
         }
     }

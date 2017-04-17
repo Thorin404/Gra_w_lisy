@@ -33,7 +33,7 @@ public class PlayerController : MonoBehaviour
         cameraT = Camera.main.transform;
         controller = GetComponent<CharacterController>();
 
-        gameController.SetPlayerStatus("Walking");
+        //gameController.SetPlayerStatus("Walking");
     }
 
     void Update()
@@ -121,7 +121,7 @@ public class PlayerController : MonoBehaviour
         {
             cover = true;
             coverCollider = other;
-            gameController.SetPlayerStatus("Hiding");
+            //gameController.SetPlayerStatus("Hiding");
         }
 
     }
@@ -131,7 +131,7 @@ public class PlayerController : MonoBehaviour
         if (other.gameObject.name == "Barrier")
         {
             cover = false;
-            gameController.SetPlayerStatus("Walking");
+            //gameController.SetPlayerStatus("Walking");
         }
     }
 
@@ -142,7 +142,7 @@ public class PlayerController : MonoBehaviour
         if (other.gameObject.name == "Egg(Clone)" || other.gameObject.name == "Egg")
         {
             Destroy(other.gameObject);
-            gameController.AddScore();
+            //gameController.AddScore();
         }
 
     }
