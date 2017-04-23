@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using System.Linq;
 
 public class GameController : MonoBehaviour
 {
 
     //Misc
     public string pauseButtonName;
-    public string introSkipButton;
+    public string skipButton;
+    public string retryButton;
 
     //Player related 
 
@@ -20,6 +22,7 @@ public class GameController : MonoBehaviour
     //Ui groups 
     public GameObject pauseUI;
     public GameObject gameUI;
+    public GameObject scoreUI;
     public GameObject miscUI;
 
     //Script references
@@ -27,29 +30,84 @@ public class GameController : MonoBehaviour
     private CameraSystemController cameraSystem;
     private PauseMenu pauseMenu;
 
-    //Private members
-    private bool mStageStarted = false;
-    private int mScore = 0;
-    private bool mGamePaused = false;
-
     //UI references 
 
-    private Text timerText;
+    private Text countdownTimer;
+    private Text playerStatus;
+    private Text gameStatus;
+    private Text gameTimer;
+
+    private Text scoreDetailsText;
+
+    //GameObjectives
+    public GameObject arrowPointer;
+
+    public Transform startPosition;
+    public Transform endPosition;
+
+    public int itemsToCollect;
+    public float targetTime;
+
+    public bool CheckpointReached
+    {
+        set { mCheckpointReached = value; }
+        get { return mCheckpointReached; }
+    }
+
+    //Private members
+    private bool mGamePaused = false;
+    private bool mCheckpointReached = false;
+    private bool mStageWon = false;
+
+    private int mScoreMultiplier = 20;
+    private float mScoreMultiplierTimer = 0.0f;
+
+    private int mPlayerScore = 0;
+    private int mPlayerItemsCollected = 0;
+    private float mPlayerTime = 0.0f;
 
     void Start()
     {
         cameraSystem = GetComponent<CameraSystemController>();
         pauseMenu = pauseUI.GetComponentInChildren<PauseMenu>();
 
-        timerText = gameUI.GetComponentInChildren<Text>();
+        //Game ui references
+        Text[] textFields = gameUI.GetComponentsInChildren<Text>();
+        countdownTimer = textFields[0];
+        playerStatus = textFields[1];
+        gameStatus = textFields[2];
+        gameTimer = textFields[3];
+
+        scoreDetailsText = scoreUI.GetComponentInChildren<Text>();
 
         RestartGame();
+    }
 
+    void Update()
+    {
 
+    }
+
+    public void RestartGame()
+    {
+        //TODO: Reseting scene state, without reloading it
+
+        mGamePaused = false;
+
+        //Set player position and rotation deactivate player controller
+        playerController.gameObject.transform.position = startPosition.position;
+        playerController.gameObject.transform.rotation = startPosition.rotation;
+        playerController.enabled = false;
+
+        //Disable game ui and retry button
+        gameUI.gameObject.SetActive(false);
         pauseMenu.EnableRetryButton(false);
-        playerController.gameObject.SetActive(false);
+
+        //Disable cameras
         primaryCamera.gameObject.SetActive(false);
         secondaryCamera.gameObject.SetActive(false);
+
+        StopAllCoroutines();
 
         //Start intro camera
         cameraSystem.Reset();
@@ -59,18 +117,14 @@ public class GameController : MonoBehaviour
         StartCoroutine(WaitForPause());
     }
 
-    void Update()
-    {
-
-    }
-
     private IEnumerator WaitForStart()
     {
         while (cameraSystem.SystemIsActive)
         {
-            if (Input.GetButtonDown(introSkipButton) && !mGamePaused)
+            if (Input.GetButtonDown(skipButton) && !mGamePaused)
             {
                 cameraSystem.Skip();
+                break;
             }
             yield return null;
             //Debug.Log("Waiting for startGame");
@@ -89,19 +143,141 @@ public class GameController : MonoBehaviour
         while (timeLeft > 0.1f)
         {
             timeLeft -= Time.deltaTime;
-            timerText.text = "Get ready : " + timeLeft;
+            countdownTimer.text = "Get ready : " + (int)timeLeft;
             yield return new WaitForEndOfFrame();
         }
-        timerText.text = "Time: ";
 
         StartCoroutine(StartStage());
+
+        //Wait for 2 sec displaying the text
+        countdownTimer.text = "Go!!!";
+        yield return new WaitForSeconds(2);
+        countdownTimer.enabled = false;
+    }
+
+    //Gameplay
+
+    //TODO : Adding score, score multiplier etc
+
+    public void AddScore(int amount)
+    {
+        mPlayerItemsCollected += amount;
+        mPlayerScore = mScoreMultiplier * amount;
+        gameStatus.text = mPlayerItemsCollected + " / " + itemsToCollect;
     }
 
     private IEnumerator StartStage()
     {
-        playerController.gameObject.SetActive(true);
+        playerController.enabled = true;
+        mPlayerScore = 0;
+        mPlayerItemsCollected = 0;
+        mPlayerTime = targetTime;
 
-        yield return null;
+        playerStatus.text = "Collect eggs";
+        gameStatus.text = mPlayerItemsCollected + " / " + itemsToCollect;
+
+        //Score counting loop
+
+        while (mPlayerTime > 0.1f)
+        {
+            //Refresh player timer
+            mPlayerTime -= Time.deltaTime;
+            gameTimer.text = "TimeLeft: " + (int)mPlayerTime;
+
+            if(mPlayerTime < targetTime / 3)
+            {
+                gameTimer.color = Color.red;
+            }
+
+            //If minimal score has been reached, activate the arrow pointing to exit
+            if (mPlayerItemsCollected >= itemsToCollect)
+            {
+                //Set stage exit pointer active
+                if (!arrowPointer.gameObject.activeSelf)
+                {
+                    playerStatus.text = "Retreat to exit";
+                    arrowPointer.gameObject.SetActive(true);
+                }
+
+                //Check if player retreated from stage
+                if (CheckpointReached)
+                {
+                    mStageWon = true;
+                    break;
+                }
+            }
+
+            yield return null;
+        }
+
+        if (mStageWon)
+        {
+            arrowPointer.gameObject.SetActive(false);
+            playerController.enabled = false;
+
+            countdownTimer.text = "You won!";
+            countdownTimer.enabled = true;
+
+            //TODO : Score saving etc
+
+            scoreDetailsText.text = 
+                "Items collected: "+ mPlayerItemsCollected + "/" + itemsToCollect +
+                "\nOverall score: " + mPlayerScore +
+                "\nTime left: "+ mPlayerTime;
+
+            //fox goes away
+            //a* to the point
+        }
+        else
+        {
+            arrowPointer.gameObject.SetActive(false);
+            playerController.enabled = false;
+
+            countdownTimer.text = "End of time";
+            countdownTimer.enabled = true;
+
+            scoreDetailsText.text = "Stage failed: end of time";
+        }
+
+        //Wait for 2 seconds and start score screen
+        yield return new WaitForSeconds(2);
+
+        countdownTimer.enabled = false;
+
+        StartCoroutine(WaitForExit());
+    }
+
+    private IEnumerator WaitForExit()
+    {
+        //Activate score screen
+        scoreUI.SetActive(true);
+        //Wait 2 sec before enablling exit to menu
+        yield return new WaitForSeconds(2);
+
+        bool exitStage = false;
+
+        while (true)
+        {
+            if (Input.GetButtonDown(skipButton) && !mGamePaused)
+            {
+                break;
+            }
+            else if (Input.GetButtonDown(retryButton) && !mGamePaused)
+            {
+                exitStage = true;
+                break;
+            }
+            yield return null;
+        }
+        if (exitStage)
+        {
+            SceneManager.LoadScene(0);
+        }
+        else
+        {
+            //TODO: reload scene async
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
     }
 
     private IEnumerator WaitForPause()
@@ -124,12 +300,5 @@ public class GameController : MonoBehaviour
         mGamePaused = false;
         pauseUI.gameObject.SetActive(false);
     }
-
-    public void RestartGame()
-    {
-        //TODO: Reseting scene state, without reloading it
-       
-    }
-
 
 }

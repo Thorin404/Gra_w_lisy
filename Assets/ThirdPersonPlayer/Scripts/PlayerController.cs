@@ -4,6 +4,7 @@ using System.Collections;
 public class PlayerController : MonoBehaviour
 {
     public GameController gameController;
+    public Camera playerCamera;
 
     public float walkSpeed = 2;
     public float runSpeed = 6;
@@ -29,8 +30,11 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
+        Debug.Log("Player start");
         //animator = GetComponent<Animator>();
-        cameraT = Camera.main.transform;
+        //cameraT = Camera.main.transform;
+        cameraT = playerCamera.transform;
+
         controller = GetComponent<CharacterController>();
 
         //gameController.SetPlayerStatus("Walking");
@@ -142,7 +146,7 @@ public class PlayerController : MonoBehaviour
         if (other.gameObject.name == "Egg(Clone)" || other.gameObject.name == "Egg")
         {
             Destroy(other.gameObject);
-            //gameController.AddScore();
+            gameController.AddScore(1);
         }
 
     }

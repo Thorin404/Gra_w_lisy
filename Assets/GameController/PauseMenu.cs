@@ -64,10 +64,11 @@ public class PauseMenu : MonoBehaviour
         Debug.Log("Restart");
         Time.timeScale = 1.0f;
         gameObject.SetActive(false);
-        gameController.RestartGame();
+        //gameController.RestartGame();
 
-        //Temp : reload scene
+        //Temp : reload entire scene
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        //gameController.RestartGame();
     }
 
     private void ExitToMenu()
