@@ -4,21 +4,25 @@ using UnityEngine;
 
 public class PickUpController : MonoBehaviour {
 
-    public int scoreValue;
-
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    public GameController gameController;
+    public string pickupTag;
+    public GameObject pickupText;
 
     void OnCollisionEnter(Collision other)
     {
-       
+        if(other.gameObject.tag == pickupTag)
+        {
+            Debug.Log(other.gameObject.name);
+            PickUp pickup = other.gameObject.GetComponent<PickUp>();
+            gameController.HandlePickUp(pickup);
+
+            //Create new PickupText
+            GameObject gameObject = Instantiate(pickupText, other.gameObject.transform.position, Quaternion.identity) as GameObject;
+            gameObject.GetComponent<TextMesh>().text = pickup.nameToDisplay;
+
+            //Destroy pickup instance
+            Destroy(other.gameObject);
+        }
 
     }
 }

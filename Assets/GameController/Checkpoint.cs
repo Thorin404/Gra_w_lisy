@@ -21,7 +21,6 @@ public class Checkpoint : MonoBehaviour {
         Debug.Log("OnCollisionEnter "+ gameObject.name);
         if (other.gameObject.name == "Player")
         {
-            Debug.Log("XDD");
             gameController.CheckpointReached = true;
         }
 

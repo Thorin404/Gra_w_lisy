@@ -7,7 +7,6 @@ using System.Linq;
 
 public class GameController : MonoBehaviour
 {
-
     //Misc
     public string pauseButtonName;
     public string skipButton;
@@ -32,10 +31,11 @@ public class GameController : MonoBehaviour
 
     //UI references 
 
-    private Text countdownTimer;
-    private Text playerStatus;
-    private Text gameStatus;
-    private Text gameTimer;
+    private Text infoText;
+    private Text gameObjectiveText;
+    private Text keyItemsText;
+    private Text scoreText;
+    private Text timerText;
 
     private Text scoreDetailsText;
 
@@ -45,18 +45,20 @@ public class GameController : MonoBehaviour
     public Transform startPosition;
     public Transform endPosition;
 
+    public string keyItemName;
     public int itemsToCollect;
     public float targetTime;
 
     public bool CheckpointReached
     {
-        set { mCheckpointReached = value; }
+        set { mCheckpointReached = mGotoExit ? value : false; }
         get { return mCheckpointReached; }
     }
 
     //Private members
     private bool mGamePaused = false;
     private bool mCheckpointReached = false;
+    private bool mGotoExit = false;
     private bool mStageWon = false;
 
     private int mScoreMultiplier = 20;
@@ -73,10 +75,11 @@ public class GameController : MonoBehaviour
 
         //Game ui references
         Text[] textFields = gameUI.GetComponentsInChildren<Text>();
-        countdownTimer = textFields[0];
-        playerStatus = textFields[1];
-        gameStatus = textFields[2];
-        gameTimer = textFields[3];
+        infoText = textFields[0];
+        gameObjectiveText = textFields[1];
+        keyItemsText = textFields[2];
+        scoreText = textFields[3];
+        timerText = textFields[4];
 
         scoreDetailsText = scoreUI.GetComponentInChildren<Text>();
 
@@ -143,27 +146,33 @@ public class GameController : MonoBehaviour
         while (timeLeft > 0.1f)
         {
             timeLeft -= Time.deltaTime;
-            countdownTimer.text = "Get ready : " + (int)timeLeft;
+            infoText.text = "Get ready : " + (int)timeLeft;
             yield return new WaitForEndOfFrame();
         }
 
         StartCoroutine(StartStage());
 
         //Wait for 2 sec displaying the text
-        countdownTimer.text = "Go!!!";
+        infoText.text = "Go!!!";
         yield return new WaitForSeconds(2);
-        countdownTimer.enabled = false;
+        infoText.enabled = false;
     }
 
     //Gameplay
 
-    //TODO : Adding score, score multiplier etc
 
-    public void AddScore(int amount)
+    public void HandlePickUp(PickUp pickup)
     {
-        mPlayerItemsCollected += amount;
-        mPlayerScore = mScoreMultiplier * amount;
-        gameStatus.text = mPlayerItemsCollected + " / " + itemsToCollect;
+        mPlayerItemsCollected += pickup.gameObject.name.Contains(keyItemName) ? 1 : 0;
+
+        mPlayerTime += pickup.timeValue;
+        mPlayerScore += pickup.scoreValue;
+
+        //TODO : Adding score, score multiplier etc
+
+        //Refresh ui text
+        scoreText.text = "Score: " + mPlayerScore;
+        keyItemsText.text = "Key items: " + mPlayerItemsCollected + " / " + itemsToCollect;
     }
 
     private IEnumerator StartStage()
@@ -173,8 +182,8 @@ public class GameController : MonoBehaviour
         mPlayerItemsCollected = 0;
         mPlayerTime = targetTime;
 
-        playerStatus.text = "Collect eggs";
-        gameStatus.text = mPlayerItemsCollected + " / " + itemsToCollect;
+        gameObjectiveText.text = "Collect eggs";
+        keyItemsText.text = mPlayerItemsCollected + " / " + itemsToCollect;
 
         //Score counting loop
 
@@ -182,11 +191,11 @@ public class GameController : MonoBehaviour
         {
             //Refresh player timer
             mPlayerTime -= Time.deltaTime;
-            gameTimer.text = "TimeLeft: " + (int)mPlayerTime;
+            timerText.text = "TimeLeft: " + (int)mPlayerTime;
 
             if(mPlayerTime < targetTime / 3)
             {
-                gameTimer.color = Color.red;
+                timerText.color = Color.red;
             }
 
             //If minimal score has been reached, activate the arrow pointing to exit
@@ -195,8 +204,9 @@ public class GameController : MonoBehaviour
                 //Set stage exit pointer active
                 if (!arrowPointer.gameObject.activeSelf)
                 {
-                    playerStatus.text = "Retreat to exit";
+                    gameObjectiveText.text = "Retreat to exit";
                     arrowPointer.gameObject.SetActive(true);
+                    mGotoExit = true;
                 }
 
                 //Check if player retreated from stage
@@ -215,8 +225,8 @@ public class GameController : MonoBehaviour
             arrowPointer.gameObject.SetActive(false);
             playerController.enabled = false;
 
-            countdownTimer.text = "You won!";
-            countdownTimer.enabled = true;
+            infoText.text = "You won!";
+            infoText.enabled = true;
 
             //TODO : Score saving etc
 
@@ -233,8 +243,8 @@ public class GameController : MonoBehaviour
             arrowPointer.gameObject.SetActive(false);
             playerController.enabled = false;
 
-            countdownTimer.text = "End of time";
-            countdownTimer.enabled = true;
+            infoText.text = "End of time";
+            infoText.enabled = true;
 
             scoreDetailsText.text = "Stage failed: end of time";
         }
@@ -242,13 +252,15 @@ public class GameController : MonoBehaviour
         //Wait for 2 seconds and start score screen
         yield return new WaitForSeconds(2);
 
-        countdownTimer.enabled = false;
+        infoText.enabled = false;
 
         StartCoroutine(WaitForExit());
     }
 
     private IEnumerator WaitForExit()
     {
+        //deactivate game ui
+        gameUI.gameObject.SetActive(false);
         //Activate score screen
         scoreUI.SetActive(true);
         //Wait 2 sec before enablling exit to menu

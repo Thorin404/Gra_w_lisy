@@ -3,7 +3,6 @@ using System.Collections;
 
 public class PlayerController : MonoBehaviour
 {
-    public GameController gameController;
     public Camera playerCamera;
 
     public float walkSpeed = 2;
@@ -24,9 +23,6 @@ public class PlayerController : MonoBehaviour
     Animator animator;
     Transform cameraT;
     CharacterController controller;
-
-    bool cover = false;
-    Collider coverCollider;
 
     void Start()
     {
@@ -61,16 +57,6 @@ public class PlayerController : MonoBehaviour
     }
     void Move(Vector2 inputDir, bool running)
     {
-        if (cover)
-        {
-            Vector3 normal = new Vector3(0, 1, 0);
-            Vector3 tangent = Vector3.Cross(normal, coverCollider.transform.forward);
-            if (tangent.magnitude == 0)
-            {
-                tangent = Vector3.Cross(normal, Vector3.up);
-            }
-            inputDir = Input.GetAxis("Horizontal") * tangent;
-        }
         if (inputDir != Vector2.zero)
         {
             //Camera rotation
@@ -94,7 +80,6 @@ public class PlayerController : MonoBehaviour
 
     }
 
-
     void Jump()
     {
         if (controller.isGrounded)
@@ -117,39 +102,4 @@ public class PlayerController : MonoBehaviour
         }
         return smoothTime / airControlPercent;
     }
-
-    void OnTriggerStay(Collider other)
-    {
-        //Debug.Log("PlayerTriggerStay");
-        if ((other.gameObject.name == "Barrier") || (other.gameObject.name == "Barrier(Clone)"))
-        {
-            cover = true;
-            coverCollider = other;
-            //gameController.SetPlayerStatus("Hiding");
-        }
-
-    }
-
-    void OnTriggerExit(Collider other)
-    {
-        if (other.gameObject.name == "Barrier")
-        {
-            cover = false;
-            //gameController.SetPlayerStatus("Walking");
-        }
-    }
-
-    void OnCollisionEnter(Collision other)
-    {
-        Debug.Log("OnCollisionEnter");
-        Debug.Log(other.gameObject.name);
-        if (other.gameObject.name == "Egg(Clone)" || other.gameObject.name == "Egg")
-        {
-            Destroy(other.gameObject);
-            gameController.AddScore(1);
-        }
-
-    }
-
-
 }
