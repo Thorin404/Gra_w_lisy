@@ -6,17 +6,18 @@ public class Grid : MonoBehaviour {
 
 	public bool DisplayGridGizmos;
 	public LayerMask unwalkableMask;
-	public Vector2 gridWorldSize;
+	public Vector3 gridWorldSize;
 	public float nodeRadius;
 	Node[,] grid;
 
 	float nodeDiameter;
-	int gridSizeX, gridSizeY;
+	int gridSizeX, gridSizeY, gridSizeZ;
 
-	void Start() {
+	void Awake() {
 		nodeDiameter = nodeRadius * 2;
 		gridSizeX = Mathf.RoundToInt (gridWorldSize.x / nodeDiameter);
-		gridSizeY = Mathf.RoundToInt (gridWorldSize.y/ nodeDiameter);
+		gridSizeY = Mathf.RoundToInt (gridWorldSize.y / nodeDiameter);
+		gridSizeZ = Mathf.RoundToInt (gridWorldSize.z / nodeDiameter);
 		CreateGrid ();
 	}
 
