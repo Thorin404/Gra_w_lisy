@@ -28,6 +28,7 @@ public class GameController : MonoBehaviour
 
     private CameraSystemController cameraSystem;
     private PauseMenu pauseMenu;
+    private KeyItemSpawner keyItemSpawner;
 
     //UI references 
 
@@ -45,8 +46,8 @@ public class GameController : MonoBehaviour
     public Transform startPosition;
     public Transform endPosition;
 
-    public string keyItemName;
-    public int itemsToCollect;
+
+
     public float targetTime;
 
     public bool CheckpointReached
@@ -56,6 +57,9 @@ public class GameController : MonoBehaviour
     }
 
     //Private members
+    private int itemsToCollect;
+    private string keyItemName;
+
     private bool mGamePaused = false;
     private bool mCheckpointReached = false;
     private bool mGotoExit = false;
@@ -72,6 +76,7 @@ public class GameController : MonoBehaviour
     {
         cameraSystem = GetComponent<CameraSystemController>();
         pauseMenu = pauseUI.GetComponentInChildren<PauseMenu>();
+        keyItemSpawner = GetComponent<KeyItemSpawner>();
 
         //Game ui references
         Text[] textFields = gameUI.GetComponentsInChildren<Text>();
@@ -94,6 +99,10 @@ public class GameController : MonoBehaviour
     public void RestartGame()
     {
         //TODO: Reseting scene state, without reloading it
+
+        keyItemSpawner.SpawnItems();
+        itemsToCollect = keyItemSpawner.KeyItemsCount;
+        keyItemName = keyItemSpawner.KeyItemName;
 
         mGamePaused = false;
 
