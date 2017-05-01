@@ -4,10 +4,13 @@ using UnityEngine;
 
 public class ArrowPointer : MonoBehaviour
 {
+    public float animMinScale;
+    public float animMaxScale;
+    public float animSpeed;
 
     public Transform arrowTarget;
 
-    public Transform SetTarget
+    public Transform Target
     {
         set { arrowTarget = value; }
     }
@@ -21,8 +24,8 @@ public class ArrowPointer : MonoBehaviour
     {
         //TODO : fancy arrow animation
 
-        float arrowScale = Mathf.PingPong(Time.time / 10.0f, 0.1f);
-        transform.localScale = new Vector3(arrowScale + 0.5f, arrowScale + 0.5f, arrowScale + 0.5f);
+        float arrowScale = Mathf.PingPong(Time.time * animSpeed, animMaxScale);
+        transform.localScale = new Vector3(arrowScale + animMinScale, arrowScale + animMinScale, arrowScale + animMinScale);
 
         transform.LookAt(arrowTarget);
     }

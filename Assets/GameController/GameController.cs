@@ -56,6 +56,11 @@ public class GameController : MonoBehaviour
         get { return mCheckpointReached; }
     }
 
+    public bool GamePaused
+    {
+        get { return mGamePaused; }
+    }
+
     //Private members
     private int itemsToCollect;
     private string keyItemName;
@@ -65,8 +70,8 @@ public class GameController : MonoBehaviour
     private bool mGotoExit = false;
     private bool mStageWon = false;
 
-    private int mScoreMultiplier = 20;
-    private float mScoreMultiplierTimer = 0.0f;
+    //private int mScoreMultiplier = 20;
+    //private float mScoreMultiplierTimer = 0.0f;
 
     private int mPlayerScore = 0;
     private int mPlayerItemsCollected = 0;

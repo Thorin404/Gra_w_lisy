@@ -4,9 +4,15 @@ using UnityEngine;
 
 public class PickUpController : MonoBehaviour {
 
-    public GameController gameController;
     public string pickupTag;
     public GameObject pickupText;
+
+    private GameController mGameController;
+
+    void Start()
+    {
+        mGameController = FindObjectOfType<GameController>();
+    }
 
     void OnCollisionEnter(Collision other)
     {
@@ -14,7 +20,7 @@ public class PickUpController : MonoBehaviour {
         {
             Debug.Log(other.gameObject.name);
             PickUp pickup = other.gameObject.GetComponent<PickUp>();
-            gameController.HandlePickUp(pickup);
+            mGameController.HandlePickUp(pickup);
 
             //Create new PickupText
             GameObject gameObject = Instantiate(pickupText, other.gameObject.transform.position, Quaternion.identity) as GameObject;

@@ -16,8 +16,6 @@ public class PickupText : MonoBehaviour
 
     IEnumerator FloatText()
     {
-        float currentTime = floatTime;
-
         while(floatTime > 0)
         {
             floatTime -= Time.deltaTime;

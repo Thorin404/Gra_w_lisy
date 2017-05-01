@@ -24,6 +24,10 @@ public class PlayerController : MonoBehaviour
     Transform cameraT;
     CharacterController controller;
 
+    //Behaviour scripts
+    private PickUpController mPickupController;
+    private FoxInstinctController mFoxInstinctController;
+
     void Start()
     {
         Debug.Log("Player start");
@@ -33,7 +37,10 @@ public class PlayerController : MonoBehaviour
 
         controller = GetComponent<CharacterController>();
 
-        //gameController.SetPlayerStatus("Walking");
+        mPickupController = GetComponent<PickUpController>();
+        Debug.Log("Lol" + mPickupController);
+
+        mFoxInstinctController = GetComponent<FoxInstinctController>();
     }
 
     void Update()
@@ -42,7 +49,7 @@ public class PlayerController : MonoBehaviour
         Vector2 input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
         Vector2 inputDir = input.normalized;
 
-        bool running = Input.GetKey(KeyCode.LeftShift);
+        bool running = Input.GetButton("Fire1");
 
         Move(inputDir, running);
 
@@ -55,8 +62,26 @@ public class PlayerController : MonoBehaviour
         //animator.SetFloat("speedPercent", animationSpeedPercent, speedSmoothTime, Time.deltaTime);
 
     }
+
+    void OnDisable()
+    {
+        mPickupController.enabled = false;
+        mFoxInstinctController.enabled = false;
+    }
+
+    void OnEnable()
+    {
+        if (mPickupController != null && mFoxInstinctController != null)
+        {
+            mPickupController.enabled = true;
+            mFoxInstinctController.enabled = true;
+        }
+    }
+
     void Move(Vector2 inputDir, bool running)
     {
+        //TODO : fix player time scale problem
+
         if (inputDir != Vector2.zero)
         {
             //Camera rotation
@@ -65,10 +90,13 @@ public class PlayerController : MonoBehaviour
         }
 
         float targetSpeed = ((running) ? runSpeed : walkSpeed) * inputDir.magnitude;
+
         currentSpeed = Mathf.SmoothDamp(currentSpeed, targetSpeed, ref speedSmoothVelocity, GetModifiedSmoothTime(speedSmoothTime));
 
         velocityY += Time.deltaTime * gravity;
         Vector3 velocity = transform.forward * currentSpeed + Vector3.up * velocityY;
+
+
 
         controller.Move(velocity * Time.deltaTime);
         currentSpeed = new Vector2(controller.velocity.x, controller.velocity.z).magnitude;
