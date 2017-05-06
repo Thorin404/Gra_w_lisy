@@ -3,6 +3,8 @@ using System.Collections;
 
 public class ThirdPersonCamera : MonoBehaviour
 {
+    public string horizontalAxis;
+    public string verticalAxis;
 
     public bool lockCursor;
     public float mouseSensitivity = 10;
@@ -28,8 +30,8 @@ public class ThirdPersonCamera : MonoBehaviour
 
     void LateUpdate()
     {
-        yaw += Input.GetAxis("Mouse X") * mouseSensitivity;
-        pitch -= Input.GetAxis("Mouse Y") * mouseSensitivity;
+        yaw += Input.GetAxis(horizontalAxis) * mouseSensitivity;
+        pitch -= Input.GetAxis(verticalAxis) * mouseSensitivity;
         pitch = Mathf.Clamp(pitch, pitchMinMax.x, pitchMinMax.y);
 
         currentRotation = Vector3.SmoothDamp(currentRotation, new Vector3(pitch, yaw), ref rotationSmoothVelocity, rotationSmoothTime);

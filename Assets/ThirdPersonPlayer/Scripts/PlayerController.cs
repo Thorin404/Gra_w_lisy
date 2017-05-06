@@ -3,6 +3,11 @@ using System.Collections;
 
 public class PlayerController : MonoBehaviour
 {
+    public string horizontalAxis;
+    public string vertivcalAxis;
+    public string runningButton;
+    public string jumpButton;
+
     public Camera playerCamera;
 
     public float walkSpeed = 2;
@@ -27,6 +32,29 @@ public class PlayerController : MonoBehaviour
     //Behaviour scripts
     private PickUpController mPickupController;
     private FoxInstinctController mFoxInstinctController;
+    private ItemController mItemController;
+
+    void OnEnable()
+    {
+        Debug.Log("Enable PC");
+
+        if (mPickupController == null
+            || mFoxInstinctController == null
+            || mItemController == null)
+        {
+            InitControllers();
+        }
+        else
+        {
+            EnableControllers(enabled);
+        }
+    }
+
+    void OnDisable()
+    {
+        Debug.Log("Disable PC");
+        EnableControllers(enabled);
+    }
 
     void Start()
     {
@@ -34,26 +62,35 @@ public class PlayerController : MonoBehaviour
         //animator = GetComponent<Animator>();
         //cameraT = Camera.main.transform;
         cameraT = playerCamera.transform;
+    }
 
+    private void InitControllers()
+    {
+        //Controller references
         controller = GetComponent<CharacterController>();
-
         mPickupController = GetComponent<PickUpController>();
-        Debug.Log("Lol" + mPickupController);
-
         mFoxInstinctController = GetComponent<FoxInstinctController>();
+        mItemController = GetComponent<ItemController>();
+    }
+
+    private void EnableControllers(bool e)
+    {
+        mPickupController.enabled = e;
+        mFoxInstinctController.enabled = e;
+        mItemController.enabled = e;
     }
 
     void Update()
     {
         // input
-        Vector2 input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+        Vector2 input = new Vector2(Input.GetAxisRaw(horizontalAxis), Input.GetAxisRaw(vertivcalAxis));
         Vector2 inputDir = input.normalized;
 
-        bool running = Input.GetButton("Fire1");
+        bool running = Input.GetButton(runningButton);
 
         Move(inputDir, running);
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetButtonDown(jumpButton))
         {
             Jump();
         }
@@ -61,21 +98,6 @@ public class PlayerController : MonoBehaviour
         //float animationSpeedPercent = ((running) ? currentSpeed / runSpeed : currentSpeed / walkSpeed * .5f);
         //animator.SetFloat("speedPercent", animationSpeedPercent, speedSmoothTime, Time.deltaTime);
 
-    }
-
-    void OnDisable()
-    {
-        mPickupController.enabled = false;
-        mFoxInstinctController.enabled = false;
-    }
-
-    void OnEnable()
-    {
-        if (mPickupController != null && mFoxInstinctController != null)
-        {
-            mPickupController.enabled = true;
-            mFoxInstinctController.enabled = true;
-        }
     }
 
     void Move(Vector2 inputDir, bool running)

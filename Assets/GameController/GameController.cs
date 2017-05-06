@@ -114,6 +114,7 @@ public class GameController : MonoBehaviour
         //Set player position and rotation deactivate player controller
         playerController.gameObject.transform.position = startPosition.position;
         playerController.gameObject.transform.rotation = startPosition.rotation;
+
         playerController.enabled = false;
 
         //Disable game ui and retry button
