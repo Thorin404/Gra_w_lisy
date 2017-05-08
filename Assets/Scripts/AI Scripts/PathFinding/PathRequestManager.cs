@@ -1,41 +1,41 @@
-﻿using System;
+﻿﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
+using System;
 
 public class PathRequestManager : MonoBehaviour {
 
-	Queue<PathRequest> pathRequestQueue = new Queue<PathRequest> ();
+	Queue<PathRequest> pathRequestQueue = new Queue<PathRequest>();
 	PathRequest currentPathRequest;
 
 	static PathRequestManager instance;
-	PathFinding pathfinding;
+	Pathfinding pathfinding;
 
 	bool isProcessingPath;
 
 	void Awake() {
 		instance = this;
-		pathfinding = GetComponent<PathFinding> ();
+		pathfinding = GetComponent<Pathfinding>();
 	}
 
 	public static void RequestPath(Vector3 pathStart, Vector3 pathEnd, Action<Vector3[], bool> callback) {
-		PathRequest newRequest = new PathRequest (pathStart, pathEnd, callback);
-		instance.pathRequestQueue.Enqueue (newRequest);
-		instance.TryProcessNext ();
+		PathRequest newRequest = new PathRequest(pathStart,pathEnd,callback);
+		instance.pathRequestQueue.Enqueue(newRequest);
+		instance.TryProcessNext();
 	}
 
 	void TryProcessNext() {
 		if (!isProcessingPath && pathRequestQueue.Count > 0) {
-			currentPathRequest = pathRequestQueue.Dequeue ();
+			currentPathRequest = pathRequestQueue.Dequeue();
 			isProcessingPath = true;
-			pathfinding.StartFindPath (currentPathRequest.pathStart, currentPathRequest.pathEnd);
+			pathfinding.StartFindPath(currentPathRequest.pathStart, currentPathRequest.pathEnd);
 		}
 	}
 
-	public void FinishedprocessingPath(Vector3[] path, bool succes) {
-		currentPathRequest.callback (path, succes);
+	public void FinishedProcessingPath(Vector3[] path, bool success) {
+		currentPathRequest.callback(path,success);
 		isProcessingPath = false;
-		TryProcessNext ();
+		TryProcessNext();
 	}
 
 	struct PathRequest {
@@ -48,5 +48,6 @@ public class PathRequestManager : MonoBehaviour {
 			pathEnd = _end;
 			callback = _callback;
 		}
+
 	}
 }
