@@ -11,6 +11,32 @@ public class ItemController : MonoBehaviour
 
     private bool mHoldingItem = false;
     private GameObject mHoldedItem;
+    private bool mUseItem;
+
+    public GameObject HoldedItem
+    {
+        get { return mHoldedItem; }
+        set
+        {
+            if(value == null)
+            {
+                mHoldedItem = value;
+                mHoldingItem = false;
+            }
+            else
+            {
+                mHoldedItem = value;
+                mHoldingItem = true;
+            }
+        }
+    }
+    public bool UseItem
+    {
+        get { return mUseItem; }
+        set { mUseItem = value; }
+    }
+
+
 
     // Use this for initialization
     void Start()
@@ -18,15 +44,15 @@ public class ItemController : MonoBehaviour
 
     }
 
+    //TODO: throwing items
+
+
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetButtonDown(actionButton) && mHoldingItem)
+        if (Input.GetButtonDown(actionButton) && mHoldingItem)
         {
-            mHoldedItem.transform.SetParent(null);
-            mHoldedItem.GetComponent<Rigidbody>().isKinematic = false;
-            mHoldingItem = false;
-            mHoldedItem = null;
+            DropItem();
         }
     }
 
@@ -35,19 +61,31 @@ public class ItemController : MonoBehaviour
     {
         if (other.gameObject.tag == itemTagName)
         {
-            if(Input.GetButtonDown(actionButton) && !mHoldedItem)
+            if (Input.GetButtonDown(actionButton) && !mHoldedItem)
             {
                 Debug.Log("Item controller, hold item [" + other.name + "]");
-
                 mHoldedItem = other.gameObject;
-                mHoldedItem.gameObject.transform.SetParent(holdingTarget);
-                mHoldedItem.gameObject.transform.localPosition = new Vector3();
-                mHoldedItem.gameObject.transform.rotation = transform.rotation;
-                mHoldedItem.gameObject.GetComponent<Rigidbody>().isKinematic = true;
-
-                StartCoroutine(WaitForAction());
+                HoldItem();
             }
         }
+    }
+
+    private void DropItem()
+    {
+        mHoldedItem.transform.SetParent(null);
+        mHoldedItem.GetComponent<Rigidbody>().isKinematic = false;
+        mHoldingItem = false;
+        mHoldedItem = null;
+    }
+
+    private void HoldItem()
+    {
+        mHoldedItem.gameObject.transform.SetParent(holdingTarget);
+        mHoldedItem.gameObject.transform.localPosition = new Vector3();
+        mHoldedItem.gameObject.transform.rotation = transform.rotation;
+        mHoldedItem.gameObject.GetComponent<Rigidbody>().isKinematic = true;
+
+        StartCoroutine(WaitForAction());
     }
 
     private IEnumerator WaitForAction()
