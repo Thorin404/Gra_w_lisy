@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 using UnityEngine;
 
 public class CameraSystemController : MonoBehaviour
@@ -24,20 +25,24 @@ public class CameraSystemController : MonoBehaviour
         private set { mSystemActive = value; }
     }
 
-    void Start()
+    private GameController mGameController;
+
+    private Text mStageNameText;
+    private Text mBestScoresText;
+
+    void Awake()
     {
-        //Reset();
+        mGameController = GetComponent<GameController>();
+        Text[] pauseScreenElements = stageIntroUI.GetComponentsInChildren<Text>();
+
+        mStageNameText = pauseScreenElements[0];
+        mBestScoresText = pauseScreenElements[2];
+
+        mStageNameText.text = mGameController.stageName;
     }
 
     void Update()
     {
-        //if (Input.GetButtonDown(skipButton))
-        //{
-        //    if (mCurrentCoroutine != null)
-        //    {
-        //        Skip();
-        //    }
-        //}
     }
 
     void OnDrawGizmos()
@@ -57,6 +62,8 @@ public class CameraSystemController : MonoBehaviour
 
     public void Reset()
     {
+        mBestScoresText.text = GameData.Instance.GetData.GetLevelSave(mGameController.stageName).GetBestScoresString(10);
+
         SystemIsActive = true;
         SetCameraTransrofm(0);
         sceneCamera.gameObject.SetActive(true);

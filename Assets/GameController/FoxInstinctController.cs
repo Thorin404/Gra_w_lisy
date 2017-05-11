@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class FoxInstinctController : MonoBehaviour
 {
@@ -11,44 +12,64 @@ public class FoxInstinctController : MonoBehaviour
     public GameObject pointerPrefab;
     //public float slowmoTimeScale;
 
-    private GameObject[] pickupsFound;
-    private GameObject[] lastGeneratedPointers;
+    private GameObject[] mKeyItems;
+    private GameObject[] mBonusItems;
+    private GameObject[] mAllItems;
 
-    private GameController mGameController;
+    private GameObject[] lastGeneratedPointers;
 
     void Start()
     {
-        mGameController = FindObjectOfType<GameController>();
+        mKeyItems = KeyItemSpawner.KeyItems;
+        mBonusItems = KeyItemSpawner.BonusItems;
+        mAllItems = mKeyItems.Concat(mBonusItems).ToArray();
     }
 
-    //TODO : time constrain, slowmo etc
+    //TODO : time constrain, slowmo, bonus pickup pointer
 
     void Update()
     {
-        if (Input.GetButton(actionButton) && !mGameController.GamePaused)
+        if (Input.GetButton(actionButton) && !GameController.GamePaused)
         {
-            if (lastGeneratedPointers == null)
-            {
-                pickupsFound = GameObject.FindGameObjectsWithTag(objectsOfInterestTag);
-                lastGeneratedPointers = new GameObject[pickupsFound.Length];
-                for (int i = 0; i < pickupsFound.Length; i++)
-                {
-                    GameObject gameObject = Instantiate(pointerPrefab, transform.position, Quaternion.identity) as GameObject;
-                    gameObject.GetComponent<ItemPointer>().Target = pickupsFound[i].transform;
-                    gameObject.transform.SetParent(this.transform);
-                    lastGeneratedPointers[i] = gameObject;
-                }
-            }
+            GeneratePointers();
         }
         else
         {
-            if (lastGeneratedPointers != null)
+            DestroyPointers();
+        }
+    }
+
+    private void DestroyPointers()
+    {
+        if (lastGeneratedPointers != null)
+        {
+            for (int i = 0; i < mAllItems.Length; i++)
             {
-                for (int i = 0; i < pickupsFound.Length; i++)
+                Destroy(lastGeneratedPointers[i]);
+            }
+            lastGeneratedPointers = null;
+        }
+    }
+
+    private void GeneratePointers()
+    {
+        if (mAllItems != null && lastGeneratedPointers == null)
+        {
+            lastGeneratedPointers = new GameObject[mAllItems.Length];
+
+            for (int i = 0; i < mAllItems.Length; i++)
+            {
+                if (mAllItems[i] != null)
                 {
-                    Destroy(lastGeneratedPointers[i]);
+                    GameObject gameObject = Instantiate(pointerPrefab, transform.position, Quaternion.identity) as GameObject;
+                    gameObject.GetComponent<ItemPointer>().Target = mAllItems[i].transform;
+                    gameObject.transform.SetParent(this.transform);
+                    lastGeneratedPointers[i] = gameObject;
                 }
-                lastGeneratedPointers = null;
+                else
+                {
+                    continue;
+                }
             }
         }
     }

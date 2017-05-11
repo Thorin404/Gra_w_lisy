@@ -26,7 +26,7 @@ public class PadlockController : MonoBehaviour
 
     }
 
-    void OnTriggerStay(Collider other)
+    void OnTriggerEnter(Collider other)
     {
         if(other.gameObject.tag == playerTag && mIsLocked)
         {
@@ -44,6 +44,7 @@ public class PadlockController : MonoBehaviour
                     gameObject.tag = itemTagName;
                     mRigidBody.isKinematic = false;
                     mIsLocked = false;
+                    this.enabled = false;
 
                     //Enable locked animator
                     mLockedAnimator.enabled = true;

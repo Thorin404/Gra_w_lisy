@@ -1,5 +1,5 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -22,7 +22,6 @@ public class GameController : MonoBehaviour
     public GameObject pauseUI;
     public GameObject gameUI;
     public GameObject scoreUI;
-    public GameObject miscUI;
 
     //Script references
 
@@ -39,15 +38,13 @@ public class GameController : MonoBehaviour
     private Text timerText;
 
     private Text scoreDetailsText;
+    private InputField playerNameInputField;
 
     //GameObjectives
+    public string stageName;
     public GameObject arrowPointer;
-
     public Transform startPosition;
     public Transform endPosition;
-
-
-
     public float targetTime;
 
     public bool CheckpointReached
@@ -56,7 +53,7 @@ public class GameController : MonoBehaviour
         get { return mCheckpointReached; }
     }
 
-    public bool GamePaused
+    public static bool GamePaused
     {
         get { return mGamePaused; }
     }
@@ -65,7 +62,7 @@ public class GameController : MonoBehaviour
     private int itemsToCollect;
     private string keyItemName;
 
-    private bool mGamePaused = false;
+    private static bool mGamePaused = false;
     private bool mCheckpointReached = false;
     private bool mGotoExit = false;
     private bool mStageWon = false;
@@ -79,6 +76,8 @@ public class GameController : MonoBehaviour
 
     void Start()
     {
+        GameData.Instance.Load();
+
         cameraSystem = GetComponent<CameraSystemController>();
         pauseMenu = pauseUI.GetComponentInChildren<PauseMenu>();
         keyItemSpawner = GetComponent<KeyItemSpawner>();
@@ -92,6 +91,7 @@ public class GameController : MonoBehaviour
         timerText = textFields[4];
 
         scoreDetailsText = scoreUI.GetComponentInChildren<Text>();
+        playerNameInputField = scoreUI.GetComponentInChildren<InputField>();
 
         RestartGame();
     }
@@ -105,7 +105,11 @@ public class GameController : MonoBehaviour
     {
         //TODO: Reseting scene state, without reloading it
 
+        playerNameInputField.gameObject.SetActive(false);
+
+        keyItemSpawner.Reset();
         keyItemSpawner.SpawnItems();
+
         itemsToCollect = keyItemSpawner.KeyItemsCount;
         keyItemName = keyItemSpawner.KeyItemName;
 
@@ -208,7 +212,7 @@ public class GameController : MonoBehaviour
             mPlayerTime -= Time.deltaTime;
             timerText.text = "TimeLeft: " + (int)mPlayerTime;
 
-            if(mPlayerTime < targetTime / 3)
+            if (mPlayerTime < targetTime / 3)
             {
                 timerText.color = Color.red;
             }
@@ -245,10 +249,13 @@ public class GameController : MonoBehaviour
 
             //TODO : Score saving etc
 
-            scoreDetailsText.text = 
-                "Items collected: "+ mPlayerItemsCollected + "/" + itemsToCollect +
-                "\nOverall score: " + mPlayerScore +
-                "\nTime left: "+ mPlayerTime;
+            playerNameInputField.gameObject.SetActive(true);
+
+            scoreDetailsText.text =
+                "Items collected: " + mPlayerItemsCollected + "/" + itemsToCollect +
+                "\nScore: " + mPlayerScore +
+                "\nTime left: " + mPlayerTime +
+                "\nSummary: " + mPlayerScore * (int)mPlayerTime;
 
             //fox goes away
             //a* to the point
@@ -296,13 +303,23 @@ public class GameController : MonoBehaviour
             }
             yield return null;
         }
+
+        //Save score
+        if (playerNameInputField.gameObject.activeSelf)
+        {
+            string name = playerNameInputField.text.Length > 0 ? playerNameInputField.text : "Player";
+            GameData.Instance.GetData.GetLevelSave(stageName).AddScore(name, mPlayerScore * (int)mPlayerTime);
+        }
+
         if (exitStage)
         {
+            GameData.Instance.Save();
             SceneManager.LoadScene(0);
         }
         else
         {
             //TODO: reload scene async
+            GameData.Instance.Save();
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
     }

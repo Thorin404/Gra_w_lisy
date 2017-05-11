@@ -5,65 +5,100 @@ using UnityEngine;
 
 public class KeyItemSpawner : MonoBehaviour
 {
-
-    public GameObject keyItemPrefab;
+    public GameObject[] keyItemPrefabs;
     public Transform keyItemPositionsHolder;
-    public float pctToSpawn;
+    public float keyItemsToSpawnPct;
 
-    private Transform[] mKeyItemPositions;
+    public GameObject[] bonusItemsPrefabs;
+    public Transform bonusItemPositionsHolder;
+    public float bonusItemsToSpawnPct;
+
+    private Transform[] mKeyItemsPositions;
+    private Transform[] mBonusItemsPositions;
+
+    private static GameObject[] mKeyItems;
+    private static GameObject[] mBonusItems;
+
+    private int mKeyItemsCount = -1;
+    private int mBonusItemsCount = -1;
+
+    public static GameObject[] KeyItems
+    {
+        get { return mKeyItems; }
+    }
+    public static GameObject[] BonusItems
+    {
+        get { return mBonusItems; }
+    }
 
     public int KeyItemsCount
     {
-        get
-        {
-            if (mKeyItemPositions != null)
-            {
-                return (int)(mKeyItemPositions.Length * pctToSpawn);
-            }
-            return 0;
-        }
+        get { return mKeyItemsCount; }
     }
+    public int BonusItemsCount
+    {
+        get { return mBonusItemsCount; }
+    }
+
     public string KeyItemName
     {
         get
         {
-            if (keyItemPrefab != null)
+            if (keyItemPrefabs != null)
             {
-                return keyItemPrefab.name;
+                return keyItemPrefabs[0].name;
             }
             return null;
         }
     }
 
-    void Start()
+    public void Awake()
     {
-
+        //Debug.Log("KI spawner start");
+        //Reset();
     }
 
-    void Update()
+    public void Reset()
     {
+        mKeyItemsPositions = CreatePositionsArray(keyItemPositionsHolder);
+        mKeyItemsCount = (int)(mKeyItemsPositions.Length * keyItemsToSpawnPct);
 
+        mBonusItemsPositions = CreatePositionsArray(bonusItemPositionsHolder);
+        mBonusItemsCount = (int)(mBonusItemsPositions.Length * bonusItemsToSpawnPct);
+    }
+
+    private Transform[] CreatePositionsArray(Transform holder)
+    {
+        Transform[] positions = holder.GetComponentsInChildren<Transform>();
+        positions = positions.Skip(1).ToArray();
+        return positions;
     }
 
     public void SpawnItems()
     {
-        if (mKeyItemPositions == null)
+        if(mKeyItems == null)
         {
-            mKeyItemPositions = keyItemPositionsHolder.GetComponentsInChildren<Transform>();
-            mKeyItemPositions = mKeyItemPositions.Skip(1).ToArray();
+            mKeyItems = SpawnPrefabsRandomly(mKeyItemsPositions, keyItemPrefabs, mKeyItemsCount);
         }
+        if(mBonusItems == null)
+        {
+            mBonusItems = SpawnPrefabsRandomly(mBonusItemsPositions, bonusItemsPrefabs, mBonusItemsCount);
+        }
+    }
 
-        int itemsToSpawn = KeyItemsCount;
+    private GameObject[] SpawnPrefabsRandomly(Transform[] positions, GameObject[] prefab, int spawnCount)
+    {
+        int itemsToSpawn = spawnCount;
+        GameObject[] spawnedObjects = new GameObject[itemsToSpawn];
+
         System.Random random = new System.Random();
-        Transform[] randomArray = mKeyItemPositions.OrderBy(x => random.Next()).ToArray();
+        Transform[] randomArray = positions.OrderBy(x => random.Next()).ToArray();
 
-        while (itemsToSpawn > 0)
+        for (int i = 0; i < spawnCount; i++)
         {
-            Instantiate(keyItemPrefab, randomArray[itemsToSpawn].position, randomArray[itemsToSpawn].rotation);
-            itemsToSpawn--;
+            spawnedObjects[i] = Instantiate(prefab[random.Next(0, prefab.Length)], randomArray[i].position, randomArray[i].rotation);
         }
-
-        Debug.Log("Key Item: ["+KeyItemName+"]x[" + KeyItemsCount+"]");
+        return spawnedObjects;
     }
 
     void OnDrawGizmos()
@@ -72,9 +107,15 @@ public class KeyItemSpawner : MonoBehaviour
         {
             foreach (Transform t in keyItemPositionsHolder.GetComponentsInChildren<Transform>())
             {
-                Gizmos.color = Color.green;
+                Gizmos.color = Color.red;
                 Gizmos.DrawWireCube(t.position, new Vector3(1, 1, 1));
             }
+            foreach (Transform t in bonusItemPositionsHolder.GetComponentsInChildren<Transform>())
+            {
+                Gizmos.color = Color.yellow;
+                Gizmos.DrawWireCube(t.position, new Vector3(1, 1, 1));
+            }
+
         }
     }
 }
