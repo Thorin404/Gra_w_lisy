@@ -1,4 +1,4 @@
-﻿﻿using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System;
@@ -9,13 +9,13 @@ public class PathRequestManager : MonoBehaviour {
 	PathRequest currentPathRequest;
 
 	static PathRequestManager instance;
-	Pathfinding pathfinding;
+	PathFinding pathfinding;
 
 	bool isProcessingPath;
 
 	void Awake() {
 		instance = this;
-		pathfinding = GetComponent<Pathfinding>();
+		pathfinding = GetComponent<PathFinding>();
 	}
 
 	public static void RequestPath(Vector3 pathStart, Vector3 pathEnd, Action<Vector3[], bool> callback) {
