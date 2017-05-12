@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System;
 
-public class Pathfinding : MonoBehaviour {
+public class PathFinding : MonoBehaviour {
 
 	PathRequestManager requestManager;
 	Grid grid;
@@ -30,7 +30,6 @@ public class Pathfinding : MonoBehaviour {
 		Node startNode = grid.NodeFromWorldPoint(startPos);
 		Node targetNode = grid.NodeFromWorldPoint(targetPos);
 		startNode.parent = startNode;
-
 
 		if (startNode.walkable && targetNode.walkable) {
 			Heap<Node> openSet = new Heap<Node>(grid.MaxSize);
@@ -112,6 +111,4 @@ public class Pathfinding : MonoBehaviour {
 			return 14 * dstY + 10 * (dstX - dstY);
 		return 14 * dstX + 10 * (dstY - dstX);
 	}
-
-
 }
