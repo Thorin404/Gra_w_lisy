@@ -7,9 +7,7 @@ public class PathFollower : MonoBehaviour {
 	public Transform[] path;
 	public float speed = 5.0f;
 	public float turnSpeed = 3.0f;
-	public float speedPercent = 1.0f;
 	public float reachDist = 1.0f;
-	public float slowingDist = 2.0f;
 	public int currentPoint = 0;
 
 	void Start () {
@@ -23,7 +21,7 @@ public class PathFollower : MonoBehaviour {
 		transform.rotation = Quaternion.Lerp (transform.rotation, targetRotation, Time.deltaTime * turnSpeed);
 		transform.Translate (Vector3.forward * Time.deltaTime * speed, Space.Self);
 
-		if (dist <= slowingDist) {
+		if (dist <= reachDist) {
 			currentPoint++;
 		}
 		if (currentPoint >= path.Length) {
