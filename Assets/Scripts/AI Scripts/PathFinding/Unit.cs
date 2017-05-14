@@ -1,4 +1,4 @@
-﻿﻿using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 
 public class Unit : MonoBehaviour {
@@ -6,6 +6,7 @@ public class Unit : MonoBehaviour {
 	const float minPathUpdateTime = .2f;
 	const float pathUpdateMoveThreshold = .5f;
 
+	public bool displayUnitGizmos;
 	public Transform target;
 	public float speed = 20;
 	public float turnSpeed = 3;
@@ -84,7 +85,7 @@ public class Unit : MonoBehaviour {
 	}
 
 	public void OnDrawGizmos() {
-		if (path != null) {
+		if (path != null && displayUnitGizmos) {
 			path.DrawWithGizmos ();
 		}
 	}

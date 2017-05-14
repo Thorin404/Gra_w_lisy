@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PathFollower : MonoBehaviour {
 
+	public bool displayPathGizmos;
 	public Transform[] path;
 	public float speed = 5.0f;
 	public float turnSpeed = 3.0f;
@@ -30,7 +31,7 @@ public class PathFollower : MonoBehaviour {
 	}
 
 	void OnDrawGizmos () {
-		if (path.Length > 0) {
+		if (path.Length > 0 && displayPathGizmos) {
 			for (int i = 0; i < path.Length; i++) {
 				if (path [i] != null) {
 					Gizmos.DrawSphere (path [i].position, reachDist);
