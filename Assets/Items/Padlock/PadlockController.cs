@@ -61,6 +61,6 @@ public class PadlockController : MonoBehaviour
         key.gameObject.transform.SetParent(keyTarget);
         key.gameObject.transform.localPosition = new Vector3();
         key.gameObject.transform.rotation = keyTarget.rotation;
-        key.gameObject.tag = "UsedItem";
+        key.gameObject.tag = "Untagged";
     }
 }
