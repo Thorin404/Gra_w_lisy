@@ -107,7 +107,6 @@ public class GameController : MonoBehaviour
 
         playerNameInputField.gameObject.SetActive(false);
 
-        keyItemSpawner.Reset();
         keyItemSpawner.SpawnItems();
 
         itemsToCollect = keyItemSpawner.KeyItemsCount;

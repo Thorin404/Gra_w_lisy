@@ -55,11 +55,12 @@ public class KeyItemSpawner : MonoBehaviour
     public void Awake()
     {
         //Debug.Log("KI spawner start");
-        //Reset();
+        Reset();
     }
 
     public void Reset()
     {
+        Debug.Log("Reset");
         mKeyItemsPositions = CreatePositionsArray(keyItemPositionsHolder);
         mKeyItemsCount = (int)(mKeyItemsPositions.Length * keyItemsToSpawnPct);
 
