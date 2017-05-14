@@ -20,9 +20,7 @@ public class FoxInstinctController : MonoBehaviour
 
     void Start()
     {
-        mKeyItems = KeyItemSpawner.KeyItems;
-        mBonusItems = KeyItemSpawner.BonusItems;
-        mAllItems = mKeyItems.Concat(mBonusItems).ToArray();
+
     }
 
     //TODO : time constrain, slowmo, bonus pickup pointer
@@ -53,6 +51,13 @@ public class FoxInstinctController : MonoBehaviour
 
     private void GeneratePointers()
     {
+        if(mAllItems == null)
+        {
+            mKeyItems = KeyItemSpawner.KeyItems;
+            mBonusItems = KeyItemSpawner.BonusItems;
+            mAllItems = mKeyItems.Concat(mBonusItems).ToArray();
+        }
+
         if (mAllItems != null && lastGeneratedPointers == null)
         {
             lastGeneratedPointers = new GameObject[mAllItems.Length];
