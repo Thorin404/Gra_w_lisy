@@ -11,41 +11,26 @@ public class ObjectSpawner : MonoBehaviour
     public float spawnInterval;
     public bool randomRotation;
 
-    private bool mStartSpawn = false;
     private bool mSpawned = false;
-
-    private float mCurrentTime;
-    private int mCurrentObject;
-
-    void Start()
-    {
-        mCurrentObject = 0;
-        mCurrentTime = 0.0f;
-    }
-
-    void Update()
-    {
-        if (mStartSpawn && !mSpawned)
-        {
-            mCurrentTime += Time.deltaTime;
-            if (mCurrentTime > spawnInterval)
-            {
-                SpawnPrefab();
-                mCurrentTime = 0.0f;
-                mCurrentObject++;
-            }
-            if(mCurrentObject > objectsNumber)
-            {
-                mSpawned = true;
-            }
-        }
-    }
 
     void OnTriggerEnter(Collider other)
     {
-        if (!mStartSpawn && !mSpawned)
+        if (!mSpawned)
         {
-            mStartSpawn = true;
+            mSpawned = true;
+            StartCoroutine(SpawnObjects(objectsNumber));
+        }
+    }
+
+    IEnumerator SpawnObjects(int count)
+    {
+        int currentItem = count;
+
+        while (currentItem > 0)
+        {
+            SpawnPrefab();
+            currentItem--;
+            yield return new WaitForSeconds(spawnInterval);
         }
     }
 
