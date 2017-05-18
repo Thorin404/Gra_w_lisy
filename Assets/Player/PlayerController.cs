@@ -152,4 +152,10 @@ public class PlayerController : MonoBehaviour
         }
         return smoothTime / airControlPercent;
     }
+
+    public void SetPlayerPosition(Transform target)
+    {
+        transform.position = target.position;
+        transform.rotation = target.rotation;
+    }
 }

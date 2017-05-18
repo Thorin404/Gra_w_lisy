@@ -7,51 +7,33 @@ using System.Linq;
 
 public class GameController : MonoBehaviour
 {
-    //Misc
+    //Buttons
     public string pauseButtonName;
-    public string skipButton;
-    public string retryButton;
+    public string skipButtonName;
+    public string retryButtonName;
 
     //Player related 
-
     public PlayerController playerController;
-    public Camera primaryCamera;
-    public Camera secondaryCamera;
-
-    //Ui groups 
-    public GameObject pauseUI;
-    public GameObject gameUI;
-    public GameObject scoreUI;
+    public Camera playerCamera;
 
     //Script references
-
     private CameraSystemController cameraSystem;
-    private PauseMenu pauseMenu;
     private KeyItemSpawner keyItemSpawner;
-
-    //UI references 
-
-    private Text infoText;
-    private Text gameObjectiveText;
-    private Text keyItemsText;
-    private Text scoreText;
-    private Text timerText;
-
-    private Text scoreDetailsText;
-    private InputField playerNameInputField;
+    private ScoreCounter scoreCounter;
 
     //GameObjectives
     public string stageName;
+    public float targetTime;
+    public float countdownTime;
     public GameObject arrowPointer;
     public Transform startPosition;
     public Transform endPosition;
-    public float targetTime;
 
-    public bool CheckpointReached
-    {
-        set { mCheckpointReached = mGotoExit ? value : false; }
-        get { return mCheckpointReached; }
-    }
+    public delegate void PickupHandler(PickUp p);
+    public PickupHandler pickupHandler;
+
+    //Game pause
+    private static bool mGamePaused = false;
 
     public static bool GamePaused
     {
@@ -59,39 +41,28 @@ public class GameController : MonoBehaviour
     }
 
     //Private members
-    private int itemsToCollect;
-    private string keyItemName;
 
-    private static bool mGamePaused = false;
+    public bool CheckpointReached
+    {
+        set { mCheckpointReached = mGotoExit ? value : false; }
+        get { return mCheckpointReached; }
+    }
+
     private bool mCheckpointReached = false;
     private bool mGotoExit = false;
     private bool mStageWon = false;
 
-    //private int mScoreMultiplier = 20;
-    //private float mScoreMultiplierTimer = 0.0f;
-
-    private int mPlayerScore = 0;
-    private int mPlayerItemsCollected = 0;
-    private float mPlayerTime = 0.0f;
-
     void Start()
     {
+        //Load game saves
         GameData.Instance.Load();
 
+        //Setup scripts references
         cameraSystem = GetComponent<CameraSystemController>();
-        pauseMenu = pauseUI.GetComponentInChildren<PauseMenu>();
         keyItemSpawner = GetComponent<KeyItemSpawner>();
+        scoreCounter = GetComponent<ScoreCounter>();
 
-        //Game ui references
-        Text[] textFields = gameUI.GetComponentsInChildren<Text>();
-        infoText = textFields[0];
-        gameObjectiveText = textFields[1];
-        keyItemsText = textFields[2];
-        scoreText = textFields[3];
-        timerText = textFields[4];
-
-        scoreDetailsText = scoreUI.GetComponentInChildren<Text>();
-        playerNameInputField = scoreUI.GetComponentInChildren<InputField>();
+        pickupHandler = scoreCounter.HandlePickUp;
 
         RestartGame();
     }
@@ -103,35 +74,28 @@ public class GameController : MonoBehaviour
 
     public void RestartGame()
     {
-        //TODO: Reseting scene state, without reloading it
+        //TODO: Reseting scene state, without reloading it / async level loading
 
-        playerNameInputField.gameObject.SetActive(false);
-
-        keyItemSpawner.SpawnItems();
-
-        itemsToCollect = keyItemSpawner.KeyItemsCount;
-        keyItemName = keyItemSpawner.KeyItemName;
-
-        mGamePaused = false;
-
-        //Set player position and rotation deactivate player controller
-        playerController.gameObject.transform.position = startPosition.position;
-        playerController.gameObject.transform.rotation = startPosition.rotation;
-
-        playerController.enabled = false;
-
-        //Disable game ui and retry button
-        gameUI.gameObject.SetActive(false);
-        pauseMenu.EnableRetryButton(false);
-
-        //Disable cameras
-        primaryCamera.gameObject.SetActive(false);
-        secondaryCamera.gameObject.SetActive(false);
-
+        //Stop all previous coroutines
         StopAllCoroutines();
 
-        //Start intro camera
+        //Unpause game
+        mGamePaused = false;
+
+        //Spawn key items
+        keyItemSpawner.Reset();
+        keyItemSpawner.SpawnItems();
+
+        //Set player position and rotation deactivate player controller
+        playerController.enabled = false;
+        playerController.SetPlayerPosition(startPosition);
+        playerCamera.gameObject.SetActive(false);
+
+        //Reset intro camera, enable intro ui
+        InGameUI.Instance.SetInterfaceGroup(InGameUI.InterfaceGroups.INTRO, true);
         cameraSystem.Reset();
+
+        //Start intro
         StartCoroutine(WaitForStart());
 
         //Start pause corutine
@@ -140,89 +104,79 @@ public class GameController : MonoBehaviour
 
     private IEnumerator WaitForStart()
     {
+        PauseMenu.Instance.EnableButton(PauseMenu.PauseMenuButtons.RETRY, false);
+
+        IntroUI.Instance.SetText(IntroUI.TextElements.STAGE_NAME, stageName);
+
+        string topScores = GameData.Instance.GetData.GetLevelSave(stageName).GetBestScoresString(10);
+        IntroUI.Instance.SetText(IntroUI.TextElements.TOP_SCORE_LIST, topScores);
+
         while (cameraSystem.SystemIsActive)
         {
-            if (Input.GetButtonDown(skipButton) && !mGamePaused)
+            if (Input.GetButtonDown(skipButtonName) && !mGamePaused)
             {
                 cameraSystem.Skip();
                 break;
             }
             yield return null;
-            //Debug.Log("Waiting for startGame");
         }
         StartCoroutine(StartCountdown());
     }
 
     private IEnumerator StartCountdown()
     {
-        gameUI.gameObject.SetActive(true);
-        primaryCamera.gameObject.SetActive(true);
-        pauseMenu.EnableRetryButton(true);
+        InGameUI.Instance.SetInterfaceGroup(InGameUI.InterfaceGroups.INTRO, false);
+        InGameUI.Instance.SetInterfaceGroup(InGameUI.InterfaceGroups.GAME, true);
 
-        float timeLeft = 3.0f;
+        playerCamera.gameObject.SetActive(true);
+
+        //TODO: Repair UI
+
+        PauseMenu.Instance.EnableButton(PauseMenu.PauseMenuButtons.RETRY, true);
+
+        float timeLeft = countdownTime;
 
         while (timeLeft > 0.1f)
         {
             timeLeft -= Time.deltaTime;
-            infoText.text = "Get ready : " + (int)timeLeft;
+
+            GameUI.Instance.SetText(GameUI.TextElements.INFO, "Get ready : " + (int)(timeLeft));
             yield return new WaitForEndOfFrame();
         }
 
         StartCoroutine(StartStage());
 
-        //Wait for 2 sec displaying the text
-        infoText.text = "Go!!!";
+        GameUI.Instance.SetText(GameUI.TextElements.INFO, "Go!!!");
+
         yield return new WaitForSeconds(2);
-        infoText.enabled = false;
+
+        GameUI.Instance.EnableElement(GameUI.TextElements.INFO, false);
     }
 
     //Gameplay
-
-
-    public void HandlePickUp(PickUp pickup)
-    {
-        mPlayerItemsCollected += pickup.gameObject.name.Contains(keyItemName) ? 1 : 0;
-
-        mPlayerTime += pickup.timeValue;
-        mPlayerScore += pickup.scoreValue;
-
-        //TODO : Adding score, score multiplier etc
-
-        //Refresh ui text
-        scoreText.text = "Score: " + mPlayerScore;
-        keyItemsText.text = "Key items: " + mPlayerItemsCollected + " / " + itemsToCollect;
-    }
-
     private IEnumerator StartStage()
     {
-        playerController.enabled = true;
-        mPlayerScore = 0;
-        mPlayerItemsCollected = 0;
-        mPlayerTime = targetTime;
+        //UI
+        GameUI.Instance.SetText(GameUI.TextElements.OBJECTIVE, "Collect eggs");
 
-        gameObjectiveText.text = "Collect eggs";
-        keyItemsText.text = mPlayerItemsCollected + " / " + itemsToCollect;
+        //Enable player movement and reset counter
+        playerController.enabled = true;
+        scoreCounter.ResetCounter(keyItemSpawner.KeyItemsCount, keyItemSpawner.KeyItemName, targetTime);
 
         //Score counting loop
 
-        while (mPlayerTime > 0.1f)
+        while (scoreCounter.PlayerHasTime)
         {
             //Refresh player timer
-            mPlayerTime -= Time.deltaTime;
-            timerText.text = "TimeLeft: " + (int)mPlayerTime;
-
-            if (mPlayerTime < targetTime / 3)
-            {
-                timerText.color = Color.red;
-            }
+            scoreCounter.SubtractTime = Time.deltaTime;
 
             //If minimal score has been reached, activate the arrow pointing to exit
-            if (mPlayerItemsCollected >= itemsToCollect)
+            if (scoreCounter.ItemsCollected)
             {
                 //Set stage exit pointer active
                 if (!arrowPointer.gameObject.activeSelf)
                 {
-                    gameObjectiveText.text = "Retreat to exit";
+                    GameUI.Instance.SetText(GameUI.TextElements.OBJECTIVE, "Retreat to exit");
                     arrowPointer.gameObject.SetActive(true);
                     mGotoExit = true;
                 }
@@ -238,23 +192,18 @@ public class GameController : MonoBehaviour
             yield return null;
         }
 
+        GameUI.Instance.EnableElement(GameUI.TextElements.INFO, true);
+
         if (mStageWon)
         {
             arrowPointer.gameObject.SetActive(false);
             playerController.enabled = false;
 
-            infoText.text = "You won!";
-            infoText.enabled = true;
+            GameUI.Instance.SetText(GameUI.TextElements.INFO, "You won!");
 
             //TODO : Score saving etc
 
-            playerNameInputField.gameObject.SetActive(true);
-
-            scoreDetailsText.text =
-                "Items collected: " + mPlayerItemsCollected + "/" + itemsToCollect +
-                "\nScore: " + mPlayerScore +
-                "\nTime left: " + mPlayerTime +
-                "\nSummary: " + mPlayerScore * (int)mPlayerTime;
+            scoreCounter.SetScoreText();
 
             //fox goes away
             //a* to the point
@@ -264,26 +213,25 @@ public class GameController : MonoBehaviour
             arrowPointer.gameObject.SetActive(false);
             playerController.enabled = false;
 
-            infoText.text = "End of time";
-            infoText.enabled = true;
+            GameUI.Instance.SetText(GameUI.TextElements.INFO, "End of time");
 
-            scoreDetailsText.text = "Stage failed: end of time";
+            ScoreUI.Instance.scoreDetailsText.text = "Stage failed: end of time";
+            ScoreUI.Instance.inputField.gameObject.SetActive(false);
         }
 
         //Wait for 2 seconds and start score screen
         yield return new WaitForSeconds(2);
 
-        infoText.enabled = false;
+        GameUI.Instance.EnableElement(GameUI.TextElements.INFO, false);
 
         StartCoroutine(WaitForExit());
     }
 
     private IEnumerator WaitForExit()
     {
-        //deactivate game ui
-        gameUI.gameObject.SetActive(false);
-        //Activate score screen
-        scoreUI.SetActive(true);
+        InGameUI.Instance.SetInterfaceGroup(InGameUI.InterfaceGroups.GAME, false);
+        InGameUI.Instance.SetInterfaceGroup(InGameUI.InterfaceGroups.SCORE, true);
+
         //Wait 2 sec before enablling exit to menu
         yield return new WaitForSeconds(2);
 
@@ -291,11 +239,11 @@ public class GameController : MonoBehaviour
 
         while (true)
         {
-            if (Input.GetButtonDown(skipButton) && !mGamePaused)
+            if (Input.GetButtonDown(skipButtonName) && !mGamePaused)
             {
                 break;
             }
-            else if (Input.GetButtonDown(retryButton) && !mGamePaused)
+            else if (Input.GetButtonDown(retryButtonName) && !mGamePaused)
             {
                 exitStage = true;
                 break;
@@ -304,11 +252,8 @@ public class GameController : MonoBehaviour
         }
 
         //Save score
-        if (playerNameInputField.gameObject.activeSelf)
-        {
-            string name = playerNameInputField.text.Length > 0 ? playerNameInputField.text : "Player";
-            GameData.Instance.GetData.GetLevelSave(stageName).AddScore(name, mPlayerScore * (int)mPlayerTime);
-        }
+        scoreCounter.SaveScore(stageName);
+
 
         if (exitStage)
         {
@@ -323,13 +268,14 @@ public class GameController : MonoBehaviour
         }
     }
 
+    //Pause Game
     private IEnumerator WaitForPause()
     {
         while (true)
         {
             if (Input.GetButtonDown(pauseButtonName) && !mGamePaused)
             {
-                pauseUI.gameObject.SetActive(true);
+                InGameUI.Instance.SetInterfaceGroup(InGameUI.InterfaceGroups.PAUSE, true);
                 Time.timeScale = 0.0f;
                 mGamePaused = true;
             }
@@ -341,7 +287,7 @@ public class GameController : MonoBehaviour
     {
         Time.timeScale = 1.0f;
         mGamePaused = false;
-        pauseUI.gameObject.SetActive(false);
+        InGameUI.Instance.SetInterfaceGroup(InGameUI.InterfaceGroups.PAUSE, false);
     }
 
 }
