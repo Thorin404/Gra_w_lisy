@@ -38,11 +38,11 @@ public class PauseMenu : MonoBehaviour
 
     void Awake()
     {
+		Instance = this;
         mMenuButtons = menuLayers[0].GetComponentsInChildren<Button>();
         //mPanelButtons = menuLayers[1].GetComponentsInChildren<Button>();
 
         menuLayers[1].SetActive(false);
-        Instance = this;
     }
 
     void Update()

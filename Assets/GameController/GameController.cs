@@ -35,6 +35,8 @@ public class GameController : MonoBehaviour
     //Game pause
     private static bool mGamePaused = false;
 
+	private IEnumerator mGamePauseCoroutine;
+
     public static bool GamePaused
     {
         get { return mGamePaused; }
@@ -99,7 +101,9 @@ public class GameController : MonoBehaviour
         StartCoroutine(WaitForStart());
 
         //Start pause corutine
-        StartCoroutine(WaitForPause());
+		mGamePauseCoroutine = WaitForPause();
+
+		StartCoroutine(mGamePauseCoroutine);
     }
 
     private IEnumerator WaitForStart()
@@ -254,6 +258,7 @@ public class GameController : MonoBehaviour
         //Save score
         scoreCounter.SaveScore(stageName);
 
+		StopCoroutine (mGamePauseCoroutine);
 
         if (exitStage)
         {

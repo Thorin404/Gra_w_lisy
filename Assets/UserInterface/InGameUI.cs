@@ -10,7 +10,7 @@ public class InGameUI : MonoBehaviour
 
     public static InGameUI Instance;
 
-    void Awake()
+    void Start()
     {
         //Disable all interface elements
         foreach(GameObject go in UiElements)
@@ -22,8 +22,10 @@ public class InGameUI : MonoBehaviour
 
     public void SetInterfaceGroup(InterfaceGroups ig, bool active)
     {
-        UiElements[(int)ig].SetActive(active);
-        //Debug.Log(UiElements[(int)ig].name + " active" + active);
+		if(UiElements[(int)ig] != null){
+       		UiElements[(int)ig].SetActive(active);
+        	Debug.Log(UiElements[(int)ig].name + " active" + active);
+		}
     }
 
 }
