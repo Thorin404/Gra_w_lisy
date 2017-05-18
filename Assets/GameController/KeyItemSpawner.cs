@@ -52,20 +52,20 @@ public class KeyItemSpawner : MonoBehaviour
         }
     }
 
-    public void Awake()
+    public void Start()
     {
-        //Debug.Log("KI spawner start");
-        Reset();
     }
 
     public void Reset()
     {
-        Debug.Log("Reset");
         mKeyItemsPositions = CreatePositionsArray(keyItemPositionsHolder);
         mKeyItemsCount = (int)(mKeyItemsPositions.Length * keyItemsToSpawnPct);
 
         mBonusItemsPositions = CreatePositionsArray(bonusItemPositionsHolder);
         mBonusItemsCount = (int)(mBonusItemsPositions.Length * bonusItemsToSpawnPct);
+
+        mKeyItems = null;
+        mBonusItems = null;
     }
 
     private Transform[] CreatePositionsArray(Transform holder)
@@ -89,8 +89,7 @@ public class KeyItemSpawner : MonoBehaviour
 
     private GameObject[] SpawnPrefabsRandomly(Transform[] positions, GameObject[] prefab, int spawnCount)
     {
-        int itemsToSpawn = spawnCount;
-        GameObject[] spawnedObjects = new GameObject[itemsToSpawn];
+        GameObject[] spawnedObjects = new GameObject[spawnCount];
 
         System.Random random = new System.Random();
         Transform[] randomArray = positions.OrderBy(x => random.Next()).ToArray();

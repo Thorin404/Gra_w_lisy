@@ -4,16 +4,22 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+
 /// <summary>
 /// Class is responsible for operations in pause menu which need ui confirmation + hiding restart btn
 /// </summary>
 public class PauseMenu : MonoBehaviour
 {
-    public int mainMenuSceneIndex;
+    public enum PauseMenuButtons { RESUME, RETRY, EXIT };
+    public enum ConfirmationDialogButtons { YES, NO };
 
-    private Button[] menuButtons;
-    private Button retryButton;
-    public GameController gameController;
+    public int mainMenuSceneIndex;
+    public GameObject[] menuLayers;
+
+    private Button[] mMenuButtons;
+    //private Button[] mPanelButtons;
+
+    public static PauseMenu Instance;
 
     private int mSelectedOperation = 0;
     public int Operation
@@ -30,9 +36,13 @@ public class PauseMenu : MonoBehaviour
 
     //TODO: Joypad menu input
 
-    void Start()
+    void Awake()
     {
+        mMenuButtons = menuLayers[0].GetComponentsInChildren<Button>();
+        //mPanelButtons = menuLayers[1].GetComponentsInChildren<Button>();
 
+        menuLayers[1].SetActive(false);
+        Instance = this;
     }
 
     void Update()
@@ -63,12 +73,9 @@ public class PauseMenu : MonoBehaviour
     {
         Debug.Log("Restart");
         Time.timeScale = 1.0f;
-        gameObject.SetActive(false);
-        //gameController.RestartGame();
 
         //Temp : reload entire scene
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-        //gameController.RestartGame();
     }
 
     private void ExitToMenu()
@@ -78,22 +85,9 @@ public class PauseMenu : MonoBehaviour
         SceneManager.LoadScene(mainMenuSceneIndex);
     }
 
-    public void EnableRetryButton(bool active)
+    public void EnableButton(PauseMenuButtons button, bool active)
     {
-        if (menuButtons == null)
-        {
-            menuButtons = GetComponentsInChildren<Button>();
-            foreach (Button b in menuButtons)
-            {
-                //Debug.Log(b.gameObject.name);
-                if (b.gameObject.name == "RetryButton")
-                {
-                    retryButton = b;
-                    break;
-                }
-            }
-        }
-        retryButton.gameObject.SetActive(active);
+        mMenuButtons[(int)button].gameObject.SetActive(active);
     }
 
 }

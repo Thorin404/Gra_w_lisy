@@ -30,7 +30,7 @@ public class PickUpController : MonoBehaviour
     {
         Debug.Log(other.gameObject.name);
         PickUp pickup = other.gameObject.GetComponent<PickUp>();
-        mGameController.HandlePickUp(pickup);
+        mGameController.pickupHandler(pickup);
 
         //Create new PickupText
         GameObject gameObject = Instantiate(pickupText, other.gameObject.transform.position, Quaternion.identity) as GameObject;

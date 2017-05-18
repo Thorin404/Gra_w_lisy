@@ -2,18 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
+using System.Linq;
 
 public class CameraSystemController : MonoBehaviour
 {
     //public string skipButton;
-    public GameObject stageIntroUI;
     public Camera sceneCamera;
-    public Transform[] cameraPositions;
+    public Transform cameraPositionsHolder;
 
     public float cameraSpeed = 1.0f;
     public float rotationSpeed = 1.0f;
     public float transitionDelay = 0.8f;
-
     public bool cycling = true;
 
     private IEnumerator mCurrentCoroutine;
@@ -25,29 +24,24 @@ public class CameraSystemController : MonoBehaviour
         private set { mSystemActive = value; }
     }
 
-    private GameController mGameController;
+    private Transform[] mCameraPositions;
 
-    private Text mStageNameText;
-    private Text mBestScoresText;
-
-    void Awake()
+    void Start()
     {
-        mGameController = GetComponent<GameController>();
-        Text[] pauseScreenElements = stageIntroUI.GetComponentsInChildren<Text>();
-
-        mStageNameText = pauseScreenElements[0];
-        mBestScoresText = pauseScreenElements[2];
-
-        mStageNameText.text = mGameController.stageName;
+        mCameraPositions = CreatePositionsArray(cameraPositionsHolder);
     }
 
-    void Update()
+    private Transform[] CreatePositionsArray(Transform holder)
     {
+        Transform[] positions = holder.GetComponentsInChildren<Transform>();
+        positions = positions.Skip(1).ToArray();
+        return positions;
     }
 
     void OnDrawGizmos()
     {
-        foreach (Transform t in cameraPositions)
+        Transform[] positions = cameraPositionsHolder.GetComponentsInChildren<Transform>();
+        foreach (Transform t in positions)
         {
             Gizmos.color = Color.yellow;
             Gizmos.DrawWireCube(t.position, new Vector3(1, 1, 1));
@@ -56,18 +50,15 @@ public class CameraSystemController : MonoBehaviour
 
     private void SetCameraTransrofm(int i)
     {
-        sceneCamera.transform.position = cameraPositions[i].position;
-        sceneCamera.transform.rotation = cameraPositions[i].rotation;
+        sceneCamera.transform.position = mCameraPositions[i].position;
+        sceneCamera.transform.rotation = mCameraPositions[i].rotation;
     }
 
     public void Reset()
     {
-        mBestScoresText.text = GameData.Instance.GetData.GetLevelSave(mGameController.stageName).GetBestScoresString(10);
-
         SystemIsActive = true;
         SetCameraTransrofm(0);
         sceneCamera.gameObject.SetActive(true);
-        stageIntroUI.gameObject.SetActive(true);
 
         mCurrentCoroutine = NextPoint();
         StartCoroutine(mCurrentCoroutine);
@@ -77,7 +68,6 @@ public class CameraSystemController : MonoBehaviour
     {
         StopCoroutine(mCurrentCoroutine);
         sceneCamera.gameObject.SetActive(false);
-        stageIntroUI.gameObject.SetActive(false);
         SystemIsActive = false;
     }
 
@@ -85,7 +75,7 @@ public class CameraSystemController : MonoBehaviour
     {
         do
         {
-            foreach (Transform t in cameraPositions)
+            foreach (Transform t in mCameraPositions)
             {
                 yield return StartCoroutine(MoveCamera(t.position, t.rotation, cameraSpeed));
             }
