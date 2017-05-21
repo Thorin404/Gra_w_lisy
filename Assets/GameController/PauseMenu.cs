@@ -87,7 +87,10 @@ public class PauseMenu : MonoBehaviour
 
     public void EnableButton(PauseMenuButtons button, bool active)
     {
-        mMenuButtons[(int)button].gameObject.SetActive(active);
+        if (mMenuButtons[(int)button] != null)
+        {
+            mMenuButtons[(int)button].gameObject.SetActive(active);
+        }
     }
 
 }
