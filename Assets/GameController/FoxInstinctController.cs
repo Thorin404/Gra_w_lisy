@@ -9,7 +9,9 @@ public class FoxInstinctController : MonoBehaviour
     public string actionButton;
     public string objectsOfInterestTag;
     public float pointerDistance;
-    public GameObject pointerPrefab;
+
+    public GameObject bonusItempointerPrefab;
+    public GameObject keyItempointerPrefab;
     //public float slowmoTimeScale;
 
     private GameObject[] mKeyItems;
@@ -49,33 +51,65 @@ public class FoxInstinctController : MonoBehaviour
         }
     }
 
+    private void CreatePrefabs(GameObject prefab,GameObject[] positions, int indexStart)
+    {
+        for (int i = 0; i < positions.Length; i++)
+        {
+            if (positions[i] != null)
+            {
+                GameObject gameObject = Instantiate(prefab, transform.position, Quaternion.identity) as GameObject;
+                gameObject.GetComponent<ItemPointer>().Target = positions[i].transform;
+                gameObject.transform.SetParent(this.transform);
+                lastGeneratedPointers[i+indexStart] = gameObject;
+            }
+            else
+            {
+                continue;
+            }
+        }
+    }
+
     private void GeneratePointers()
     {
-        if(mAllItems == null)
+        //if(mAllItems == null)
+        //{
+        //    mKeyItems = KeyItemSpawner.KeyItems;
+        //    mBonusItems = KeyItemSpawner.BonusItems;
+        //    mAllItems = mKeyItems.Concat(mBonusItems).ToArray();
+        //}
+
+        if (mKeyItems == null && mBonusItems == null)
         {
             mKeyItems = KeyItemSpawner.KeyItems;
             mBonusItems = KeyItemSpawner.BonusItems;
             mAllItems = mKeyItems.Concat(mBonusItems).ToArray();
         }
-
-        if (mAllItems != null && lastGeneratedPointers == null)
+        else if (lastGeneratedPointers == null && mAllItems != null)
         {
             lastGeneratedPointers = new GameObject[mAllItems.Length];
-
-            for (int i = 0; i < mAllItems.Length; i++)
-            {
-                if (mAllItems[i] != null)
-                {
-                    GameObject gameObject = Instantiate(pointerPrefab, transform.position, Quaternion.identity) as GameObject;
-                    gameObject.GetComponent<ItemPointer>().Target = mAllItems[i].transform;
-                    gameObject.transform.SetParent(this.transform);
-                    lastGeneratedPointers[i] = gameObject;
-                }
-                else
-                {
-                    continue;
-                }
-            }
+            CreatePrefabs(bonusItempointerPrefab, mBonusItems, 0);
+            CreatePrefabs(keyItempointerPrefab, mKeyItems, mBonusItems.Length);
         }
+
+
+        //if (mAllItems != null && lastGeneratedPointers == null)
+        //{
+        //    lastGeneratedPointers = new GameObject[mAllItems.Length];
+
+        //    for (int i = 0; i < mAllItems.Length; i++)
+        //    {
+        //        if (mAllItems[i] != null)
+        //        {
+        //            GameObject gameObject = Instantiate(keyItempointerPrefab, transform.position, Quaternion.identity) as GameObject;
+        //            gameObject.GetComponent<ItemPointer>().Target = mAllItems[i].transform;
+        //            gameObject.transform.SetParent(this.transform);
+        //            lastGeneratedPointers[i] = gameObject;
+        //        }
+        //        else
+        //        {
+        //            continue;
+        //        }
+        //    }
+        //}
     }
 }

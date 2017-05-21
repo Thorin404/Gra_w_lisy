@@ -12,6 +12,9 @@ public class ThirdPersonCamera : MonoBehaviour
     public float dstFromTarget = 2;
     public Vector2 pitchMinMax = new Vector2(-40, 85);
 
+    public float yawStartOffset = 180.0f;
+    public float pitchStartOffset = 20.0f;
+
     public float rotationSmoothTime = .12f;
     Vector3 rotationSmoothVelocity;
     Vector3 currentRotation;
@@ -21,6 +24,9 @@ public class ThirdPersonCamera : MonoBehaviour
 
     void Start()
     {
+        yaw = yawStartOffset;
+        pitch = pitchStartOffset;
+
         if (lockCursor)
         {
             Cursor.lockState = CursorLockMode.Locked;
@@ -30,15 +36,14 @@ public class ThirdPersonCamera : MonoBehaviour
 
     void LateUpdate()
     {
-        yaw += Input.GetAxis(horizontalAxis) * mouseSensitivity;
-        pitch -= Input.GetAxis(verticalAxis) * mouseSensitivity;
-        pitch = Mathf.Clamp(pitch, pitchMinMax.x, pitchMinMax.y);
-
         currentRotation = Vector3.SmoothDamp(currentRotation, new Vector3(pitch, yaw), ref rotationSmoothVelocity, rotationSmoothTime);
         transform.eulerAngles = currentRotation;
 
-        transform.position = target.position - transform.forward * dstFromTarget;
+        transform.position = target.position - (transform.forward * dstFromTarget);
 
+        yaw += Input.GetAxis(horizontalAxis) * mouseSensitivity;
+        pitch -= Input.GetAxis(verticalAxis) * mouseSensitivity;
+        pitch = Mathf.Clamp(pitch, pitchMinMax.x, pitchMinMax.y);
     }
 
 }

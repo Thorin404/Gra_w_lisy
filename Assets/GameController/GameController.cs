@@ -89,9 +89,10 @@ public class GameController : MonoBehaviour
         keyItemSpawner.SpawnItems();
 
         //Set player position and rotation deactivate player controller
-        playerController.enabled = false;
         playerController.SetPlayerPosition(startPosition);
+        playerController.enabled = false;
         playerCamera.gameObject.SetActive(false);
+
 
         //Reset intro camera, enable intro ui
         InGameUI.Instance.SetInterfaceGroup(InGameUI.InterfaceGroups.INTRO, true);
@@ -165,6 +166,7 @@ public class GameController : MonoBehaviour
 
         //Enable player movement and reset counter
         playerController.enabled = true;
+        playerController.SetPlayerPosition(startPosition);
         scoreCounter.ResetCounter(keyItemSpawner.KeyItemsCount, keyItemSpawner.KeyItemName, targetTime);
 
         //Score counting loop
@@ -269,6 +271,7 @@ public class GameController : MonoBehaviour
         {
             //TODO: reload scene async
             GameData.Instance.Save();
+            Debug.Log("Load scene");
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
     }

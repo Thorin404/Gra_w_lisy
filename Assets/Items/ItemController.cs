@@ -3,15 +3,27 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public interface IItem{
+
+    /// <summary>
+    /// Default item action
+    /// </summary>
+    /// <returns>False if the item has no special action</returns>
+    bool ItemAction(ItemController c);
+
+}
+
 public class ItemController : MonoBehaviour
 {
     public string actionButton;
     public string itemTagName;
     public Transform holdingTarget;
+    public float itemUseTime;
 
     private bool mHoldingItem = false;
     private GameObject mHoldedItem;
     private bool mUseItem;
+    float mTimeAccumulator;
 
     public GameObject HoldedItem
     {
@@ -30,29 +42,40 @@ public class ItemController : MonoBehaviour
             }
         }
     }
+
     public bool UseItem
     {
         get { return mUseItem; }
         set { mUseItem = value; }
     }
 
-
-
     // Use this for initialization
     void Start()
     {
-
+        mTimeAccumulator = 0.0f;
     }
 
-    //TODO: throwing items
-
-
-    // Update is called once per frame
     void Update()
     {
-        if (Input.GetButtonDown(actionButton) && mHoldingItem)
+        if (Input.GetButton(actionButton))
         {
-            DropItem();
+            if (mHoldingItem)
+            {
+                if (mTimeAccumulator < itemUseTime)
+                {
+                    mTimeAccumulator += Time.deltaTime;
+                }
+                else
+                {
+                    //item action
+                    mTimeAccumulator = 0.0f;
+                    StartItemAction();
+                }
+            }
+        }
+        else
+        {
+            mTimeAccumulator = 0.0f;
         }
     }
 
@@ -70,12 +93,32 @@ public class ItemController : MonoBehaviour
         }
     }
 
-    private void DropItem()
+    private void StartItemAction()
     {
-        mHoldedItem.transform.SetParent(null);
-        mHoldedItem.GetComponent<Rigidbody>().isKinematic = false;
-        mHoldingItem = false;
-        mHoldedItem = null;
+        IItem item = mHoldedItem.GetComponentInChildren<IItem>();
+
+        if (item != null)
+        {
+            if (!item.ItemAction(this))
+            {
+                DropItem();
+            }
+        }
+        else
+        {
+            DropItem();
+        }
+    }
+
+    public void DropItem()
+    {
+        if (mHoldedItem != null)
+        {
+            mHoldedItem.transform.SetParent(null);
+            mHoldedItem.GetComponent<Rigidbody>().isKinematic = false;
+            mHoldingItem = false;
+            mHoldedItem = null;
+        }
     }
 
     private void HoldItem()

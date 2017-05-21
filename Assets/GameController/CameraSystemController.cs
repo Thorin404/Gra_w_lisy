@@ -26,7 +26,7 @@ public class CameraSystemController : MonoBehaviour
 
     private Transform[] mCameraPositions;
 
-    void Start()
+    void Awake()
     {
         mCameraPositions = CreatePositionsArray(cameraPositionsHolder);
     }
@@ -56,6 +56,7 @@ public class CameraSystemController : MonoBehaviour
 
     public void Reset()
     {
+        Debug.Log("Reset");
         SystemIsActive = true;
         SetCameraTransrofm(0);
         sceneCamera.gameObject.SetActive(true);
