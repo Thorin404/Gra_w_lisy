@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Rotator : MonoBehaviour {
-	
-	// Update is called once per frame
+
+	public Transform target;
+
 	void Update () {
-		transform.Rotate (new Vector3 (15, 30, 45) * Time.deltaTime);
+		//transform.Rotate (new Vector3 (0, 30, 0) * Time.deltaTime);
+		transform.RotateAround(Vector3.zero, Vector3.up, 20 * Time.deltaTime);
+		//transform.LookAt (target);
 	}
 }
