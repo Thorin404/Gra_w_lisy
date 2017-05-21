@@ -1,0 +1,166 @@
+fileFormatVersion: 2
+guid: 656da6bdb21d9f3458597aae9be1f6cc
+timeCreated: 1495408662
+licenseType: Free
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: Arm_IK_L
+    100002: Arm_IK_L_end
+    100004: Arm_IK_R
+    100006: Arm_IK_R_end
+    100008: Arm_lower_L
+    100010: Arm_lower_R
+    100012: Arm_upper_L
+    100014: Arm_upper_R
+    100016: Chest
+    100018: Elbow_IK_L
+    100020: Elbow_IK_L_end
+    100022: Elbow_IK_R
+    100024: Elbow_IK_R_end
+    100026: //RootNode
+    100028: FarmerArmature
+    100030: FarmerOptimized
+    100032: Foot_IK_L
+    100034: Foot_IK_L_end
+    100036: Foot_IK_R
+    100038: Foot_IK_R_end
+    100040: Foot_L
+    100042: Foot_L_end
+    100044: Foot_R
+    100046: Foot_R_end
+    100048: Head
+    100050: Head_end
+    100052: Knee_IK_L
+    100054: Knee_IK_L_end
+    100056: Knee_IK_R
+    100058: Knee_IK_R_end
+    100060: Leg_lower_L
+    100062: Leg_lower_R
+    100064: Leg_upper_L
+    100066: Leg_upper_R
+    100068: Palm_L
+    100070: Palm_L_end
+    100072: Palm_R
+    100074: Palm_R_end
+    100076: Root
+    100078: Shoulder_L
+    100080: Shoulder_R
+    100082: Spine
+    400000: Arm_IK_L
+    400002: Arm_IK_L_end
+    400004: Arm_IK_R
+    400006: Arm_IK_R_end
+    400008: Arm_lower_L
+    400010: Arm_lower_R
+    400012: Arm_upper_L
+    400014: Arm_upper_R
+    400016: Chest
+    400018: Elbow_IK_L
+    400020: Elbow_IK_L_end
+    400022: Elbow_IK_R
+    400024: Elbow_IK_R_end
+    400026: //RootNode
+    400028: FarmerArmature
+    400030: FarmerOptimized
+    400032: Foot_IK_L
+    400034: Foot_IK_L_end
+    400036: Foot_IK_R
+    400038: Foot_IK_R_end
+    400040: Foot_L
+    400042: Foot_L_end
+    400044: Foot_R
+    400046: Foot_R_end
+    400048: Head
+    400050: Head_end
+    400052: Knee_IK_L
+    400054: Knee_IK_L_end
+    400056: Knee_IK_R
+    400058: Knee_IK_R_end
+    400060: Leg_lower_L
+    400062: Leg_lower_R
+    400064: Leg_upper_L
+    400066: Leg_upper_R
+    400068: Palm_L
+    400070: Palm_L_end
+    400072: Palm_R
+    400074: Palm_R_end
+    400076: Root
+    400078: Shoulder_L
+    400080: Shoulder_R
+    400082: Spine
+    4300000: FarmerOptimized
+    7400000: FarmerArmature|Run
+    7400002: FarmerArmature|Walk
+    9500000: //RootNode
+    13700000: FarmerOptimized
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
