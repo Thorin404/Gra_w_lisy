@@ -11,7 +11,8 @@ public class Unit : MonoBehaviour {
 	public float speed = 20;
 	public float turnSpeed = 3;
 	public float turnDst = 5;
-	public float stoppingDst = 10;
+	public float stoppingDst = 1.0f;
+	public float reachDist = 1.0f;
 
 	int currentTarget = 0;
 
@@ -23,10 +24,15 @@ public class Unit : MonoBehaviour {
 
 	void Update() {
 		bool running = Input.GetKey(KeyCode.Q);
+		float dist = Vector3.Distance (target [currentTarget].position, transform.position);
 
 		if (running) {
-			currentTarget = 1;
-		} else {
+			currentTarget++;
+		}
+		if (dist <= reachDist) {
+			currentTarget++;
+		}
+		if (currentTarget >= target.Length) {
 			currentTarget = 0;
 		}
 	}
@@ -62,7 +68,6 @@ public class Unit : MonoBehaviour {
 
 		bool followingPath = true;
 		int pathIndex = 0;
-		transform.LookAt (path.lookPoints [0]);
 
 		float speedPercent = 1;
 
@@ -78,14 +83,6 @@ public class Unit : MonoBehaviour {
 			}
 
 			if (followingPath) {
-
-				if (pathIndex >= path.slowDownIndex && stoppingDst > 0) {
-					speedPercent = Mathf.Clamp01 (path.turnBoundaries [path.finishLineIndex].DistanceFromPoint (pos2D) / stoppingDst);
-					if (speedPercent < 0.01f) {
-						followingPath = false;
-					}
-				}
-
 				Quaternion targetRotation = Quaternion.LookRotation (path.lookPoints [pathIndex] - transform.position);
 				transform.rotation = Quaternion.Lerp (transform.rotation, targetRotation, Time.deltaTime * turnSpeed);
 				transform.Translate (Vector3.forward * Time.deltaTime * speed * speedPercent, Space.Self);
@@ -99,6 +96,13 @@ public class Unit : MonoBehaviour {
 	public void OnDrawGizmos() {
 		if (path != null && displayUnitGizmos) {
 			path.DrawWithGizmos ();
+		}
+		if (target.Length > 0 && displayUnitGizmos) {
+			for (int i = 0; i < target.Length; i++) {
+				if (target [i] != null) {
+					Gizmos.DrawSphere (target [i].position, reachDist);
+				}
+			}
 		}
 	}
 }
