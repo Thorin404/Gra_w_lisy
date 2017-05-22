@@ -75,7 +75,8 @@ public class ScoreCounter : MonoBehaviour
 
     public void SetScoreText()
     {
-        ScoreUI.Instance.scoreDetailsText.text =
+        Debug.Log(ScoreUI.Instance);
+        ScoreUI.Instance.scoreText.text =
                 "Items collected: " + mPlayerItemsCollected + "/" + mItemsToCollect +
                 "\nScore: " + mPlayerScore +
                 "\nTime left: " + mPlayerTime +

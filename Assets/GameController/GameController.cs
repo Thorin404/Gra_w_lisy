@@ -98,6 +98,8 @@ public class GameController : MonoBehaviour
         InGameUI.Instance.SetInterfaceGroup(InGameUI.InterfaceGroups.INTRO, true);
         cameraSystem.Reset();
 
+        ///PauseMenu.Instance.EnableButton(PauseMenu.PauseMenuButtons.RETRY, false);
+
         //Start intro
         StartCoroutine(WaitForStart());
 
@@ -109,8 +111,6 @@ public class GameController : MonoBehaviour
 
     private IEnumerator WaitForStart()
     {
-        PauseMenu.Instance.EnableButton(PauseMenu.PauseMenuButtons.RETRY, false);
-
         IntroUI.Instance.SetText(IntroUI.TextElements.STAGE_NAME, stageName);
 
         string topScores = GameData.Instance.GetData.GetLevelSave(stageName).GetBestScoresString(10);
@@ -137,7 +137,7 @@ public class GameController : MonoBehaviour
 
         //TODO: Repair UI
 
-        PauseMenu.Instance.EnableButton(PauseMenu.PauseMenuButtons.RETRY, true);
+        //PauseMenu.Instance.EnableButton(PauseMenu.PauseMenuButtons.RETRY, true);
 
         float timeLeft = countdownTime;
 
@@ -199,12 +199,19 @@ public class GameController : MonoBehaviour
         }
 
         GameUI.Instance.EnableElement(GameUI.TextElements.INFO, true);
+        arrowPointer.gameObject.SetActive(false);
+        playerController.enabled = false;
+
+        //Wait for 2 seconds and start score screen
+        yield return new WaitForSeconds(2);
+
+        GameUI.Instance.EnableElement(GameUI.TextElements.INFO, false);
+
+        InGameUI.Instance.SetInterfaceGroup(InGameUI.InterfaceGroups.GAME, false);
+        InGameUI.Instance.SetInterfaceGroup(InGameUI.InterfaceGroups.SCORE, true);
 
         if (mStageWon)
         {
-            arrowPointer.gameObject.SetActive(false);
-            playerController.enabled = false;
-
             GameUI.Instance.SetText(GameUI.TextElements.INFO, "You won!");
 
             //TODO : Score saving etc
@@ -221,22 +228,15 @@ public class GameController : MonoBehaviour
 
             GameUI.Instance.SetText(GameUI.TextElements.INFO, "End of time");
 
-            ScoreUI.Instance.scoreDetailsText.text = "Stage failed: end of time";
+            ScoreUI.Instance.scoreText.text = "Stage failed: end of time";
             ScoreUI.Instance.inputField.gameObject.SetActive(false);
         }
-
-        //Wait for 2 seconds and start score screen
-        yield return new WaitForSeconds(2);
-
-        GameUI.Instance.EnableElement(GameUI.TextElements.INFO, false);
 
         StartCoroutine(WaitForExit());
     }
 
     private IEnumerator WaitForExit()
     {
-        InGameUI.Instance.SetInterfaceGroup(InGameUI.InterfaceGroups.GAME, false);
-        InGameUI.Instance.SetInterfaceGroup(InGameUI.InterfaceGroups.SCORE, true);
 
         //Wait 2 sec before enablling exit to menu
         yield return new WaitForSeconds(2);

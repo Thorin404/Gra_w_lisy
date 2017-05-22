@@ -3,22 +3,49 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ScoreUI : MonoBehaviour {
+public class ScoreUI : MonoBehaviour
+{
 
     public static ScoreUI Instance;
 
-    public Text scoreDetailsText;
-    public InputField inputField; 
+    public Text mScoreDetailsText;
+    public InputField mInputField;
 
-	// Use this for initialization
-	void Awake () {
+    public InputField inputField
+    {
+        get
+        {
+            if (mInputField != null)
+            {
+                return mInputField;
+            }
+            return null;
+        }
+    }
+
+    public Text scoreText
+    {
+        get
+        {
+            if (mScoreDetailsText != null)
+            {
+                return mScoreDetailsText;
+            }
+            return null;
+        }
+    }
+
+    // Use this for initialization
+    void Awake()
+    {
         Instance = this;
-        scoreDetailsText = GetComponentInChildren<Text>();
-        inputField = GetComponentInChildren<InputField>();
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+        //mScoreDetailsText = GetComponentInChildren<Text>();
+        //mInputField = GetComponentInChildren<InputField>();
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+
+    }
 }
