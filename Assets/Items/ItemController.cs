@@ -16,6 +16,7 @@ public interface IItem{
 public class ItemController : MonoBehaviour
 {
     public string actionButton;
+    public string dropButton;
     public string itemTagName;
     public Transform holdingTarget;
     public float itemUseTime;
@@ -76,6 +77,10 @@ public class ItemController : MonoBehaviour
         else
         {
             mTimeAccumulator = 0.0f;
+        }
+        if(Input.GetButtonDown(dropButton) && mHoldingItem)
+        {
+            DropItem();
         }
     }
 
