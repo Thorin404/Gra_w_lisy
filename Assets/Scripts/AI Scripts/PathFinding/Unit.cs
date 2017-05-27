@@ -8,13 +8,13 @@ public class Unit : MonoBehaviour {
 
 	public bool displayUnitGizmos;
 	public Transform[] target;
-	public float speed = 20;
+	public float speed = 2;
 	public float turnSpeed = 3;
 	public float turnDst = 5;
 	public float stoppingDst = 1.0f;
 	public float reachDist = 1.0f;
 
-	int currentTarget = 0;
+	public int currentTarget = 0;
 
 	Path path;
 
@@ -32,7 +32,7 @@ public class Unit : MonoBehaviour {
 		if (dist <= reachDist) {
 			currentTarget++;
 		}
-		if (currentTarget >= target.Length) {
+		if (currentTarget >= target.Length - 1) {
 			currentTarget = 0;
 		}
 	}
