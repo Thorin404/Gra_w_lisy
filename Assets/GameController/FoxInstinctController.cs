@@ -10,6 +10,8 @@ public class FoxInstinctController : MonoBehaviour
     public string objectsOfInterestTag;
     public float pointerDistance;
 
+    public float maxActionTime;
+
     public GameObject bonusItempointerPrefab;
     public GameObject keyItempointerPrefab;
     //public float slowmoTimeScale;
@@ -20,9 +22,12 @@ public class FoxInstinctController : MonoBehaviour
 
     private GameObject[] lastGeneratedPointers;
 
+    private float mCurrentTime;
+
     void Start()
     {
-
+        mCurrentTime = maxActionTime;
+        RefreshUi();
     }
 
     //TODO : time constrain, slowmo, bonus pickup pointer
@@ -31,13 +36,43 @@ public class FoxInstinctController : MonoBehaviour
     {
         if (Input.GetButton(actionButton) && !GameController.GamePaused)
         {
+            StartAction();
+        }
+        else
+        {
+            StopAction();
+        }
+    }
+
+    private void StartAction()
+    {
+        RefreshUi();
+        if (mCurrentTime > 0.0f)
+        {
+            mCurrentTime -= Time.deltaTime;
             GeneratePointers();
         }
         else
         {
+            mCurrentTime = 0.0f;
             DestroyPointers();
         }
     }
+
+    private void StopAction()
+    {
+        RefreshUi();
+        if(mCurrentTime < maxActionTime)
+        {
+            mCurrentTime += Time.deltaTime;
+        }
+        else
+        {
+            mCurrentTime = maxActionTime;
+        }
+        DestroyPointers();
+    }
+
 
     private void DestroyPointers()
     {
@@ -69,15 +104,16 @@ public class FoxInstinctController : MonoBehaviour
         }
     }
 
+    private void RefreshUi()
+    {
+        ProgressBar progressBar = GameUI.Instance.GetProgressBar(GameUI.ProgressBars.FOXPOWER);
+        float pct = mCurrentTime / maxActionTime;
+        progressBar.ProgressBarPct = pct;
+        progressBar.ValueText = ((int)(pct * 100.0f))+"%";
+    }
+
     private void GeneratePointers()
     {
-        //if(mAllItems == null)
-        //{
-        //    mKeyItems = KeyItemSpawner.KeyItems;
-        //    mBonusItems = KeyItemSpawner.BonusItems;
-        //    mAllItems = mKeyItems.Concat(mBonusItems).ToArray();
-        //}
-
         if (mKeyItems == null && mBonusItems == null)
         {
             mKeyItems = KeyItemSpawner.KeyItems;
@@ -90,26 +126,5 @@ public class FoxInstinctController : MonoBehaviour
             CreatePrefabs(bonusItempointerPrefab, mBonusItems, 0);
             CreatePrefabs(keyItempointerPrefab, mKeyItems, mBonusItems.Length);
         }
-
-
-        //if (mAllItems != null && lastGeneratedPointers == null)
-        //{
-        //    lastGeneratedPointers = new GameObject[mAllItems.Length];
-
-        //    for (int i = 0; i < mAllItems.Length; i++)
-        //    {
-        //        if (mAllItems[i] != null)
-        //        {
-        //            GameObject gameObject = Instantiate(keyItempointerPrefab, transform.position, Quaternion.identity) as GameObject;
-        //            gameObject.GetComponent<ItemPointer>().Target = mAllItems[i].transform;
-        //            gameObject.transform.SetParent(this.transform);
-        //            lastGeneratedPointers[i] = gameObject;
-        //        }
-        //        else
-        //        {
-        //            continue;
-        //        }
-        //    }
-        //}
     }
 }

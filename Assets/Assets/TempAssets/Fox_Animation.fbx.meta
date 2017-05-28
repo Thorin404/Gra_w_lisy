@@ -119,8 +119,6 @@ ModelImporter:
     resampleCurves: 1
     optimizeGameObjects: 0
     motionNodeName: 
-    rigImportErrors: 
-    rigImportWarnings: 
     animationImportErrors: 
     animationImportWarnings: 
     animationRetargetingWarnings: 
@@ -131,7 +129,135 @@ ModelImporter:
     animationScaleError: 0.5
     animationWrapMode: 0
     extraExposedTransformPaths: []
-    clipAnimations: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Fox_rig|Walk
+      takeName: Fox_rig|Walk
+      firstFrame: 0
+      lastFrame: 21
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Fox_opt
+        weight: 1
+      - path: Fox_rig
+        weight: 1
+      - path: Fox_rig/Back_leg_foot_IK_L
+        weight: 1
+      - path: Fox_rig/Back_leg_foot_IK_L/Back_leg_foot_IK_L_end
+        weight: 1
+      - path: Fox_rig/Back_leg_foot_IK_R
+        weight: 1
+      - path: Fox_rig/Back_leg_foot_IK_R/Back_leg_foot_IK_R_end
+        weight: 1
+      - path: Fox_rig/Back_leg_IK_L
+        weight: 1
+      - path: Fox_rig/Back_leg_IK_L/Back_leg_IK_L_end
+        weight: 1
+      - path: Fox_rig/Back_leg_IK_R
+        weight: 1
+      - path: Fox_rig/Back_leg_IK_R/Back_leg_IK_R_end
+        weight: 1
+      - path: Fox_rig/Front_leg_foot_IK_L
+        weight: 1
+      - path: Fox_rig/Front_leg_foot_IK_L/Front_leg_foot_IK_L_end
+        weight: 1
+      - path: Fox_rig/Front_leg_foot_IK_R
+        weight: 1
+      - path: Fox_rig/Front_leg_foot_IK_R/Front_leg_foot_IK_R_end
+        weight: 1
+      - path: Fox_rig/Front_leg_IK_L
+        weight: 1
+      - path: Fox_rig/Front_leg_IK_L/Front_leg_IK_L_end
+        weight: 1
+      - path: Fox_rig/Front_leg_IK_R
+        weight: 1
+      - path: Fox_rig/Front_leg_IK_R/Front_leg_IK_R_end
+        weight: 1
+      - path: Fox_rig/Root
+        weight: 1
+      - path: Fox_rig/Root/Spine
+        weight: 1
+      - path: Fox_rig/Root/Spine/Back_leg_upper_L
+        weight: 1
+      - path: Fox_rig/Root/Spine/Back_leg_upper_L/Back_leg_lower_L
+        weight: 1
+      - path: Fox_rig/Root/Spine/Back_leg_upper_L/Back_leg_lower_L/Back_leg_foot_L
+        weight: 1
+      - path: Fox_rig/Root/Spine/Back_leg_upper_L/Back_leg_lower_L/Back_leg_foot_L/Back_leg_foot_L_end
+        weight: 1
+      - path: Fox_rig/Root/Spine/Back_leg_upper_R
+        weight: 1
+      - path: Fox_rig/Root/Spine/Back_leg_upper_R/Back_leg_lower_R
+        weight: 1
+      - path: Fox_rig/Root/Spine/Back_leg_upper_R/Back_leg_lower_R/Back_leg_foot_R
+        weight: 1
+      - path: Fox_rig/Root/Spine/Back_leg_upper_R/Back_leg_lower_R/Back_leg_foot_R/Back_leg_foot_R_end
+        weight: 1
+      - path: Fox_rig/Root/Spine/Chest
+        weight: 1
+      - path: Fox_rig/Root/Spine/Chest/Neck
+        weight: 1
+      - path: Fox_rig/Root/Spine/Chest/Neck/Front_leg_upper_L
+        weight: 1
+      - path: Fox_rig/Root/Spine/Chest/Neck/Front_leg_upper_L/Front_leg_lower_L
+        weight: 1
+      - path: Fox_rig/Root/Spine/Chest/Neck/Front_leg_upper_L/Front_leg_lower_L/Front_leg_Foot_L
+        weight: 1
+      - path: Fox_rig/Root/Spine/Chest/Neck/Front_leg_upper_L/Front_leg_lower_L/Front_leg_Foot_L/Front_leg_Foot_L_end
+        weight: 1
+      - path: Fox_rig/Root/Spine/Chest/Neck/Front_leg_upper_R
+        weight: 1
+      - path: Fox_rig/Root/Spine/Chest/Neck/Front_leg_upper_R/Front_leg_lower_R
+        weight: 1
+      - path: Fox_rig/Root/Spine/Chest/Neck/Front_leg_upper_R/Front_leg_lower_R/Front_leg_Foot_R
+        weight: 1
+      - path: Fox_rig/Root/Spine/Chest/Neck/Front_leg_upper_R/Front_leg_lower_R/Front_leg_Foot_R/Front_leg_Foot_R_end
+        weight: 1
+      - path: Fox_rig/Root/Spine/Chest/Neck/Head
+        weight: 1
+      - path: Fox_rig/Root/Spine/Chest/Neck/Head/Ear_L
+        weight: 1
+      - path: Fox_rig/Root/Spine/Chest/Neck/Head/Ear_L/Ear_L_end
+        weight: 1
+      - path: Fox_rig/Root/Spine/Chest/Neck/Head/Ear_R
+        weight: 1
+      - path: Fox_rig/Root/Spine/Chest/Neck/Head/Ear_R/Ear_R_end
+        weight: 1
+      - path: Fox_rig/Root/Spine/Tail_1
+        weight: 1
+      - path: Fox_rig/Root/Spine/Tail_1/Tail_2
+        weight: 1
+      - path: Fox_rig/Root/Spine/Tail_1/Tail_2/Tail_3
+        weight: 1
+      - path: Fox_rig/Root/Spine/Tail_1/Tail_2/Tail_3/Tail_3_end
+        weight: 1
+      - path: Fox_rig/Tail_IK
+        weight: 1
+      - path: Fox_rig/Tail_IK/Tail_IK_end
+        weight: 1
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
     isReadable: 1
   meshes:
     lODScreenPercentages: []

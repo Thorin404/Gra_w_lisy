@@ -3,7 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface IItem{
+public interface IItem
+{
 
     /// <summary>
     /// Default item action
@@ -11,6 +12,9 @@ public interface IItem{
     /// <returns>False if the item has no special action</returns>
     bool ItemAction(ItemController c);
 
+    Sprite GetSprite();
+    string GetName();
+    string GetHint();
 }
 
 public class ItemController : MonoBehaviour
@@ -23,6 +27,7 @@ public class ItemController : MonoBehaviour
 
     private bool mHoldingItem = false;
     private GameObject mHoldedItem;
+    private IItem mItemInterface;
     private bool mUseItem;
     float mTimeAccumulator;
 
@@ -31,10 +36,12 @@ public class ItemController : MonoBehaviour
         get { return mHoldedItem; }
         set
         {
-            if(value == null)
+            if (value == null)
             {
                 mHoldedItem = value;
+                mItemInterface = null;
                 mHoldingItem = false;
+                GameUI.Instance.ItemBar.SetDefault();
             }
             else
             {
@@ -78,7 +85,7 @@ public class ItemController : MonoBehaviour
         {
             mTimeAccumulator = 0.0f;
         }
-        if(Input.GetButtonDown(dropButton) && mHoldingItem)
+        if (Input.GetButtonDown(dropButton) && mHoldingItem)
         {
             DropItem();
         }
@@ -100,13 +107,15 @@ public class ItemController : MonoBehaviour
 
     private void StartItemAction()
     {
-        IItem item = mHoldedItem.GetComponentInChildren<IItem>();
-
-        if (item != null)
+        if (mItemInterface != null)
         {
-            if (!item.ItemAction(this))
+            if (!mItemInterface.ItemAction(this))
             {
                 DropItem();
+            }
+            else
+            {
+                SetItemBar();
             }
         }
         else
@@ -123,6 +132,25 @@ public class ItemController : MonoBehaviour
             mHoldedItem.GetComponent<Rigidbody>().isKinematic = false;
             mHoldingItem = false;
             mHoldedItem = null;
+            mItemInterface = null;
+
+            GameUI.Instance.ItemBar.SetDefault();
+        }
+    }
+
+    private void SetItemBar()
+    {
+        if (mItemInterface != null)
+        {
+            ItemBar itemBar = GameUI.Instance.ItemBar;
+
+            itemBar.ItemName = mItemInterface.GetName();
+            itemBar.ItemHint = mItemInterface.GetHint();
+            itemBar.ItemSprite = mItemInterface.GetSprite();
+        }
+        else
+        {
+            GameUI.Instance.ItemBar.SetDefault();
         }
     }
 
@@ -132,6 +160,11 @@ public class ItemController : MonoBehaviour
         mHoldedItem.gameObject.transform.localPosition = new Vector3();
         mHoldedItem.gameObject.transform.rotation = transform.rotation;
         mHoldedItem.gameObject.GetComponent<Rigidbody>().isKinematic = true;
+
+        mItemInterface = mHoldedItem.GetComponentInChildren<IItem>();
+
+
+        SetItemBar();
 
         StartCoroutine(WaitForAction());
     }

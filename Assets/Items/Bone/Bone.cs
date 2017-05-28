@@ -8,6 +8,10 @@ public class Bone : MonoBehaviour, IItem {
     public float throwForce;
     public ForceMode forceMode;
 
+    public string itemName;
+    public string itemHint;
+    public Sprite itemSprite;
+
     public bool ItemAction(ItemController c)
     {
         Debug.Log("Throw bone");
@@ -25,4 +29,19 @@ public class Bone : MonoBehaviour, IItem {
 	void Update () {
 		
 	}
+
+    public Sprite GetSprite()
+    {
+        return itemSprite;
+    }
+
+    public string GetName()
+    {
+        return itemName;
+    }
+
+    public string GetHint()
+    {
+        return itemHint;
+    }
 }

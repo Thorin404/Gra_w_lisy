@@ -9,6 +9,7 @@ public class ScoreCounter : MonoBehaviour
 
     private string mKeyItemName;
     private int mItemsToCollect;
+    private float mTargetTime;
     private int mPlayerItemsCollected;
 
     public float PlayerTime
@@ -21,8 +22,23 @@ public class ScoreCounter : MonoBehaviour
         set
         {
             mPlayerTime -= value;
-            GameUI.Instance.SetText(GameUI.TextElements.TIMER, "TimeLeft: " + (int)mPlayerTime);
+            //Set timer ui
+            UpdateUI();
         }
+    }
+
+    private void UpdateUI()
+    {
+        //Update timer
+        ProgressBar timeBar = GameUI.Instance.GetProgressBar(GameUI.ProgressBars.TIMER);
+        timeBar.ValueText = (int)mPlayerTime + "";
+        timeBar.ProgressBarPct = mPlayerTime / mTargetTime;
+
+        GameUI.Instance.SetText(GameUI.TextElements.SCORE, "Score: " + mPlayerScore);
+        GameUI.Instance.SetText(GameUI.TextElements.KEY_ITEMS, "Key items: " + mPlayerItemsCollected + " / " + mItemsToCollect);
+
+
+        GameUI.Instance.SetText(GameUI.TextElements.KEY_ITEMS, mPlayerItemsCollected + " / " + mItemsToCollect);
     }
 
     public bool PlayerHasTime
@@ -56,21 +72,22 @@ public class ScoreCounter : MonoBehaviour
 
         //TODO : Adding score, score multiplier etc
 
-        //Refresh ui text
-        GameUI.Instance.SetText(GameUI.TextElements.SCORE, "Score: " + mPlayerScore);
-        GameUI.Instance.SetText(GameUI.TextElements.KEY_ITEMS, "Key items: " + mPlayerItemsCollected + " / " + mItemsToCollect);
+        UpdateUI();
     }
 
-    public void ResetCounter(int itemsToCollect, string keyItemName, float playerTime)
+    public void ResetCounter(int itemsToCollect, string keyItemName, float targetTime)
     {
         mItemsToCollect = itemsToCollect;
         mKeyItemName = keyItemName;
-        mPlayerTime = playerTime;
+        mTargetTime = targetTime;
 
+        mPlayerTime = mTargetTime;
         mPlayerScore = 0;
         mPlayerItemsCollected = 0;
 
-        GameUI.Instance.SetText(GameUI.TextElements.KEY_ITEMS, mPlayerItemsCollected + " / " + mItemsToCollect);
+        GameUI.Instance.SetText(GameUI.TextElements.OBJECTIVE, "Collect "+ keyItemName+"s");
+
+        UpdateUI();
     }
 
     public void SetScoreText()

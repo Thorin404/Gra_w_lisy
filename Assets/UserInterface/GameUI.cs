@@ -7,18 +7,31 @@ public class GameUI : MonoBehaviour
 {
     public static GameUI Instance;
 
-    public enum TextElements { INFO, OBJECTIVE, KEY_ITEMS, SCORE, TIMER };
+    public enum TextElements { INFO, OBJECTIVE, KEY_ITEMS, SCORE };
+    public enum ProgressBars { FOXPOWER, TIMER }
+
     private Text[] mUiTextElements;
+    private ProgressBar[] mProgressBars;
+    private ItemBar mItemBar;
+
+    public ItemBar ItemBar
+    {
+        get
+        {
+            return mItemBar;
+        }
+    }
 
     // Use this for initialization
     void Awake()
     {
         mUiTextElements = GetComponentsInChildren<Text>();
+        mProgressBars = GetComponentsInChildren<ProgressBar>();
+        mItemBar = GetComponentInChildren<ItemBar>();
 
-        //foreach (Text t in mUiTextElements)
-        //{
-        //    Debug.Log(t.gameObject.name);
-        //}
+        Debug.Assert(mUiTextElements != null);
+        Debug.Assert(mProgressBars != null);
+        Debug.Assert(mItemBar != null);
 
         Instance = this;
     }
@@ -28,9 +41,14 @@ public class GameUI : MonoBehaviour
         mUiTextElements[(int)element].text = text;
     }
 
-    public void EnableElement(TextElements element, bool active)
+    public void EnableText(TextElements element, bool active)
     {
         mUiTextElements[(int)element].gameObject.SetActive(active);
+    }
+
+    public ProgressBar GetProgressBar(ProgressBars bar)
+    {
+        return mProgressBars[(int)bar];
     }
 
 }

@@ -132,9 +132,10 @@ public class GameController : MonoBehaviour
     {
         InGameUI.Instance.SetInterfaceGroup(InGameUI.InterfaceGroups.INTRO, false);
         InGameUI.Instance.SetInterfaceGroup(InGameUI.InterfaceGroups.GAME, true);
+        scoreCounter.ResetCounter(keyItemSpawner.KeyItemsCount, keyItemSpawner.KeyItemName, targetTime);
 
         playerCamera.gameObject.SetActive(true);
-
+        
         //TODO: Repair UI
 
         //PauseMenu.Instance.EnableButton(PauseMenu.PauseMenuButtons.RETRY, true);
@@ -155,19 +156,16 @@ public class GameController : MonoBehaviour
 
         yield return new WaitForSeconds(2);
 
-        GameUI.Instance.EnableElement(GameUI.TextElements.INFO, false);
+        GameUI.Instance.EnableText(GameUI.TextElements.INFO, false);
     }
 
     //Gameplay
     private IEnumerator StartStage()
     {
-        //UI
-        GameUI.Instance.SetText(GameUI.TextElements.OBJECTIVE, "Collect eggs");
 
         //Enable player movement and reset counter
         playerController.enabled = true;
         playerController.SetPlayerPosition(startPosition);
-        scoreCounter.ResetCounter(keyItemSpawner.KeyItemsCount, keyItemSpawner.KeyItemName, targetTime);
 
         //Score counting loop
 
@@ -198,14 +196,14 @@ public class GameController : MonoBehaviour
             yield return null;
         }
 
-        GameUI.Instance.EnableElement(GameUI.TextElements.INFO, true);
+        GameUI.Instance.EnableText(GameUI.TextElements.INFO, true);
         arrowPointer.gameObject.SetActive(false);
         playerController.enabled = false;
 
         //Wait for 2 seconds and start score screen
         yield return new WaitForSeconds(2);
 
-        GameUI.Instance.EnableElement(GameUI.TextElements.INFO, false);
+        GameUI.Instance.EnableText(GameUI.TextElements.INFO, false);
 
         InGameUI.Instance.SetInterfaceGroup(InGameUI.InterfaceGroups.GAME, false);
         InGameUI.Instance.SetInterfaceGroup(InGameUI.InterfaceGroups.SCORE, true);
