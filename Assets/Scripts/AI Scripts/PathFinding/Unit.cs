@@ -69,8 +69,6 @@ public class Unit : MonoBehaviour {
 		bool followingPath = true;
 		int pathIndex = 0;
 
-		float speedPercent = 1;
-
 		while (followingPath) {
 			Vector2 pos2D = new Vector2 (transform.position.x, transform.position.z);
 			while (path.turnBoundaries [pathIndex].HasCrossedLine (pos2D)) {
@@ -85,7 +83,7 @@ public class Unit : MonoBehaviour {
 			if (followingPath) {
 				Quaternion targetRotation = Quaternion.LookRotation (path.lookPoints [pathIndex] - transform.position);
 				transform.rotation = Quaternion.Lerp (transform.rotation, targetRotation, Time.deltaTime * turnSpeed);
-				transform.Translate (Vector3.forward * Time.deltaTime * speed * speedPercent, Space.Self);
+				transform.Translate (Vector3.forward * Time.deltaTime * speed, Space.Self);
 			}
 
 			yield return null;
