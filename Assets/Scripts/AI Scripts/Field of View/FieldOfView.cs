@@ -54,9 +54,8 @@ public class FieldOfView : MonoBehaviour {
 				if (!Physics.Raycast (transform.position, dirToTarget, dstToTarget, obstacleMask)) {
 					visibleTargets.Add (target);
 					Unit u = GetComponent<Unit> ();
-					u.currentTarget = 8;
-					u.speed = 4;
-					//Unit.currentTarget = 8;
+					u.currentTarget = u.target.Length - 1;
+					u.speed = u.chasingSpeed;
 				}
 			}
 		}
