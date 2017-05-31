@@ -55,7 +55,9 @@ public class FieldOfView : MonoBehaviour {
 					visibleTargets.Add (target);
 					Unit u = GetComponent<Unit> ();
 					u.currentTarget = u.target.Length - 1;
-					u.speed = u.chasingSpeed;
+					//u.speed = u.chasingSpeed;
+					PathFollower pf = GetComponent<PathFollower> ();
+					pf.currentPoint = pf.path.Length - 1;
 				}
 			}
 		}
