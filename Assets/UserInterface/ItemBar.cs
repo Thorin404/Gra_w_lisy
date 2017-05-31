@@ -3,15 +3,25 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ItemBar : MonoBehaviour {
+public class ItemBar : MonoBehaviour
+{
 
     public Sprite defaultSprite;
     public string defaultName;
     public string defaultHint;
 
+    private Image mProgressBarImage;
     private Image mItemImage;
     private Text mItemName;
     private Text mItemHint;
+
+    public float ProgressBarPct
+    {
+        set
+        {
+            mProgressBarImage.fillAmount = value;
+        }
+    }
 
     public string ItemName
     {
@@ -39,16 +49,22 @@ public class ItemBar : MonoBehaviour {
 
     public void SetDefault()
     {
+        mProgressBarImage.fillAmount = 0.0f;
         mItemImage.sprite = defaultSprite;
         mItemName.text = defaultName;
         mItemHint.text = defaultHint;
     }
 
-	// Use this for initialization
-	void Start () {
-        mItemImage = GetComponentInChildren<Image>();
-        Text[] textElements = GetComponentsInChildren<Text>();
+    // Use this for initialization
+    void Start()
+    {
+        Image[] imageElements = GetComponentsInChildren<Image>();
+        Debug.Assert(imageElements != null);
 
+        mProgressBarImage = imageElements[0];
+        mItemImage = imageElements[1];
+
+        Text[] textElements = GetComponentsInChildren<Text>();
         Debug.Assert(textElements != null);
 
         mItemName = textElements[0];
@@ -56,9 +72,9 @@ public class ItemBar : MonoBehaviour {
 
         SetDefault();
     }
-	
-	// Update is called once per frame
-	//void Update () {
-		
-	//}
+
+    // Update is called once per frame
+    //void Update () {
+
+    //}
 }

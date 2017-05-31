@@ -10,6 +10,8 @@ public class PlayerController : MonoBehaviour
 
     public Camera playerCamera;
 
+    public string animatorParamName;
+
     public float walkSpeed = 2;
     public float runSpeed = 6;
     public float gravity = -12;
@@ -59,9 +61,11 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         Debug.Log("Player start");
-        //animator = GetComponent<Animator>();
+        animator = GetComponentInChildren<Animator>();
         //cameraT = Camera.main.transform;
         cameraT = playerCamera.transform;
+
+        animator.SetFloat(animatorParamName, 0.0f, speedSmoothTime, Time.deltaTime);
     }
 
     private void InitControllers()
@@ -95,8 +99,8 @@ public class PlayerController : MonoBehaviour
             Jump();
         }
         // animator
-        //float animationSpeedPercent = ((running) ? currentSpeed / runSpeed : currentSpeed / walkSpeed * .5f);
-        //animator.SetFloat("speedPercent", animationSpeedPercent, speedSmoothTime, Time.deltaTime);
+        float animationSpeedPercent = ((running) ? currentSpeed / runSpeed : currentSpeed / walkSpeed * .5f);
+        animator.SetFloat(animatorParamName, animationSpeedPercent, speedSmoothTime, Time.deltaTime);
 
     }
 

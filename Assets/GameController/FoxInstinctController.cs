@@ -10,6 +10,7 @@ public class FoxInstinctController : MonoBehaviour
     public string objectsOfInterestTag;
     public float pointerDistance;
 
+    public float reloadSpeedPct;
     public float maxActionTime;
 
     public GameObject bonusItempointerPrefab;
@@ -64,7 +65,7 @@ public class FoxInstinctController : MonoBehaviour
         RefreshUi();
         if(mCurrentTime < maxActionTime)
         {
-            mCurrentTime += Time.deltaTime;
+            mCurrentTime += Time.deltaTime * reloadSpeedPct;
         }
         else
         {
