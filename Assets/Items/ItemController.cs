@@ -28,7 +28,7 @@ public class ItemController : MonoBehaviour
     private bool mHoldingItem = false;
     private GameObject mHoldedItem;
     private IItem mItemInterface;
-    private ItemBar mItemBar;
+	private ItemBar mItemBar;
     private bool mUseItem;
     private float mTimeAccumulator;
 
@@ -59,10 +59,9 @@ public class ItemController : MonoBehaviour
     }
 
     // Use this for initialization
-    void Start()
+    void Awake()
     {
         mTimeAccumulator = 0.0f;
-        mItemBar = GameUI.Instance.ItemBar;
     }
 
     void Update()
@@ -81,13 +80,20 @@ public class ItemController : MonoBehaviour
                     mTimeAccumulator = 0.0f;
                     StartItemAction();
                 }
-                mItemBar.ProgressBarPct = mTimeAccumulator / itemUseTime;
+				if (mItemBar != null) {
+					mItemBar.ProgressBarPct = mTimeAccumulator / itemUseTime;
+				} else
+				{
+					mItemBar = GameUI.Instance.ItemBar;
+				}
             }
         }
         else
         {
             mTimeAccumulator = 0.0f;
-            mItemBar.ProgressBarPct = 0.0f;
+			if (mItemBar != null) {
+				mItemBar.ProgressBarPct = 0.0f;
+			}
         }
         if (Input.GetButtonDown(dropButton) && mHoldingItem)
         {

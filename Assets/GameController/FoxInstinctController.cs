@@ -28,7 +28,7 @@ public class FoxInstinctController : MonoBehaviour
     void Start()
     {
         mCurrentTime = maxActionTime;
-        RefreshUi();
+        //RefreshUi();
     }
 
     //TODO : time constrain, slowmo, bonus pickup pointer
@@ -107,10 +107,13 @@ public class FoxInstinctController : MonoBehaviour
 
     private void RefreshUi()
     {
-        ProgressBar progressBar = GameUI.Instance.GetProgressBar(GameUI.ProgressBars.FOXPOWER);
-        float pct = mCurrentTime / maxActionTime;
-        progressBar.ProgressBarPct = pct;
-        progressBar.ValueText = ((int)(pct * 100.0f))+"%";
+		ProgressBar progressBar = GameUI.Instance.GetProgressBar(GameUI.ProgressBars.FOXPOWER);
+		if(progressBar != null)
+		{
+			float pct = mCurrentTime / maxActionTime;
+			progressBar.ProgressBarPct = pct;
+			progressBar.ValueText = ((int)(pct * 100.0f)) + "%";
+		}
     }
 
     private void GeneratePointers()
