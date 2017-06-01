@@ -36,6 +36,17 @@ public class PlayerController : MonoBehaviour
     private FoxInstinctController mFoxInstinctController;
     private ItemController mItemController;
 
+    public float setAnimatorState
+    {
+        set
+        {
+            if(animator != null)
+            {
+                animator.SetFloat(animatorParamName, value);
+            }
+        }
+    }
+
     void OnEnable()
     {
         //Debug.Log("Enable PC");
@@ -65,7 +76,7 @@ public class PlayerController : MonoBehaviour
         //cameraT = Camera.main.transform;
         cameraT = playerCamera.transform;
 
-        animator.SetFloat(animatorParamName, 0.0f, speedSmoothTime, Time.deltaTime);
+        animator.SetFloat(animatorParamName, 0.0f);
     }
 
     private void InitControllers()

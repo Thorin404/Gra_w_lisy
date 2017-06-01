@@ -5,6 +5,7 @@ public class ThirdPersonCamera : MonoBehaviour
 {
     public string horizontalAxis;
     public string verticalAxis;
+    public string centerCameraButton;
 
     public bool lockCursor;
     public float mouseSensitivity = 10;
@@ -36,14 +37,24 @@ public class ThirdPersonCamera : MonoBehaviour
 
     void LateUpdate()
     {
+
         currentRotation = Vector3.SmoothDamp(currentRotation, new Vector3(pitch, yaw), ref rotationSmoothVelocity, rotationSmoothTime);
         transform.eulerAngles = currentRotation;
 
         transform.position = target.position - (transform.forward * dstFromTarget);
 
-        yaw += Input.GetAxis(horizontalAxis) * mouseSensitivity;
-        pitch -= Input.GetAxis(verticalAxis) * mouseSensitivity;
-        pitch = Mathf.Clamp(pitch, pitchMinMax.x, pitchMinMax.y);
+        if (Input.GetButton(centerCameraButton))
+        {
+            //TODO : add player rotation
+            yaw = yawStartOffset;
+            pitch = pitchStartOffset;
+        }
+        else
+        {
+            yaw += Input.GetAxis(horizontalAxis) * mouseSensitivity;
+            pitch -= Input.GetAxis(verticalAxis) * mouseSensitivity;
+            pitch = Mathf.Clamp(pitch, pitchMinMax.x, pitchMinMax.y);
+        }
     }
 
 }

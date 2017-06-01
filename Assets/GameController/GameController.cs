@@ -196,9 +196,21 @@ public class GameController : MonoBehaviour
             yield return null;
         }
 
+        if (mStageWon)
+        {
+            GameUI.Instance.SetText(GameUI.TextElements.INFO, "You won!");
+
+        }
+        else
+        {
+            GameUI.Instance.SetText(GameUI.TextElements.INFO, "End of time");
+        }
+
         GameUI.Instance.EnableText(GameUI.TextElements.INFO, true);
         arrowPointer.gameObject.SetActive(false);
+
         playerController.enabled = false;
+        playerController.setAnimatorState = 0.0f;
 
         //Wait for 2 seconds and start score screen
         yield return new WaitForSeconds(2);
@@ -210,7 +222,6 @@ public class GameController : MonoBehaviour
 
         if (mStageWon)
         {
-            GameUI.Instance.SetText(GameUI.TextElements.INFO, "You won!");
 
             //TODO : Score saving etc
 
@@ -223,8 +234,6 @@ public class GameController : MonoBehaviour
         {
             arrowPointer.gameObject.SetActive(false);
             playerController.enabled = false;
-
-            GameUI.Instance.SetText(GameUI.TextElements.INFO, "End of time");
 
             ScoreUI.Instance.scoreText.text = "Stage failed: end of time";
             ScoreUI.Instance.inputField.gameObject.SetActive(false);
