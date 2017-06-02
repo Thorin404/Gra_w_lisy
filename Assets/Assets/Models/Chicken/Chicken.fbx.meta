@@ -1,0 +1,139 @@
+fileFormatVersion: 2
+guid: 54537171b4061804d8284d68b9406c29
+timeCreated: 1496424953
+licenseType: Free
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: Chest
+    100002: //RootNode
+    100004: Chicken_2
+    100006: Chicken_rig
+    100008: Foot_IK_L
+    100010: Foot_IK_L_end
+    100012: Foot_IK_R
+    100014: Foot_IK_R_end
+    100016: Foot_L
+    100018: Foot_L_end
+    100020: Foot_R
+    100022: Foot_R_end
+    100024: Head
+    100026: Head_end
+    100028: Leg_IK_L
+    100030: Leg_IK_L_end
+    100032: Leg_IK_R
+    100034: Leg_IK_R_end
+    100036: Leg_Lower_L
+    100038: Leg_Lower_R
+    100040: Leg_Upper_L
+    100042: Leg_Upper_R
+    100044: Neck
+    100046: Root
+    100048: Spine
+    100050: Tail
+    100052: Tail_end
+    400000: Chest
+    400002: //RootNode
+    400004: Chicken_2
+    400006: Chicken_rig
+    400008: Foot_IK_L
+    400010: Foot_IK_L_end
+    400012: Foot_IK_R
+    400014: Foot_IK_R_end
+    400016: Foot_L
+    400018: Foot_L_end
+    400020: Foot_R
+    400022: Foot_R_end
+    400024: Head
+    400026: Head_end
+    400028: Leg_IK_L
+    400030: Leg_IK_L_end
+    400032: Leg_IK_R
+    400034: Leg_IK_R_end
+    400036: Leg_Lower_L
+    400038: Leg_Lower_R
+    400040: Leg_Upper_L
+    400042: Leg_Upper_R
+    400044: Neck
+    400046: Root
+    400048: Spine
+    400050: Tail
+    400052: Tail_end
+    4300000: Chicken_2
+    7400000: Chicken_rig|Grain
+    7400002: Chicken_rig|Run
+    7400004: Chicken_rig|Stop
+    7400006: Chicken_rig|Stop_2
+    7400008: Chicken_rig|Walk
+    9500000: //RootNode
+    13700000: Chicken_2
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
