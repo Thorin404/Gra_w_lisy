@@ -28,9 +28,18 @@ public class ItemController : MonoBehaviour
     private bool mHoldingItem = false;
     private GameObject mHoldedItem;
     private IItem mItemInterface;
-	private ItemBar mItemBar;
+    private ItemBar mItemBar;
     private bool mUseItem;
     private float mTimeAccumulator;
+
+    private bool mAcionPending;
+
+    //Animator
+    private Animator mPlayerAnimator;
+    public float pickAnimationTime;
+    public float throwAnimationTime;
+    public string pickUpTrigger;
+    public string throwTrigger;
 
     public GameObject HoldedItem
     {
@@ -62,11 +71,13 @@ public class ItemController : MonoBehaviour
     void Awake()
     {
         mTimeAccumulator = 0.0f;
+        mPlayerAnimator = GetComponentInChildren<Animator>();
+        mAcionPending = false;
     }
 
     void Update()
     {
-        if (Input.GetButton(actionButton))
+        if (Input.GetButton(actionButton) && !mAcionPending)
         {
             if (mHoldingItem)
             {
@@ -78,22 +89,25 @@ public class ItemController : MonoBehaviour
                 {
                     //item action
                     mTimeAccumulator = 0.0f;
-                    StartItemAction();
+                    StartCoroutine(StartItemAction());
                 }
-				if (mItemBar != null) {
-					mItemBar.ProgressBarPct = mTimeAccumulator / itemUseTime;
-				} else
-				{
-					mItemBar = GameUI.Instance.ItemBar;
-				}
+                if (mItemBar != null)
+                {
+                    mItemBar.ProgressBarPct = mTimeAccumulator / itemUseTime;
+                }
+                else
+                {
+                    mItemBar = GameUI.Instance.ItemBar;
+                }
             }
         }
         else
         {
             mTimeAccumulator = 0.0f;
-			if (mItemBar != null) {
-				mItemBar.ProgressBarPct = 0.0f;
-			}
+            if (mItemBar != null)
+            {
+                mItemBar.ProgressBarPct = 0.0f;
+            }
         }
         if (Input.GetButtonDown(dropButton) && mHoldingItem)
         {
@@ -110,13 +124,18 @@ public class ItemController : MonoBehaviour
             {
                 Debug.Log("Item controller, hold item [" + other.name + "]");
                 mHoldedItem = other.gameObject;
-                HoldItem();
+                StartCoroutine(HoldItem(pickAnimationTime));
             }
         }
     }
 
-    private void StartItemAction()
+    private IEnumerator StartItemAction()
     {
+        mAcionPending = true;
+        mPlayerAnimator.SetTrigger(throwTrigger);
+
+        yield return new WaitForSeconds(throwAnimationTime);
+
         if (mItemInterface != null)
         {
             if (!mItemInterface.ItemAction(this))
@@ -132,6 +151,7 @@ public class ItemController : MonoBehaviour
         {
             DropItem();
         }
+        mAcionPending = false;
     }
 
     public void DropItem()
@@ -164,25 +184,23 @@ public class ItemController : MonoBehaviour
         }
     }
 
-    private void HoldItem()
+    private IEnumerator HoldItem(float time)
     {
+        mAcionPending = true;
+
+        mPlayerAnimator.SetTrigger(pickUpTrigger);
+        //TODO : disable player movements
+        yield return new WaitForSeconds(time);
+
         mHoldedItem.gameObject.transform.SetParent(holdingTarget);
         mHoldedItem.gameObject.transform.localPosition = new Vector3();
-        mHoldedItem.gameObject.transform.rotation = transform.rotation;
+        mHoldedItem.gameObject.transform.localRotation = Quaternion.identity;
         mHoldedItem.gameObject.GetComponent<Rigidbody>().isKinematic = true;
-
         mItemInterface = mHoldedItem.GetComponentInChildren<IItem>();
-
-
         SetItemBar();
 
-        StartCoroutine(WaitForAction());
-    }
-
-    private IEnumerator WaitForAction()
-    {
-        yield return new WaitForSeconds(0.5f);
         mHoldingItem = true;
+        mAcionPending = false;
     }
 
 }

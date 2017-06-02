@@ -3,6 +3,8 @@ using System.Collections;
 
 public class ThirdPersonCamera : MonoBehaviour
 {
+    public PlayerController playerController;
+
     public string horizontalAxis;
     public string verticalAxis;
     public string centerCameraButton;
@@ -25,8 +27,7 @@ public class ThirdPersonCamera : MonoBehaviour
 
     void Start()
     {
-        yaw = yawStartOffset;
-        pitch = pitchStartOffset;
+        SetToPlayerRotation();
 
         if (lockCursor)
         {
@@ -35,9 +36,16 @@ public class ThirdPersonCamera : MonoBehaviour
         }
     }
 
+    void SetToPlayerRotation()
+    {
+        float playerRot = playerController.transform.rotation.eulerAngles.y;
+        //TODO : fix rotation
+        yaw = playerRot;
+        pitch = pitchStartOffset;
+    }
+
     void LateUpdate()
     {
-
         currentRotation = Vector3.SmoothDamp(currentRotation, new Vector3(pitch, yaw), ref rotationSmoothVelocity, rotationSmoothTime);
         transform.eulerAngles = currentRotation;
 
@@ -45,9 +53,8 @@ public class ThirdPersonCamera : MonoBehaviour
 
         if (Input.GetButton(centerCameraButton))
         {
-            //TODO : add player rotation
-            yaw = yawStartOffset;
-            pitch = pitchStartOffset;
+            SetToPlayerRotation();
+
         }
         else
         {
