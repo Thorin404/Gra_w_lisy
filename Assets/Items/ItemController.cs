@@ -34,6 +34,8 @@ public class ItemController : MonoBehaviour
 
     private bool mAcionPending;
 
+    private PlayerController mPlayerController;
+
     //Animator
     private Animator mPlayerAnimator;
     public float pickAnimationTime;
@@ -73,6 +75,8 @@ public class ItemController : MonoBehaviour
         mTimeAccumulator = 0.0f;
         mPlayerAnimator = GetComponentInChildren<Animator>();
         mAcionPending = false;
+        mPlayerController = GetComponent<PlayerController>();
+        Debug.Assert(mPlayerController != null);
     }
 
     void Update()
@@ -132,6 +136,7 @@ public class ItemController : MonoBehaviour
     private IEnumerator StartItemAction()
     {
         mAcionPending = true;
+        mPlayerController.ableToMove = false;
         mPlayerAnimator.SetTrigger(throwTrigger);
 
         yield return new WaitForSeconds(throwAnimationTime);
@@ -152,6 +157,7 @@ public class ItemController : MonoBehaviour
             DropItem();
         }
         mAcionPending = false;
+        mPlayerController.ableToMove = true;
     }
 
     public void DropItem()
@@ -187,6 +193,7 @@ public class ItemController : MonoBehaviour
     private IEnumerator HoldItem(float time)
     {
         mAcionPending = true;
+        mPlayerController.ableToMove = false;
 
         mPlayerAnimator.SetTrigger(pickUpTrigger);
         //TODO : disable player movements
@@ -201,6 +208,7 @@ public class ItemController : MonoBehaviour
 
         mHoldingItem = true;
         mAcionPending = false;
+        mPlayerController.ableToMove = true;
     }
 
 }

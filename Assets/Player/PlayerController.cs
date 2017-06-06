@@ -26,6 +26,7 @@ public class PlayerController : MonoBehaviour
     float speedSmoothVelocity;
     float currentSpeed;
     float velocityY;
+    private bool moving;
 
     Animator animator;
     Transform cameraT;
@@ -36,11 +37,23 @@ public class PlayerController : MonoBehaviour
     private FoxInstinctController mFoxInstinctController;
     private ItemController mItemController;
 
+    public bool ableToMove
+    {
+        set
+        {
+            moving = value;
+        }
+        get
+        {
+            return moving;
+        }
+    }
+
     public float setAnimatorState
     {
         set
         {
-            if(animator != null)
+            if (animator != null)
             {
                 animator.SetFloat(animatorParamName, value);
             }
@@ -77,6 +90,7 @@ public class PlayerController : MonoBehaviour
         cameraT = playerCamera.transform;
 
         animator.SetFloat(animatorParamName, 0.0f);
+        moving = true;
     }
 
     private void InitControllers()
@@ -103,7 +117,10 @@ public class PlayerController : MonoBehaviour
 
         bool running = Input.GetButton(runningButton);
 
-        Move(inputDir, running);
+        if (moving)
+        {
+            Move(inputDir, running);
+        }
 
         if (Input.GetButtonDown(jumpButton))
         {

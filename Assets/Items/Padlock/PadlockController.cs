@@ -4,63 +4,67 @@ using UnityEngine;
 
 public class PadlockController : MonoBehaviour
 {
-    public string playerTag;
-    public string itemTagName;
-    public string keyItemName;
-    public Transform keyTarget;
-    public Animator mLockedAnimator;
+    public string playerName;
+    public string triggerName;
+    public float actionTime;
+    public GameObject keyItem;
+    public Transform keyHolder;
 
-    private Rigidbody mRigidBody;
-    private bool mIsLocked = true;
+    private Animator mAnimator;
+    private Rigidbody mRigidbody;
 
-    // Use this for initialization
+    private bool mActivated;
+
     void Start()
     {
-        mRigidBody = GetComponent<Rigidbody>();
-        mLockedAnimator.enabled = false;
+        mAnimator = GetComponent<Animator>();
+        mRigidbody = GetComponent<Rigidbody>();
+
+        Debug.Assert(mAnimator != null);
+        Debug.Assert(keyItem != null);
+        Debug.Assert(keyHolder != null);
+        Debug.Assert(mRigidbody != null);
+
+        mActivated = false;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void SetKeyPosition()
     {
-
+        keyItem.transform.SetParent(keyHolder);
+        keyItem.transform.localPosition = new Vector3();
+        keyItem.transform.localRotation = Quaternion.identity;
+        keyItem.GetComponent<Rigidbody>().isKinematic = true;
+        keyItem.GetComponent<Collider>().enabled = false;
     }
 
-    void OnTriggerEnter(Collider other)
+    private IEnumerator PadlockAction()
     {
-        if(other.gameObject.tag == playerTag && mIsLocked)
+        //Set key parent
+        SetKeyPosition();
+
+        //Start animation
+        mAnimator.SetTrigger(triggerName);
+
+        //Wait for some time
+        yield return new WaitForSeconds(actionTime);
+
+        //Enable physics
+        mRigidbody.isKinematic = false;
+
+        //Deactivate padlock action
+        mActivated = true;
+
+        yield return null;
+    }
+
+    public void Unlock()
+    {
+        if (!mActivated)
         {
-            ItemController playerItemController = other.gameObject.GetComponent<ItemController>();
-            GameObject itemHoldedByPlayer = playerItemController.HoldedItem;
-
-            if (itemHoldedByPlayer != null)
-            {
-                if (itemHoldedByPlayer.tag == itemTagName && itemHoldedByPlayer.name.Contains(keyItemName))
-                {
-                    SetKeyPosition(itemHoldedByPlayer);
-
-                    playerItemController.HoldedItem = null;
-
-                    gameObject.tag = itemTagName;
-                    mRigidBody.isKinematic = false;
-                    mIsLocked = false;
-                    this.enabled = false;
-
-                    //Enable locked animator
-                    mLockedAnimator.enabled = true;
-                }
-            }
+            StartCoroutine(PadlockAction());
+            mActivated = true;
         }
-
     }
 
-    private void SetKeyPosition(GameObject key)
-    {
-        key.gameObject.GetComponent<Rigidbody>().isKinematic = true;
-        key.gameObject.GetComponent<Collider>().enabled = false;
-        key.gameObject.transform.SetParent(keyTarget);
-        key.gameObject.transform.localPosition = new Vector3();
-        key.gameObject.transform.rotation = keyTarget.rotation;
-        key.gameObject.tag = "Untagged";
-    }
+
 }
