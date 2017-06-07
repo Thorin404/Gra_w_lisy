@@ -3,6 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public interface IEvent
+{
+    void Activate();
+    bool IsActive();
+}
+
 public interface IItem
 {
 

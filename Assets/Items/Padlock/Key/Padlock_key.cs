@@ -13,18 +13,6 @@ public class Padlock_key : MonoBehaviour, IItem
 
     private bool mUsed;
     private bool mActive;
-    public bool Active
-    {
-        private set
-        {
-            mActive = value;
-        }
-        get
-        {
-            return mActive;
-        }
-    }
-
 
     void Start()
     {
@@ -36,14 +24,13 @@ public class Padlock_key : MonoBehaviour, IItem
     public bool ItemAction(ItemController c)
     {
         ///throw new NotImplementedException();
-        if (Active && !mUsed)
+        if (mActive && !mUsed)
         {
             c.HoldedItem = null;
             PadlockController padCtrl = padlock.GetComponent<PadlockController>();
             Debug.Assert(padCtrl != null);
-            padCtrl.Unlock();
+            padCtrl.Unlock(this.gameObject);
         }
-       
         return false;
     }
 
@@ -62,21 +49,22 @@ public class Padlock_key : MonoBehaviour, IItem
         return itemHint;
     }
 
+    void ActivateKey(Collider other, bool active)
+    {
+        if (other.gameObject == padlock && !mUsed)
+        {
+            mActive = active;
+            GameUI.Instance.ItemBar.EnableUseSign = active;
+        }
+    }
+
     void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject == padlock && !mUsed)
-        {
-            Active = true;
-            //Debug.Log("KeyActive " + Active);
-        }
+        ActivateKey(other, true);
     }
 
     void OnTriggerExit(Collider other)
     {
-        if (other.gameObject == padlock && !mUsed)
-        {
-            Active = false;
-            //Debug.Log("KeyActive " + Active);
-        }
+        ActivateKey(other, false);
     }
 }

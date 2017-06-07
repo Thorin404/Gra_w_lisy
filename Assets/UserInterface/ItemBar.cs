@@ -10,6 +10,7 @@ public class ItemBar : MonoBehaviour
     public string defaultName;
     public string defaultHint;
 
+    private Image mUseItemSign;
     private Image mProgressBarImage;
     private Image mItemImage;
     private Text mItemName;
@@ -47,12 +48,25 @@ public class ItemBar : MonoBehaviour
         }
     }
 
+    public bool EnableUseSign
+    {
+        set
+        {
+            mUseItemSign.enabled = value;
+        }
+        get
+        {
+            return mUseItemSign.enabled;
+        }
+    }
+
     public void SetDefault()
     {
         mProgressBarImage.fillAmount = 0.0f;
         mItemImage.sprite = defaultSprite;
         mItemName.text = defaultName;
         mItemHint.text = defaultHint;
+        mUseItemSign.enabled = false;
     }
 
     // Use this for initialization
@@ -61,8 +75,9 @@ public class ItemBar : MonoBehaviour
         Image[] imageElements = GetComponentsInChildren<Image>();
         Debug.Assert(imageElements != null);
 
-        mProgressBarImage = imageElements[0];
-        mItemImage = imageElements[1];
+        mUseItemSign = imageElements[0];
+        mProgressBarImage = imageElements[1];
+        mItemImage = imageElements[2];
 
         Text[] textElements = GetComponentsInChildren<Text>();
         Debug.Assert(textElements != null);

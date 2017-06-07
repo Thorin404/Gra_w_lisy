@@ -2,14 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public interface ILockable
+{
+    void Lock();
+    void Unlock();
+    bool IsLocked();
+}
+
 public class PadlockController : MonoBehaviour
 {
-    public string playerName;
-    public string triggerName;
+    public string animationTriggerName;
     public float actionTime;
-    public GameObject keyItem;
     public Transform keyHolder;
+    public GameObject lockedObject;
 
+    private GameObject mKeyItem;
     private Animator mAnimator;
     private Rigidbody mRigidbody;
 
@@ -21,7 +28,6 @@ public class PadlockController : MonoBehaviour
         mRigidbody = GetComponent<Rigidbody>();
 
         Debug.Assert(mAnimator != null);
-        Debug.Assert(keyItem != null);
         Debug.Assert(keyHolder != null);
         Debug.Assert(mRigidbody != null);
 
@@ -30,11 +36,11 @@ public class PadlockController : MonoBehaviour
 
     private void SetKeyPosition()
     {
-        keyItem.transform.SetParent(keyHolder);
-        keyItem.transform.localPosition = new Vector3();
-        keyItem.transform.localRotation = Quaternion.identity;
-        keyItem.GetComponent<Rigidbody>().isKinematic = true;
-        keyItem.GetComponent<Collider>().enabled = false;
+        mKeyItem.transform.SetParent(keyHolder);
+        mKeyItem.transform.localPosition = new Vector3();
+        mKeyItem.transform.localRotation = Quaternion.identity;
+        mKeyItem.GetComponent<Rigidbody>().isKinematic = true;
+        mKeyItem.GetComponent<Collider>().enabled = false;
     }
 
     private IEnumerator PadlockAction()
@@ -43,7 +49,7 @@ public class PadlockController : MonoBehaviour
         SetKeyPosition();
 
         //Start animation
-        mAnimator.SetTrigger(triggerName);
+        mAnimator.SetTrigger(animationTriggerName);
 
         //Wait for some time
         yield return new WaitForSeconds(actionTime);
@@ -51,15 +57,26 @@ public class PadlockController : MonoBehaviour
         //Enable physics
         mRigidbody.isKinematic = false;
 
+        //Unlock locked object
+        if(lockedObject != null)
+        {
+            ILockable objectToUnlock = lockedObject.GetComponent<ILockable>();
+            if(objectToUnlock != null)
+            {
+                objectToUnlock.Unlock();
+            }
+        }
+
         //Deactivate padlock action
         mActivated = true;
 
         yield return null;
     }
 
-    public void Unlock()
+    public void Unlock(GameObject keyObject)
     {
-        if (!mActivated)
+        mKeyItem = keyObject;
+        if (!mActivated && mKeyItem != null)
         {
             StartCoroutine(PadlockAction());
             mActivated = true;
