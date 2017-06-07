@@ -9,8 +9,8 @@ public class PathFollower : MonoBehaviour
     public Transform[] path;
     public float speed = 2;
     public float turnSpeed = 3.0f;
-    public float stoppingDist = 3;
-    public float reachDist = 2;
+    public float stoppingDst = 2;
+	public float reachDst = 1;
     public int currentPoint = 0;
 
     void Start()
@@ -25,16 +25,18 @@ public class PathFollower : MonoBehaviour
             float dist = Vector3.Distance(path[currentPoint].position, transform.position);
             float speedPercent = 1;
 
-            if (dist <= stoppingDist)
-            {
-                speedPercent = Mathf.Clamp01(dist / stoppingDist);
-            }
+			if (dist <= stoppingDst) {
+				speedPercent = 0.5f;
+			}
+			if (dist <= reachDst) {
+				speedPercent = 0;
+			}
 
             Quaternion targetRotation = Quaternion.LookRotation(path[currentPoint].position - transform.position);
             transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * turnSpeed);
             transform.Translate(Vector3.forward * Time.deltaTime * speed * speedPercent, Space.Self);
 
-            if (dist <= reachDist)
+            if (dist <= reachDst)
             {
                 currentPoint++;
             }
@@ -53,7 +55,7 @@ public class PathFollower : MonoBehaviour
             {
                 if (path[i] != null)
                 {
-                    Gizmos.DrawSphere(path[i].position, reachDist);
+                    Gizmos.DrawSphere(path[i].position, reachDst);
                 }
             }
         }
