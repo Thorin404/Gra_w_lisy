@@ -10,7 +10,6 @@ public class Unit : MonoBehaviour {
 	public Transform[] target;
 	public float speed = 2;
 	public float turnSpeed = 3;
-	public float chasingSpeed = 4;
 	public float turnDst = 5;
 	public float stoppingDst = 1.0f;
 	public float reachDist = 1.0f;
@@ -24,16 +23,12 @@ public class Unit : MonoBehaviour {
 	}
 
 	void Update() {
-		bool running = Input.GetKey(KeyCode.Q);
 		float dist = Vector3.Distance (target [currentTarget].position, transform.position);
 
-		if (running) {
-			currentTarget++;
-		}
 		if (dist <= reachDist) {
 			currentTarget++;
 		}
-		if (currentTarget >= target.Length - 1) {
+		if (currentTarget >= target.Length) {
 			currentTarget = 0;
 		}
 	}

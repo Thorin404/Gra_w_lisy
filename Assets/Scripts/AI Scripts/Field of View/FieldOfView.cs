@@ -45,6 +45,14 @@ public class FieldOfView : MonoBehaviour {
 		visibleTargets.Clear ();
 		Collider[] targetsInViewRadius = Physics.OverlapSphere (transform.position, viewRadius, targetMask);
 
+		Unit u = GetComponent<Unit> ();
+		PathFollower pf = GetComponent<PathFollower> ();
+
+		u.speed = 1;
+		u.turnSpeed = 2;
+		pf.speed = 0;
+		pf.turnSpeed = 0;
+
 		for (int i = 0; i < targetsInViewRadius.Length; i++) {
 			Transform target = targetsInViewRadius [i].transform;
 			Vector3 dirToTarget = (target.position - transform.position).normalized;
@@ -53,11 +61,14 @@ public class FieldOfView : MonoBehaviour {
 
 				if (!Physics.Raycast (transform.position, dirToTarget, dstToTarget, obstacleMask)) {
 					visibleTargets.Add (target);
-					Unit u = GetComponent<Unit> ();
-					u.currentTarget = u.target.Length - 1;
-					//u.speed = u.chasingSpeed;
-					PathFollower pf = GetComponent<PathFollower> ();
-					pf.currentPoint = pf.path.Length - 1;
+					u.speed = 0;
+					u.turnSpeed = 0;
+					u.currentTarget++;
+					if (u.currentTarget >= u.target.Length) {
+						u.currentTarget = 0;
+					}
+					pf.speed = 2;
+					pf.turnSpeed = 4;
 				}
 			}
 		}
