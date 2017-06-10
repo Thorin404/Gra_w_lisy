@@ -8,7 +8,9 @@ public class PathFollower : MonoBehaviour
     public bool displayPathGizmos;
     public Transform[] path;
     public float speed = 2;
-    public float turnSpeed = 3.0f;
+	public float chasingSpeed = 3;
+    public float turnSpeed = 3;
+	public float chasingTurn = 4;
     public float stoppingDst = 2;
 	public float reachDst = 1;
     public int currentPoint = 0;

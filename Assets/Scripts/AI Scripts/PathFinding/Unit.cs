@@ -9,11 +9,14 @@ public class Unit : MonoBehaviour {
 	public bool displayUnitGizmos;
 	public Transform[] target;
 	public float speed = 2;
+	public float followSpeed = 2;
 	public float turnSpeed = 3;
+	public float followTurn = 3;
 	public float turnDst = 5;
 	public float stoppingDst = 1.0f;
 	public float reachDist = 1.0f;
 
+	public int waitTime = 0;
 	public int currentTarget = 0;
 
 	Path path;
@@ -29,8 +32,17 @@ public class Unit : MonoBehaviour {
 			currentTarget++;
 		}
 		if (currentTarget >= target.Length) {
+			StartCoroutine (Waiting ());
 			currentTarget = 0;
 		}
+	}
+
+	IEnumerator Waiting(){
+		speed = 0;
+		turnSpeed = 0;
+		yield return new WaitForSeconds (5);
+		speed = followSpeed;
+		turnSpeed = followTurn;
 	}
 
 	public void OnPathFound(Vector3[] waypoints, bool pathSuccessful) {

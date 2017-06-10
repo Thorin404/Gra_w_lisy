@@ -51,10 +51,10 @@ public class FieldOfView : MonoBehaviour {
 		Unit u = GetComponent<Unit> ();
 		PathFollower pf = GetComponent<PathFollower> ();
 
-		u.speed = 1;
-		u.turnSpeed = 2;
+		/*u.speed = u.followSpeed;
+		u.turnSpeed = u.followTurn;
 		pf.speed = 0;
-		pf.turnSpeed = 0;
+		pf.turnSpeed = 0;*/
 
 		for (int i = 0; i < targetsInViewRadius.Length; i++) {
 			Transform target = targetsInViewRadius [i].transform;
@@ -70,8 +70,13 @@ public class FieldOfView : MonoBehaviour {
 					if (u.currentTarget >= u.target.Length) {
 						u.currentTarget = 0;
 					}
-					pf.speed = 2;
-					pf.turnSpeed = 4;
+					pf.speed = pf.chasingSpeed;
+					pf.turnSpeed = pf.chasingTurn;
+				} else {
+					u.speed = u.followSpeed;
+					u.turnSpeed = u.followTurn;
+					pf.speed = 0;
+					pf.turnSpeed = 0;
 				}
 			}
 		}
