@@ -18,6 +18,8 @@ public class FieldOfView : MonoBehaviour {
 	public int edgeResolveIterations;
 	public float edgeDstThreshold;
 
+	public float height;
+
 	public MeshFilter viewMeshFilter;
 	Mesh viewMesh;
 
@@ -44,7 +46,7 @@ public class FieldOfView : MonoBehaviour {
 	void FindVisibleTargets() {
 		visibleTargets.Clear ();
 
-		Vector3 center = new Vector3 (transform.position.x, transform.position.y + 1, transform.position.z);
+		Vector3 center = new Vector3 (transform.position.x, transform.position.y + height, transform.position.z);
 
 		Collider[] targetsInViewRadius = Physics.OverlapSphere (center, viewRadius, targetMask);
 

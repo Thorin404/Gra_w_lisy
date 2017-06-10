@@ -16,7 +16,7 @@ public class Unit : MonoBehaviour {
 	public float stoppingDst = 1.0f;
 	public float reachDist = 1.0f;
 
-	public int waitTime = 0;
+	public int waitTime;
 	public int currentTarget = 0;
 
 	Path path;
