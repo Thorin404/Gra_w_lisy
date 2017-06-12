@@ -1,0 +1,180 @@
+fileFormatVersion: 2
+guid: c99aa37acfde1a54381c41f86e2e667c
+timeCreated: 1497282338
+licenseType: Free
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: Back_leg_foot_IK_L
+    100002: Back_leg_foot_IK_L_end
+    100004: Back_leg_foot_IK_R
+    100006: Back_leg_foot_IK_R_end
+    100008: Back_leg_foot_L
+    100010: Back_leg_foot_L_end
+    100012: Back_leg_foot_R
+    100014: Back_leg_foot_R_end
+    100016: Back_leg_IK_L
+    100018: Back_leg_IK_L_end
+    100020: Back_leg_IK_R
+    100022: Back_leg_IK_R_end
+    100024: Back_leg_lower_L
+    100026: Back_leg_lower_R
+    100028: Back_leg_upper_L
+    100030: Back_leg_upper_R
+    100032: Chest
+    100034: //RootNode
+    100036: Dog_arm
+    100038: Dog_retopo
+    100040: Front_leg_foot_IK_L
+    100042: Front_leg_foot_IK_L_end
+    100044: Front_leg_foot_IK_R
+    100046: Front_leg_foot_IK_R_end
+    100048: Front_leg_Foot_L
+    100050: Front_leg_Foot_L_end
+    100052: Front_leg_Foot_R
+    100054: Front_leg_Foot_R_end
+    100056: Front_leg_IK_L
+    100058: Front_leg_IK_L_end
+    100060: Front_leg_IK_R
+    100062: Front_leg_IK_R_end
+    100064: Front_leg_lower_L
+    100066: Front_leg_lower_R
+    100068: Front_leg_upper_L
+    100070: Front_leg_upper_R
+    100072: Head
+    100074: Head_end
+    100076: Neck
+    100078: Root
+    100080: Spine
+    100082: Tail_1
+    100084: Tail_2
+    100086: Tail_3
+    100088: Tail_3_end
+    100090: Tail_IK
+    100092: Tail_IK_end
+    400000: Back_leg_foot_IK_L
+    400002: Back_leg_foot_IK_L_end
+    400004: Back_leg_foot_IK_R
+    400006: Back_leg_foot_IK_R_end
+    400008: Back_leg_foot_L
+    400010: Back_leg_foot_L_end
+    400012: Back_leg_foot_R
+    400014: Back_leg_foot_R_end
+    400016: Back_leg_IK_L
+    400018: Back_leg_IK_L_end
+    400020: Back_leg_IK_R
+    400022: Back_leg_IK_R_end
+    400024: Back_leg_lower_L
+    400026: Back_leg_lower_R
+    400028: Back_leg_upper_L
+    400030: Back_leg_upper_R
+    400032: Chest
+    400034: //RootNode
+    400036: Dog_arm
+    400038: Dog_retopo
+    400040: Front_leg_foot_IK_L
+    400042: Front_leg_foot_IK_L_end
+    400044: Front_leg_foot_IK_R
+    400046: Front_leg_foot_IK_R_end
+    400048: Front_leg_Foot_L
+    400050: Front_leg_Foot_L_end
+    400052: Front_leg_Foot_R
+    400054: Front_leg_Foot_R_end
+    400056: Front_leg_IK_L
+    400058: Front_leg_IK_L_end
+    400060: Front_leg_IK_R
+    400062: Front_leg_IK_R_end
+    400064: Front_leg_lower_L
+    400066: Front_leg_lower_R
+    400068: Front_leg_upper_L
+    400070: Front_leg_upper_R
+    400072: Head
+    400074: Head_end
+    400076: Neck
+    400078: Root
+    400080: Spine
+    400082: Tail_1
+    400084: Tail_2
+    400086: Tail_3
+    400088: Tail_3_end
+    400090: Tail_IK
+    400092: Tail_IK_end
+    4300000: Dog_retopo
+    7400000: Dog_arm|Dog_Bark
+    7400002: Dog_arm|Dog_Bone
+    7400004: Dog_arm|Dog_Pick_up
+    7400006: Dog_arm|Dog_Run
+    7400008: Dog_arm|Dog_Stop
+    7400010: Dog_arm|Dog_Walk
+    9500000: //RootNode
+    13700000: Dog_retopo
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
