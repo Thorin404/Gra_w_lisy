@@ -6,6 +6,8 @@ public class PathFollower : MonoBehaviour
 {
 
     public bool displayPathGizmos;
+	public bool isChicken;
+
     public Transform[] path;
     public float speed = 2;
 	public float chasingSpeed = 3;
@@ -13,6 +15,11 @@ public class PathFollower : MonoBehaviour
 	public float chasingTurn = 4;
     public float stoppingDst = 2;
 	public float reachDst = 1;
+	public float wanderXMin;
+	public float wanderXMax;
+	public float wanderZMin;
+	public float wanderZMax;
+
     public int currentPoint = 0;
 
     void Start()
@@ -28,14 +35,20 @@ public class PathFollower : MonoBehaviour
             float speedPercent = 1;
 
 			if (dist <= stoppingDst) {
-				speedPercent = 0.5f;
+				speedPercent = dist / stoppingDst;
 			}
 			if (dist <= reachDst) {
 				speedPercent = 0;
 			}
 
-            Quaternion targetRotation = Quaternion.LookRotation(path[currentPoint].position - transform.position);
-            transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * turnSpeed);
+			if (isChicken) {
+				Vector3 chickenWandering = new Vector3 (Random.Range (wanderXMin, wanderXMax), 0, Random.Range (wanderZMin, wanderZMax));
+				Quaternion targetRotation = Quaternion.LookRotation (chickenWandering - transform.position);
+				transform.rotation = Quaternion.Lerp (transform.rotation, targetRotation, Time.deltaTime * turnSpeed);
+			} else {
+				Quaternion targetRotation = Quaternion.LookRotation (path [currentPoint].position - transform.position);
+				transform.rotation = Quaternion.Lerp (transform.rotation, targetRotation, Time.deltaTime * turnSpeed);
+			}
             transform.Translate(Vector3.forward * Time.deltaTime * speed * speedPercent, Space.Self);
 
             if (dist <= reachDst)
