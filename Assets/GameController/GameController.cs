@@ -35,7 +35,7 @@ public class GameController : MonoBehaviour
     //Game pause
     private static bool mGamePaused = false;
 
-	private IEnumerator mGamePauseCoroutine;
+    private IEnumerator mGamePauseCoroutine;
 
     public static bool GamePaused
     {
@@ -53,6 +53,9 @@ public class GameController : MonoBehaviour
     private bool mCheckpointReached = false;
     private bool mGotoExit = false;
     private bool mStageWon = false;
+
+    private bool mPlayerLost = false;
+    private string mStageLostReason = "";
 
     void Start()
     {
@@ -83,6 +86,7 @@ public class GameController : MonoBehaviour
 
         //Unpause game
         mGamePaused = false;
+        mPlayerLost = false;
 
         //Spawn key items
         keyItemSpawner.Reset();
@@ -104,9 +108,9 @@ public class GameController : MonoBehaviour
         StartCoroutine(WaitForStart());
 
         //Start pause corutine
-		mGamePauseCoroutine = WaitForPause();
+        mGamePauseCoroutine = WaitForPause();
 
-		StartCoroutine(mGamePauseCoroutine);
+        StartCoroutine(mGamePauseCoroutine);
     }
 
     private IEnumerator WaitForStart()
@@ -135,7 +139,7 @@ public class GameController : MonoBehaviour
         scoreCounter.ResetCounter(keyItemSpawner.KeyItemsCount, keyItemSpawner.KeyItemName, targetTime);
 
         playerCamera.gameObject.SetActive(true);
-        
+
         //TODO: Repair UI
 
         //PauseMenu.Instance.EnableButton(PauseMenu.PauseMenuButtons.RETRY, true);
@@ -152,7 +156,7 @@ public class GameController : MonoBehaviour
 
         StartCoroutine(StartStage());
 
-        GameUI.Instance.SetText(GameUI.TextElements.INFO, "Go!!!");
+        GameUI.Instance.SetText(GameUI.TextElements.INFO, "Foxels!");
 
         yield return new WaitForSeconds(2);
 
@@ -160,6 +164,17 @@ public class GameController : MonoBehaviour
     }
 
     //Gameplay
+
+    public void EndGame(string message)
+    {
+        if (!mPlayerLost && playerController.enabled)
+        {
+            mPlayerLost = true;
+            mStageLostReason = message;
+        }
+    }
+
+
     private IEnumerator StartStage()
     {
 
@@ -168,6 +183,9 @@ public class GameController : MonoBehaviour
         playerController.SetPlayerPosition(startPosition);
 
         //Score counting loop
+
+        //Default: end of time
+        mStageLostReason = "End of time...";
 
         while (scoreCounter.PlayerHasTime)
         {
@@ -190,7 +208,14 @@ public class GameController : MonoBehaviour
                 {
                     mStageWon = true;
                     break;
-                }
+                }            
+            }
+
+            //Check if player lost for some reason
+            if (mPlayerLost)
+            {
+                mStageWon = false;
+                break;
             }
 
             yield return null;
@@ -199,11 +224,10 @@ public class GameController : MonoBehaviour
         if (mStageWon)
         {
             GameUI.Instance.SetText(GameUI.TextElements.INFO, "You won!");
-
         }
         else
         {
-            GameUI.Instance.SetText(GameUI.TextElements.INFO, "End of time");
+            GameUI.Instance.SetText(GameUI.TextElements.INFO, mStageLostReason);
         }
 
         GameUI.Instance.EnableText(GameUI.TextElements.INFO, true);
@@ -235,7 +259,7 @@ public class GameController : MonoBehaviour
             arrowPointer.gameObject.SetActive(false);
             playerController.enabled = false;
 
-            ScoreUI.Instance.scoreText.text = "Stage failed: end of time";
+            ScoreUI.Instance.scoreText.text = "Stage failed: " + mStageLostReason;
             ScoreUI.Instance.inputField.gameObject.SetActive(false);
         }
 
@@ -267,7 +291,7 @@ public class GameController : MonoBehaviour
         //Save score
         scoreCounter.SaveScore(stageName);
 
-		StopCoroutine (mGamePauseCoroutine);
+        StopCoroutine(mGamePauseCoroutine);
 
         if (exitStage)
         {
