@@ -19,8 +19,11 @@ public class PathFollower : MonoBehaviour
 	public float wanderXMax;
 	public float wanderZMin;
 	public float wanderZMax;
+	public float eatingTime;
 
     public int currentPoint = 0;
+
+	int seedsDone = 0;
 
     void Start()
     {
@@ -40,13 +43,32 @@ public class PathFollower : MonoBehaviour
 			if (dist <= reachDst) {
 				speedPercent = 0;
 			}
-
+			Quaternion targetRotation;
 			if (isChicken) {
-				Vector3 chickenWandering = new Vector3 (Random.Range (wanderXMin, wanderXMax), 0, Random.Range (wanderZMin, wanderZMax));
-				Quaternion targetRotation = Quaternion.LookRotation (chickenWandering - transform.position);
-				transform.rotation = Quaternion.Lerp (transform.rotation, targetRotation, Time.deltaTime * turnSpeed);
+				/*if (GameObject.FindGameObjectsWithTag("Seeds").Length) {
+					Vector3 chickenSeeds = GameObject.FindWithTag ("Seeds").transform.position;
+					targetRotation = Quaternion.LookRotation (chickenSeeds - transform.position);
+					transform.rotation = Quaternion.Lerp (transform.rotation, targetRotation, Time.deltaTime * turnSpeed);
+					if ((Vector3.Distance (chickenSeeds, transform.position)) <= 1) {
+						StartCoroutine (EatingSeeds ());
+					}
+				}else {/
+					Vector3 chickenWandering = new Vector3 (Random.Range (wanderXMin, wanderXMax), 0, Random.Range (wanderZMin, wanderZMax));
+					targetRotation = Quaternion.LookRotation (chickenWandering - transform.position);
+					transform.rotation = Quaternion.Lerp (transform.rotation, targetRotation, Time.deltaTime * turnSpeed);
+				//}*/
+				switch (GameObject.FindGameObjectsWithTag("Seeds").Length){
+				case 1: 
+					GoingToSeeds ();
+					break;
+				default:
+					Vector3 chickenWandering = new Vector3 (Random.Range (wanderXMin, wanderXMax), 0, Random.Range (wanderZMin, wanderZMax));
+					targetRotation = Quaternion.LookRotation (chickenWandering - transform.position);
+					transform.rotation = Quaternion.Lerp (transform.rotation, targetRotation, Time.deltaTime * turnSpeed);
+					break;
+				}
 			} else {
-				Quaternion targetRotation = Quaternion.LookRotation (path [currentPoint].position - transform.position);
+				targetRotation = Quaternion.LookRotation (path [currentPoint].position - transform.position);
 				transform.rotation = Quaternion.Lerp (transform.rotation, targetRotation, Time.deltaTime * turnSpeed);
 			}
             transform.Translate(Vector3.forward * Time.deltaTime * speed * speedPercent, Space.Self);
@@ -61,6 +83,27 @@ public class PathFollower : MonoBehaviour
             }
         }
     }
+
+	void GoingToSeeds(){
+		Quaternion targetRotation;
+		Vector3 chickenSeeds = GameObject.FindWithTag ("Seeds").transform.position;
+		targetRotation = Quaternion.LookRotation (chickenSeeds - transform.position);
+		transform.rotation = Quaternion.Lerp (transform.rotation, targetRotation, Time.deltaTime * turnSpeed);
+		if ((Vector3.Distance (chickenSeeds, transform.position)) <= 1) {
+			StartCoroutine (EatingSeeds ());
+		}
+	}
+
+	IEnumerator EatingSeeds(){
+		speed = 0;
+		turnSpeed = 0;
+		yield return new WaitForSeconds (eatingTime);
+		GameObject tsd = GameObject.FindGameObjectWithTag ("Seeds");
+		Destroy (tsd);
+		seedsDone++;
+		speed = chasingSpeed;
+		turnSpeed = chasingTurn;
+	}
 
     void OnDrawGizmos()
     {
