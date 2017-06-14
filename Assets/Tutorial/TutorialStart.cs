@@ -35,11 +35,6 @@ public class TutorialStart : MonoBehaviour, ITutorialQuest {
         
     }
 
-    public string[] GetDescription()
-    {
-        return description;
-    }
-
     public string GetTitle()
     {
         return title;
@@ -75,7 +70,7 @@ public class TutorialStart : MonoBehaviour, ITutorialQuest {
         yield return null;
     }
 
-    string ITutorialQuest.GetDescription()
+    public string GetDescription()
     {
         if(mCurrentDescriptionText >= description.Length)
         {
@@ -83,5 +78,10 @@ public class TutorialStart : MonoBehaviour, ITutorialQuest {
             return "";
         }
         return description[mCurrentDescriptionText++];
+    }
+
+    public bool TaskCompleted()
+    {
+        return true;
     }
 }

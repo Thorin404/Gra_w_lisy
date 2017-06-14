@@ -35,11 +35,6 @@ public class TutorialEnd : MonoBehaviour, ITutorialQuest {
         StartCoroutine(ImageFadeOut());
     }
 
-    public string[] GetDescription()
-    {
-        return description;
-    }
-
     public string GetTitle()
     {
         return title;
@@ -73,7 +68,7 @@ public class TutorialEnd : MonoBehaviour, ITutorialQuest {
         yield return null;
     }
 
-    string ITutorialQuest.GetDescription()
+    public string GetDescription()
     {
         if (mCurrentDescriptionText >= description.Length)
         {
@@ -81,5 +76,10 @@ public class TutorialEnd : MonoBehaviour, ITutorialQuest {
             return "";
         }
         return description[mCurrentDescriptionText++];
+    }
+
+    public bool TaskCompleted()
+    {
+        return true;
     }
 }

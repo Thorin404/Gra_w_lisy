@@ -15,6 +15,7 @@ public interface ITutorialQuest
     string GetDescription();
 
     bool Completed();
+    bool TaskCompleted();
 }
 
 public class Tutorial : MonoBehaviour
@@ -24,6 +25,11 @@ public class Tutorial : MonoBehaviour
     public float animationSpeed;
     public string messageSkipButton;
     public float characterTime;
+
+    //Play basic sound after printing specific number of characters, then special sound at the end of a sentence.
+    public int characterSound;
+    public bool randomizedSounds;
+    private int mCharacterSoundOffset;
 
     public AudioClip character;
     public AudioClip sentenceEnd;
@@ -56,6 +62,8 @@ public class Tutorial : MonoBehaviour
 
         skipText.text = "(" + messageSkipButton + ") next.";
         skipText.enabled = false;
+
+        mCharacterSoundOffset = characterSound;
 
         //mPrintingMessage = false;
         //mMessageEnd = false;
@@ -153,7 +161,12 @@ public class Tutorial : MonoBehaviour
                 mCurrentMessageString += getCurrentMessage[i];
                 questDescription.text = mCurrentMessageString;
 
-                mAudioSource.Play();
+                //Play sound 
+                if ((i % mCharacterSoundOffset) == 0)
+                {
+                    mAudioSource.Play();
+                    mCharacterSoundOffset = randomizedSounds ? UnityEngine.Random.Range(2, characterSound) : characterSound;
+                }
 
                 //Skipping whole message
                 if (mMessageEnd)
@@ -168,6 +181,12 @@ public class Tutorial : MonoBehaviour
             mAudioSource.Play();
 
             questDescription.fontStyle = FontStyle.Italic;
+
+            //Wait for task to finish
+            while (!quest.TaskCompleted())
+            {
+                yield return new WaitForFixedUpdate();
+            }
 
             skipText.enabled = true;
 

@@ -63,7 +63,7 @@ public class FoxInstinctController : MonoBehaviour
     private void StopAction()
     {
         RefreshUi();
-        if(mCurrentTime < maxActionTime)
+        if (mCurrentTime < maxActionTime)
         {
             mCurrentTime += Time.deltaTime * reloadSpeedPct;
         }
@@ -87,7 +87,7 @@ public class FoxInstinctController : MonoBehaviour
         }
     }
 
-    private void CreatePrefabs(GameObject prefab,GameObject[] positions, int indexStart)
+    private void CreatePrefabs(GameObject prefab, GameObject[] positions, int indexStart)
     {
         for (int i = 0; i < positions.Length; i++)
         {
@@ -96,7 +96,7 @@ public class FoxInstinctController : MonoBehaviour
                 GameObject gameObject = Instantiate(prefab, transform.position, Quaternion.identity) as GameObject;
                 gameObject.GetComponent<ItemPointer>().Target = positions[i].transform;
                 gameObject.transform.SetParent(this.transform);
-                lastGeneratedPointers[i+indexStart] = gameObject;
+                lastGeneratedPointers[i + indexStart] = gameObject;
             }
             else
             {
@@ -107,13 +107,16 @@ public class FoxInstinctController : MonoBehaviour
 
     private void RefreshUi()
     {
-		ProgressBar progressBar = GameUI.Instance.GetProgressBar(GameUI.ProgressBars.FOXPOWER);
-		if(progressBar != null)
-		{
-			float pct = mCurrentTime / maxActionTime;
-			progressBar.ProgressBarPct = pct;
-			progressBar.ValueText = ((int)(pct * 100.0f)) + "%";
-		}
+        if (GameUI.Instance != null)
+        {
+            ProgressBar progressBar = GameUI.Instance.GetProgressBar(GameUI.ProgressBars.FOXPOWER);
+            if (progressBar != null)
+            {
+                float pct = mCurrentTime / maxActionTime;
+                progressBar.ProgressBarPct = pct;
+                progressBar.ValueText = ((int)(pct * 100.0f)) + "%";
+            }
+        }
     }
 
     private void GeneratePointers()
@@ -122,6 +125,12 @@ public class FoxInstinctController : MonoBehaviour
         {
             mKeyItems = KeyItemSpawner.KeyItems;
             mBonusItems = KeyItemSpawner.BonusItems;
+
+            if(mKeyItems == null || mBonusItems == null)
+            {
+                return;
+            }
+
             mAllItems = mKeyItems.Concat(mBonusItems).ToArray();
         }
         else if (lastGeneratedPointers == null && mAllItems != null)
