@@ -25,13 +25,9 @@ public class PathFollower : MonoBehaviour
 
 	int seedsDone = 0;
 
-	Animator anim;
-
-	string isWalking = "IsWalking";
-
     void Start()
     {
-		anim = GetComponent<Animator> ();
+		
     }
 
     void Update()
@@ -56,11 +52,11 @@ public class PathFollower : MonoBehaviour
 					if ((Vector3.Distance (chickenSeeds, transform.position)) <= 1) {
 						StartCoroutine (EatingSeeds ());
 					}
-				}else {/
+				}else {
 					Vector3 chickenWandering = new Vector3 (Random.Range (wanderXMin, wanderXMax), 0, Random.Range (wanderZMin, wanderZMax));
 					targetRotation = Quaternion.LookRotation (chickenWandering - transform.position);
 					transform.rotation = Quaternion.Lerp (transform.rotation, targetRotation, Time.deltaTime * turnSpeed);
-				//}*/
+				}*/
 				if (GameObject.FindGameObjectsWithTag ("Seeds").Length >= 1) {
 					GoingToSeeds ();
 				} else {
@@ -73,7 +69,7 @@ public class PathFollower : MonoBehaviour
 				transform.rotation = Quaternion.Lerp (transform.rotation, targetRotation, Time.deltaTime * turnSpeed);
 			}
             transform.Translate(Vector3.forward * Time.deltaTime * speed * speedPercent, Space.Self);
-			anim.SetBool (isWalking, true);
+
 
             if (dist <= reachDst)
             {
@@ -99,14 +95,12 @@ public class PathFollower : MonoBehaviour
 	IEnumerator EatingSeeds(){
 		speed = 0;
 		turnSpeed = 0;
-		anim.SetBool (isWalking, false);
 		yield return new WaitForSeconds (eatingTime);
 		GameObject tsd = GameObject.FindGameObjectWithTag ("Seeds");
 		Destroy (tsd);
 		seedsDone++;
 		speed = chasingSpeed;
 		turnSpeed = chasingTurn;
-		anim.SetBool (isWalking, true);
 	}
 
     void OnDrawGizmos()
