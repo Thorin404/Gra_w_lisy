@@ -19,9 +19,14 @@ public class Unit : MonoBehaviour {
 	public int waitTime;
 	public int currentTarget = 0;
 
+	Animator anim;
+
+	string isWalking = "IsWalking";
+
 	Path path;
 
 	void Start() {
+		anim = GetComponent<Animator> ();
 		StartCoroutine (UpdatePath ());
 	}
 
@@ -40,9 +45,11 @@ public class Unit : MonoBehaviour {
 	IEnumerator Waiting(){
 		speed = 0;
 		turnSpeed = 0;
+		anim.SetBool (isWalking, false);
 		yield return new WaitForSeconds (5);
 		speed = followSpeed;
 		turnSpeed = followTurn;
+		anim.SetBool (isWalking, true);
 	}
 
 	public void OnPathFound(Vector3[] waypoints, bool pathSuccessful) {
