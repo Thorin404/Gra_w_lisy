@@ -57,15 +57,12 @@ public class PathFollower : MonoBehaviour
 					targetRotation = Quaternion.LookRotation (chickenWandering - transform.position);
 					transform.rotation = Quaternion.Lerp (transform.rotation, targetRotation, Time.deltaTime * turnSpeed);
 				//}*/
-				switch (GameObject.FindGameObjectsWithTag("Seeds").Length){
-				case 1: 
+				if (GameObject.FindGameObjectsWithTag ("Seeds").Length >= 1) {
 					GoingToSeeds ();
-					break;
-				default:
+				} else {
 					Vector3 chickenWandering = new Vector3 (Random.Range (wanderXMin, wanderXMax), 0, Random.Range (wanderZMin, wanderZMax));
 					targetRotation = Quaternion.LookRotation (chickenWandering - transform.position);
 					transform.rotation = Quaternion.Lerp (transform.rotation, targetRotation, Time.deltaTime * turnSpeed);
-					break;
 				}
 			} else {
 				targetRotation = Quaternion.LookRotation (path [currentPoint].position - transform.position);
@@ -86,10 +83,10 @@ public class PathFollower : MonoBehaviour
 
 	void GoingToSeeds(){
 		Quaternion targetRotation;
-		Vector3 chickenSeeds = GameObject.FindWithTag ("Seeds").transform.position;
-		targetRotation = Quaternion.LookRotation (chickenSeeds - transform.position);
+		Vector3 seeds = GameObject.FindWithTag ("Seeds").transform.position;
+		targetRotation = Quaternion.LookRotation (seeds - transform.position);
 		transform.rotation = Quaternion.Lerp (transform.rotation, targetRotation, Time.deltaTime * turnSpeed);
-		if ((Vector3.Distance (chickenSeeds, transform.position)) <= 1) {
+		if ((Vector3.Distance (seeds, transform.position)) <= 1) {
 			StartCoroutine (EatingSeeds ());
 		}
 	}
