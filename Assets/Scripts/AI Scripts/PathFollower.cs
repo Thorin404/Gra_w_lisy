@@ -7,6 +7,7 @@ public class PathFollower : MonoBehaviour
 
     public bool displayPathGizmos;
 	public bool isChicken;
+	public bool isChasing;
 
     public Transform[] path;
     public float speed = 2;
@@ -20,6 +21,8 @@ public class PathFollower : MonoBehaviour
 	public float wanderZMin;
 	public float wanderZMax;
 	public float eatingTime;
+
+	public GameController tsd;
 
     public int currentPoint = 0;
 
@@ -42,6 +45,12 @@ public class PathFollower : MonoBehaviour
 			}
 			if (dist <= reachDst) {
 				speedPercent = 0;
+				if (isChasing) {
+					//GetComponent<GameController> ().EndGame ("You got caught");
+					//gameObject.GetComponent<GameController>().EndGame("You got caught");
+					//GameController.EndGame ("umrzyj");
+					tsd.EndGame("You got caught");
+				}
 			}
 			Quaternion targetRotation;
 			if (isChicken) {
