@@ -23,6 +23,13 @@ public class ScoreCounter : MonoBehaviour
         {
             mPlayerTime -= value;
             //Set timer ui
+
+            //Rotate timer text each 10 sec TODO : parametrize
+            if (((int)mPlayerTime % 10) == 0)
+            {
+                GameUI.Instance.RotateUiText(GameUI.TextElements.TIMER_VALUE);
+            }
+
             UpdateUI();
         }
     }

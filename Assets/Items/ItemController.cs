@@ -194,6 +194,7 @@ public class ItemController : MonoBehaviour
         {
             GameUI.Instance.ItemBar.SetDefault();
         }
+        GameUI.Instance.RotateUiText(GameUI.TextElements.IB_NAME);
     }
 
     private IEnumerator HoldItem(float time)

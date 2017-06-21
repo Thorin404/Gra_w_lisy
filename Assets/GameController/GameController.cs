@@ -157,6 +157,7 @@ public class GameController : MonoBehaviour
         StartCoroutine(StartStage());
 
         GameUI.Instance.SetText(GameUI.TextElements.INFO, "Foxels!");
+        GameUI.Instance.RotateUiText(GameUI.TextElements.INFO);
 
         yield return new WaitForSeconds(2);
 
