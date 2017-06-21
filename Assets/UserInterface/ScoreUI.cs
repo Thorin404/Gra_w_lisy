@@ -5,9 +5,9 @@ using UnityEngine.UI;
 
 public class ScoreUI : MonoBehaviour
 {
-
     public static ScoreUI Instance;
 
+    public GameObject mPlayerNameInputBox;
     public Text mScoreDetailsText;
     public InputField mInputField;
 
@@ -21,6 +21,11 @@ public class ScoreUI : MonoBehaviour
             }
             return null;
         }
+    }
+
+    public void EnableBestScoreInput(bool enable)
+    {
+        mPlayerNameInputBox.SetActive(enable);
     }
 
     public Text scoreText

@@ -44,10 +44,20 @@ public class GameController : MonoBehaviour
 
     //Starting the game
     private bool mGameStart = false;
+    private bool mExitToMenu = false;
+    private bool mRestart = false;
 
     public void StartGame()
     {
         mGameStart = true;
+    }
+    public void ExitToMenu()
+    {
+        mExitToMenu = true;
+    }
+    public void RestartStage()
+    {
+        mRestart = true;
     }
 
 
@@ -97,6 +107,8 @@ public class GameController : MonoBehaviour
         mGamePaused = false;
         mPlayerLost = false;
         mGameStart = false;
+        mExitToMenu = false;
+        mRestart = false;
 
         //Spawn key items
         keyItemSpawner.Reset();
@@ -160,7 +172,7 @@ public class GameController : MonoBehaviour
         {
             timeLeft -= Time.deltaTime;
 
-            GameUI.Instance.SetText(GameUI.TextElements.INFO, "Get ready : " + (int)(timeLeft));
+            GameUI.Instance.SetText(GameUI.TextElements.INFO, "Get ready : " + (int)(timeLeft+1));
             yield return new WaitForEndOfFrame();
         }
 
@@ -259,7 +271,7 @@ public class GameController : MonoBehaviour
         {
 
             //TODO : Score saving etc
-
+            ScoreUI.Instance.EnableBestScoreInput(true);
             scoreCounter.SetScoreText();
 
             //fox goes away
@@ -271,7 +283,7 @@ public class GameController : MonoBehaviour
             playerController.enabled = false;
 
             ScoreUI.Instance.scoreText.text = "Stage failed: " + mStageLostReason;
-            ScoreUI.Instance.inputField.gameObject.SetActive(false);
+            ScoreUI.Instance.EnableBestScoreInput(false);
         }
 
         StartCoroutine(WaitForExit());
@@ -287,11 +299,11 @@ public class GameController : MonoBehaviour
 
         while (true)
         {
-            if (Input.GetButtonDown(skipButtonName) && !mGamePaused)
+            if (mRestart && !mGamePaused)
             {
                 break;
             }
-            else if (Input.GetButtonDown(retryButtonName) && !mGamePaused)
+            else if (mExitToMenu && !mGamePaused)
             {
                 exitStage = true;
                 break;
