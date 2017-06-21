@@ -109,11 +109,12 @@ public class LevelSave
         mScores = mScores.OrderByDescending(x => x.Value).ToList();
 
         List<KeyValuePair<string, int>> bestScores = GetBestScoresRaw(range);
-        string outString = "Name    Score \n";
+        string outString = "";
+        int counter = 1;
 
         foreach(KeyValuePair<string, int> score in bestScores)
         {
-            outString += score.Key + "    " + score.Value + " pts\n";
+            outString += (counter++)+". " + score.Key + " : " + score.Value + " pts\n";
         }
 
         return outString;

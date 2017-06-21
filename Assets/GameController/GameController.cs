@@ -42,7 +42,16 @@ public class GameController : MonoBehaviour
         get { return mGamePaused; }
     }
 
-    //Private members
+    //Starting the game
+    private bool mGameStart = false;
+
+    public void StartGame()
+    {
+        mGameStart = true;
+    }
+
+
+    //Gameplay 
 
     public bool CheckpointReached
     {
@@ -87,6 +96,7 @@ public class GameController : MonoBehaviour
         //Unpause game
         mGamePaused = false;
         mPlayerLost = false;
+        mGameStart = false;
 
         //Spawn key items
         keyItemSpawner.Reset();
@@ -122,7 +132,7 @@ public class GameController : MonoBehaviour
 
         while (cameraSystem.SystemIsActive)
         {
-            if (Input.GetButtonDown(skipButtonName) && !mGamePaused)
+            if (mGameStart && !mGamePaused)
             {
                 cameraSystem.Skip();
                 break;
