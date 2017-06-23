@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PathFollowerChicken : MonoBehaviour {
+public class ChickenBehavior : MonoBehaviour {
 
 	public float speed = 2;
 	public float chasingSpeed = 3;
