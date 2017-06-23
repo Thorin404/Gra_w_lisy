@@ -1,17 +1,29 @@
 fileFormatVersion: 2
-guid: 3c4f890812afa20459604a9c555a7ee8
-timeCreated: 1496863118
+guid: b1db9b515ffc9d4468ff020d0b7eb2b3
+timeCreated: 1498228589
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
-    100000: default
-    100002: //RootNode
-    400000: default
-    400002: //RootNode
-    2300000: default
-    3300000: default
-    4300000: default
+    100000: Bone
+    100002: Bone.001
+    100004: Bone.001_end
+    100006: Bone.002
+    100008: //RootNode
+    100010: Flower_2
+    100012: Flower_2.001
+    400000: Bone
+    400002: Bone.001
+    400004: Bone.001_end
+    400006: Bone.002
+    400008: //RootNode
+    400010: Flower_2
+    400012: Flower_2.001
+    4300000: Flower_2.001
+    7400000: Flower_2|Flower_2_Touch
+    7400002: Flower_2|Flower_2_Wind
+    9500000: //RootNode
+    13700000: Flower_2.001
   materials:
     importMaterials: 1
     materialName: 0
@@ -76,7 +88,7 @@ ModelImporter:
     hasExtraRoot: 0
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
-  animationType: 0
+  animationType: 2
   humanoidOversampling: 1
   additionalBone: 0
   userData: 
