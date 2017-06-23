@@ -7,9 +7,14 @@ public class Grass : MonoBehaviour {
     public string[] actionTriggers;
     public float triggerReleaseTime;
 
+    public float soundPitchMin;
+    public float soundPitchMax;
+
     private Animator mAnimator;
     private IEnumerator mAnimationStarted;
     private AudioSource mAudioSource;
+
+    
 
 	void Start () {
         mAnimator = GetComponent<Animator>();
@@ -34,6 +39,7 @@ public class Grass : MonoBehaviour {
         mAnimator.SetTrigger(trigger);
 
         //Play sound
+        mAudioSource.pitch = Random.Range(soundPitchMin, soundPitchMax);
         mAudioSource.Play();
 
         //Wait for specified time
