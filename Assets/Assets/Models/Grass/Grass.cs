@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Grass : MonoBehaviour {
+public class Grass : MonoBehaviour
+{
 
     public string[] actionTriggers;
     public float triggerReleaseTime;
@@ -14,27 +15,30 @@ public class Grass : MonoBehaviour {
     private IEnumerator mAnimationStarted;
     private AudioSource mAudioSource;
 
-    
 
-	void Start () {
+
+    void Start()
+    {
         mAnimator = GetComponent<Animator>();
         mAudioSource = GetComponent<AudioSource>();
         Debug.Assert(mAnimator != null && actionTriggers != null && actionTriggers.Length != 0 && mAudioSource != null);
         mAnimationStarted = null;
     }
-	
+
     void OnTriggerEnter(Collider other)
     {
-        if(mAnimationStarted == null)
+        if (mAnimationStarted == null)
         {
             mAnimationStarted = StartAnimation();
             StartCoroutine(mAnimationStarted);
-        } 
+        }
     }
     private IEnumerator StartAnimation()
     {
         //Trigger the animation
-        string trigger = actionTriggers[Random.Range(0, actionTriggers.Length)];
+        int triggerIndex = (int)Random.Range(0, actionTriggers.Length);
+
+        string trigger = actionTriggers[triggerIndex];
         Debug.Log("Grass animation" + trigger);
         mAnimator.SetTrigger(trigger);
 
