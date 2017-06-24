@@ -1,0 +1,157 @@
+fileFormatVersion: 2
+guid: f605dae78499481478adaf36f5567706
+timeCreated: 1498251977
+licenseType: Free
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: Floor_bath
+    100002: Floor_bedroom
+    100004: Floor_concrete
+    100006: Floor_Hall
+    100008: Floor_kitchen
+    100010: Inner_wall4
+    100012: InnerWall_1
+    100014: InnerWall_2
+    100016: InnerWall_3
+    100018: //RootNode
+    100020: ModularHouseFloor
+    100022: ModularHouseRoof
+    100024: ModularHouseWalls
+    100026: WallBack
+    100028: WallFront
+    100030: WallLeft
+    100032: WallRight
+    400000: Floor_bath
+    400002: Floor_bedroom
+    400004: Floor_concrete
+    400006: Floor_Hall
+    400008: Floor_kitchen
+    400010: Inner_wall4
+    400012: InnerWall_1
+    400014: InnerWall_2
+    400016: InnerWall_3
+    400018: //RootNode
+    400020: ModularHouseFloor
+    400022: ModularHouseRoof
+    400024: ModularHouseWalls
+    400026: WallBack
+    400028: WallFront
+    400030: WallLeft
+    400032: WallRight
+    2300000: Floor_bath
+    2300002: Floor_bedroom
+    2300004: Floor_concrete
+    2300006: Floor_Hall
+    2300008: Floor_kitchen
+    2300010: Inner_wall4
+    2300012: InnerWall_1
+    2300014: InnerWall_2
+    2300016: InnerWall_3
+    2300018: ModularHouseFloor
+    2300020: ModularHouseRoof
+    2300022: ModularHouseWalls
+    2300024: WallBack
+    2300026: WallFront
+    2300028: WallLeft
+    2300030: WallRight
+    3300000: Floor_bath
+    3300002: Floor_bedroom
+    3300004: Floor_concrete
+    3300006: Floor_Hall
+    3300008: Floor_kitchen
+    3300010: Inner_wall4
+    3300012: InnerWall_1
+    3300014: InnerWall_2
+    3300016: InnerWall_3
+    3300018: ModularHouseFloor
+    3300020: ModularHouseRoof
+    3300022: ModularHouseWalls
+    3300024: WallBack
+    3300026: WallFront
+    3300028: WallLeft
+    3300030: WallRight
+    4300000: WallBack
+    4300002: Inner_wall4
+    4300004: WallLeft
+    4300006: WallRight
+    4300008: InnerWall_3
+    4300010: InnerWall_2
+    4300012: InnerWall_1
+    4300014: WallFront
+    4300016: Floor_bedroom
+    4300018: Floor_Hall
+    4300020: Floor_bath
+    4300022: Floor_kitchen
+    4300024: Floor_concrete
+    4300026: ModularHouseRoof
+    4300028: ModularHouseFloor
+    4300030: ModularHouseWalls
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
