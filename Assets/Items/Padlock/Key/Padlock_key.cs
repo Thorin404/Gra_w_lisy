@@ -27,7 +27,7 @@ public class Padlock_key : MonoBehaviour, IItem, IObjectHint
         ///throw new NotImplementedException();
         if (mActive && !mUsed)
         {
-            c.HoldedItem = null;
+            ItemController.HoldedItem = null;
             PadlockController padCtrl = padlock.GetComponent<PadlockController>();
             Debug.Assert(padCtrl != null);
             padCtrl.Unlock(this.gameObject);

@@ -55,11 +55,6 @@ public class Bone : MonoBehaviour, IItem, IObjectHint
         return itemName;
     }
 
-    public GameObject ItemObject()
-    {
-        return mHintObject;
-    }
-
     public void SetHintObject(GameObject hintObject)
     {
         mHintObject = hintObject;

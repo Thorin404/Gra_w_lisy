@@ -11,6 +11,8 @@ public class PickUp : MonoBehaviour, IObjectHint {
     public float timeValue;
     //Name to display
     public string nameToDisplay;
+    //Check if item is key
+    public bool pickupIsKey;
 
     //Hint
     private GameObject mHintPointer;
@@ -42,6 +44,6 @@ public class PickUp : MonoBehaviour, IObjectHint {
 
     public HintType GetHintType()
     {
-        return HintType.FOOD;
+        return pickupIsKey ? HintType.OBJECTIVE : HintType.FOOD; 
     }
 }

@@ -16,12 +16,16 @@ public class KeyItemSpawner : MonoBehaviour
     //Tools
     public GameObject[] toolItems;
 
+    //Use item hints
+    public GameObject[] toolUsageItems;
+
     private Transform[] mKeyItemsPositions;
     private Transform[] mBonusItemsPositions;
 
     private static GameObject[] mKeyItems;
     private static GameObject[] mBonusItems;
     private static GameObject[] mToolItems;
+    private static GameObject[] mToolUsageItems;
 
     private int mKeyItemsCount = -1;
     private int mBonusItemsCount = -1;
@@ -31,6 +35,14 @@ public class KeyItemSpawner : MonoBehaviour
         get
         {
             return mToolItems;
+        }
+    }
+
+    public static GameObject[] ToolUsageItems
+    {
+        get
+        {
+            return mToolUsageItems;
         }
     }
 
@@ -74,9 +86,13 @@ public class KeyItemSpawner : MonoBehaviour
 
     public void Start()
     {
-        Debug.Assert(toolItems != null);
+        Debug.Assert(toolItems != null && toolUsageItems != null);
+
         mToolItems = new GameObject[toolItems.Length];
         toolItems.CopyTo(mToolItems, 0);
+
+        mToolUsageItems = new GameObject[toolUsageItems.Length];
+        toolUsageItems.CopyTo(mToolUsageItems, 0);
     }
 
     private static GameObject[] RemoveEmptyElements(GameObject[] array)

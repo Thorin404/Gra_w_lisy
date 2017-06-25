@@ -31,9 +31,9 @@ public class ItemController : MonoBehaviour
     public Transform holdingTarget;
     public float itemUseTime;
 
-    private bool mHoldingItem = false;
-    private GameObject mHoldedItem;
-    private IItem mItemInterface;
+    private static bool mHoldingItem = false;
+    private static GameObject mHoldedItem;
+    private static IItem mItemInterface;
     private ItemBar mItemBar;
     private bool mUseItem;
     private float mTimeAccumulator;
@@ -50,7 +50,7 @@ public class ItemController : MonoBehaviour
     public string throwTrigger;
     public string toolAnimationTrigger;
 
-    public GameObject HoldedItem
+    public static GameObject HoldedItem
     {
         get { return mHoldedItem; }
         set

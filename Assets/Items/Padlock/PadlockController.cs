@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,18 +10,22 @@ public interface ILockable
     bool IsLocked();
 }
 
-public class PadlockController : MonoBehaviour
+public class PadlockController : MonoBehaviour, IObjectHint
 {
     public string animationTriggerName;
     public float actionTime;
     public Transform keyHolder;
     public GameObject lockedObject;
 
+    public string hintName;
+
     private GameObject mKeyItem;
     private Animator mAnimator;
     private Rigidbody mRigidbody;
 
     private bool mActivated;
+
+    private GameObject mHintObject;
 
     void Start()
     {
@@ -83,5 +88,28 @@ public class PadlockController : MonoBehaviour
         }
     }
 
+    public string GetHintName()
+    {
+        return hintName;
+    }
 
+    public void SetHintObject(GameObject hintObject)
+    {
+        mHintObject = hintObject;
+    }
+
+    public bool HasActiveHintObject()
+    {
+        return mHintObject != null;
+    }
+
+    public bool DisplayHint()
+    {
+        return !mActivated;
+    }
+
+    public HintType GetHintType()
+    {
+        return HintType.TOOL_USAGE;
+    }
 }

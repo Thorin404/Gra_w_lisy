@@ -20,7 +20,7 @@ public class ItemHint : MonoBehaviour
     //Countdown corutine
     private IEnumerator mCountdownCorutine;
 
-    public void CreateHint(string textToDisplay, Transform target,GameObject pointedObj, float lifeTime)
+    public void CreateHint(string textToDisplay, Transform target, GameObject pointedObj, float lifeTime)
     {
         mLookTarget = target;
         mLifeTime = lifeTime;
@@ -64,13 +64,22 @@ public class ItemHint : MonoBehaviour
             Vector3 targetPosition = new Vector3(mLookTarget.position.x, transform.position.y, mLookTarget.position.z);
             transform.LookAt(targetPosition);
         }
-        if(mPointedObject == null && mCountdownCorutine != null)
+
+        bool playerGrabbedItem = false;
+
+        playerGrabbedItem = ItemController.HoldedItem == null ? false : (ItemController.HoldedItem.gameObject == mPointedObject);
+
+        if ((mPointedObject == null || playerGrabbedItem) && mCountdownCorutine != null)
         {
-            Debug.Log("Target collected");
-            StopCoroutine(mCountdownCorutine);
-            mCountdownCorutine = null;
-            StartCoroutine(DestroyHint());
+            StopCountdown();
         }
+    }
+
+    private void StopCountdown()
+    {
+        StopCoroutine(mCountdownCorutine);
+        mCountdownCorutine = null;
+        StartCoroutine(DestroyHint());
     }
 
     private IEnumerator CountdownLifeTime()

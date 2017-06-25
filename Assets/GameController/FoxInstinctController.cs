@@ -12,7 +12,6 @@ public enum HintType { OBJECTIVE, FOOD, TOOL, TOOL_USAGE };
 public interface IObjectHint
 {
     string GetHintName();
-    GameObject ItemObject();
 
     void SetHintObject(GameObject hintObject);
     bool HasActiveHintObject();
@@ -55,8 +54,8 @@ public class FoxInstinctController : MonoBehaviour
     //Objective prefabs
     public GameObject bonusHintPrefab;
     public GameObject toolHintPrefab;
-    //public GameObject toolUseHintPrefab;
-    //public GameObject objectiveUseHintPrefab;
+    public GameObject objectiveHintPrefab;
+    public GameObject itemUsageHintPrefab;
 
 
 
@@ -154,12 +153,17 @@ public class FoxInstinctController : MonoBehaviour
         {
             //Remove holded item from array
             GameObject[] toolItems = KeyItemSpawner.ToolItems;
-            toolItems = toolItems.Where(x => x != mItemController.HoldedItem).ToArray();
+            toolItems = toolItems.Where(x => x != ItemController.HoldedItem).ToArray();
 
             StartCoroutine(CreateItemHints(toolItems));
         }
-        //Tool usage items
-        //Objective items
+
+        yield return new WaitForSeconds(spawnInterval);
+
+        if (KeyItemSpawner.ToolUsageItems != null)
+        {
+            StartCoroutine(CreateItemHints(KeyItemSpawner.ToolUsageItems));
+        }
 
         yield return null;
     }
@@ -222,7 +226,12 @@ public class FoxInstinctController : MonoBehaviour
                     case HintType.TOOL:
                         prefab = toolHintPrefab;
                         break;
-
+                    case HintType.OBJECTIVE:
+                        prefab = objectiveHintPrefab;
+                        break;
+                    case HintType.TOOL_USAGE:
+                        prefab = itemUsageHintPrefab;
+                        break;
                     default:
                         break;
                 }
@@ -236,7 +245,7 @@ public class FoxInstinctController : MonoBehaviour
                     if (hintScript != null)
                     {
                         hintInfo.SetHintObject(gameObject);
-                        hintScript.CreateHint(hintInfo.GetHintName(), mPlayerController.PlayerCamera.gameObject.transform, hintInfo.ItemObject(), hintLifetime);
+                        hintScript.CreateHint(hintInfo.GetHintName(), mPlayerController.PlayerCamera.gameObject.transform, pickup.gameObject, hintLifetime);
                     }
                 }
 
