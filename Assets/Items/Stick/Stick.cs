@@ -3,11 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Stick : MonoBehaviour, IItem {
+public class Stick : MonoBehaviour, IItem, IObjectHint {
 
     public string itemName;
     public string itemHint;
     public Sprite itemSprite;
+
+    private GameObject mHintObject;
 
     // Use this for initialization
     void Start () {
@@ -37,5 +39,35 @@ public class Stick : MonoBehaviour, IItem {
     public string GetHint()
     {
         return itemHint;
+    }
+
+    public string GetHintName()
+    {
+        return itemName;
+    }
+
+    public GameObject ItemObject()
+    {
+        return mHintObject;
+    }
+
+    public void SetHintObject(GameObject hintObject)
+    {
+        mHintObject = hintObject;
+    }
+
+    public bool HasActiveHintObject()
+    {
+        return mHintObject != null;
+    }
+
+    public bool DisplayHint()
+    {
+        return true;
+    }
+
+    public HintType GetHintType()
+    {
+        return HintType.TOOL;
     }
 }

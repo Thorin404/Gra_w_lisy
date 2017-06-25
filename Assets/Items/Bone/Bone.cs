@@ -3,7 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Bone : MonoBehaviour, IItem {
+public class Bone : MonoBehaviour, IItem, IObjectHint
+{
 
     public float throwForce;
     public ForceMode forceMode;
@@ -11,6 +12,8 @@ public class Bone : MonoBehaviour, IItem {
     public string itemName;
     public string itemHint;
     public Sprite itemSprite;
+
+    private GameObject mHintObject;
 
     public bool ItemAction(ItemController c)
     {
@@ -21,14 +24,16 @@ public class Bone : MonoBehaviour, IItem {
     }
 
     // Use this for initialization
-    void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    void Start()
+    {
+
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+
+    }
 
     public Sprite GetSprite()
     {
@@ -43,5 +48,35 @@ public class Bone : MonoBehaviour, IItem {
     public string GetHint()
     {
         return itemHint;
+    }
+
+    public string GetHintName()
+    {
+        return itemName;
+    }
+
+    public GameObject ItemObject()
+    {
+        return mHintObject;
+    }
+
+    public void SetHintObject(GameObject hintObject)
+    {
+        mHintObject = hintObject;
+    }
+
+    public bool HasActiveHintObject()
+    {
+        return mHintObject != null;
+    }
+
+    public bool DisplayHint()
+    {
+        return true;
+    }
+
+    public HintType GetHintType()
+    {
+        return HintType.TOOL;
     }
 }

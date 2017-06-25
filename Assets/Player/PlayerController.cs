@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour
     public Camera playerCamera;
 
     public string animatorParamName;
+    public string jumpAnimationTriggerName;
 
     public float walkSpeed = 2;
     public float runSpeed = 6;
@@ -28,16 +29,16 @@ public class PlayerController : MonoBehaviour
     float velocityY;
     private bool moving;
 
-    Animator animator;
-    Transform cameraT;
-    CharacterController controller;
+    private Animator mAnimatior;
+    private Transform mCameraTarget;
+    private CharacterController mController;
 
     //Behaviour scripts
     private PickUpController mPickupController;
     private FoxInstinctController mFoxInstinctController;
     private ItemController mItemController;
 
-    public bool ableToMove
+    public bool AbleToMove
     {
         set
         {
@@ -49,13 +50,29 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public float setAnimatorState
+    public bool PlayerGrounded
+    {
+        get
+        {
+            return mController.isGrounded;
+        }
+    }
+
+    public Camera PlayerCamera
+    {
+        get
+        {
+            return playerCamera;
+        }
+    }
+
+    public float SetAnimatorState
     {
         set
         {
-            if (animator != null)
+            if (mAnimatior != null)
             {
-                animator.SetFloat(animatorParamName, value);
+                mAnimatior.SetFloat(animatorParamName, value);
             }
         }
     }
@@ -85,18 +102,18 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         Debug.Log("Player start");
-        animator = GetComponentInChildren<Animator>();
+        mAnimatior = GetComponentInChildren<Animator>();
         //cameraT = Camera.main.transform;
-        cameraT = playerCamera.transform;
+        mCameraTarget = playerCamera.transform;
 
-        animator.SetFloat(animatorParamName, 0.0f);
+        mAnimatior.SetFloat(animatorParamName, 0.0f);
         moving = true;
     }
 
     private void InitControllers()
     {
         //Controller references
-        controller = GetComponent<CharacterController>();
+        mController = GetComponent<CharacterController>();
         mPickupController = GetComponent<PickUpController>();
         mFoxInstinctController = GetComponent<FoxInstinctController>();
         mItemController = GetComponent<ItemController>();
@@ -128,7 +145,7 @@ public class PlayerController : MonoBehaviour
         }
         // animator
         float animationSpeedPercent = ((running) ? currentSpeed / runSpeed : currentSpeed / walkSpeed * .5f);
-        animator.SetFloat(animatorParamName, animationSpeedPercent, speedSmoothTime, Time.deltaTime);
+        mAnimatior.SetFloat(animatorParamName, animationSpeedPercent, speedSmoothTime, Time.deltaTime);
 
     }
 
@@ -139,7 +156,7 @@ public class PlayerController : MonoBehaviour
         if (inputDir != Vector2.zero)
         {
             //Camera rotation
-            float targetRotation = Mathf.Atan2(inputDir.x, inputDir.y) * Mathf.Rad2Deg + cameraT.eulerAngles.y;
+            float targetRotation = Mathf.Atan2(inputDir.x, inputDir.y) * Mathf.Rad2Deg + mCameraTarget.eulerAngles.y;
             transform.eulerAngles = Vector3.up * Mathf.SmoothDampAngle(transform.eulerAngles.y, targetRotation, ref turnSmoothVelocity, GetModifiedSmoothTime(turnSmoothTime));
         }
 
@@ -152,10 +169,10 @@ public class PlayerController : MonoBehaviour
 
 
 
-        controller.Move(velocity * Time.deltaTime);
-        currentSpeed = new Vector2(controller.velocity.x, controller.velocity.z).magnitude;
+        mController.Move(velocity * Time.deltaTime);
+        currentSpeed = new Vector2(mController.velocity.x, mController.velocity.z).magnitude;
 
-        if (controller.isGrounded)
+        if (mController.isGrounded)
         {
             velocityY = 0;
         }
@@ -164,8 +181,9 @@ public class PlayerController : MonoBehaviour
 
     void Jump()
     {
-        if (controller.isGrounded)
+        if (mController.isGrounded)
         {
+            mAnimatior.SetTrigger(jumpAnimationTriggerName);
             float jumpVelocity = Mathf.Sqrt(-2 * gravity * jumpHeight);
             velocityY = jumpVelocity;
         }
@@ -173,7 +191,7 @@ public class PlayerController : MonoBehaviour
 
     float GetModifiedSmoothTime(float smoothTime)
     {
-        if (controller.isGrounded)
+        if (mController.isGrounded)
         {
             return smoothTime;
         }

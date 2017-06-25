@@ -7,8 +7,8 @@ public class GameUI : MonoBehaviour
 {
     public static GameUI Instance;
 
-    public enum TextElements { INFO, OBJECTIVE, KEY_ITEMS, SCORE, FP_NAME, FP_VALUE, IB_NAME, IB_HINT, TIMER_NAME, TIMER_VALUE };
-    public enum ProgressBars { FOXPOWER, TIMER }
+    public enum TextElements { INFO, OBJECTIVE, KEY_ITEMS, SCORE, /* FP_NAME, FP_VALUE,*/ IB_NAME, IB_HINT, TIMER_NAME, TIMER_VALUE };
+    public enum ProgressBars { /* FOXPOWER ,*/ TIMER }
 
     private Text[] mUiTextElements;
     private ProgressBar[] mProgressBars;

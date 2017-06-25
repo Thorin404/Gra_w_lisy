@@ -93,8 +93,8 @@ public class ScoreCounter : MonoBehaviour
         mPlayerItemsCollected = 0;
 
         GameUI.Instance.SetText(GameUI.TextElements.OBJECTIVE, "Collect "+ keyItemName+"s");
-        ProgressBar progressBar = GameUI.Instance.GetProgressBar(GameUI.ProgressBars.FOXPOWER);
-        progressBar.ValueText = "100%";
+        //ProgressBar progressBar = GameUI.Instance.GetProgressBar(GameUI.ProgressBars.FOXPOWER);
+        //progressBar.ValueText = "100%";
 
         UpdateUI();
     }

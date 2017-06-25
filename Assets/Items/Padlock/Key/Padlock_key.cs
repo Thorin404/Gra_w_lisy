@@ -3,13 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Padlock_key : MonoBehaviour, IItem
+public class Padlock_key : MonoBehaviour, IItem, IObjectHint
 {
     public string itemName;
     public string itemHint;
     public Sprite itemSprite;
 
     public GameObject padlock;
+    private GameObject mHintObject;
 
     private bool mUsed;
     private bool mActive;
@@ -30,6 +31,7 @@ public class Padlock_key : MonoBehaviour, IItem
             PadlockController padCtrl = padlock.GetComponent<PadlockController>();
             Debug.Assert(padCtrl != null);
             padCtrl.Unlock(this.gameObject);
+            mUsed = true;
         }
         return false;
     }
@@ -66,5 +68,35 @@ public class Padlock_key : MonoBehaviour, IItem
     void OnTriggerExit(Collider other)
     {
         ActivateKey(other, false);
+    }
+
+    public string GetHintName()
+    {
+        return itemName;
+    }
+
+    public GameObject ItemObject()
+    {
+        return mHintObject;
+    }
+
+    public void SetHintObject(GameObject hintObject)
+    {
+        mHintObject = hintObject;
+    }
+
+    public bool HasActiveHintObject()
+    {
+        return mHintObject != null;
+    }
+
+    public bool DisplayHint()
+    {
+        return !mUsed;
+    }
+
+    public HintType GetHintType()
+    {
+        return HintType.TOOL;
     }
 }

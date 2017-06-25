@@ -1,8 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PickUp : MonoBehaviour {
+public class PickUp : MonoBehaviour, IObjectHint {
     
     //pickup value
     public int scoreValue;
@@ -11,4 +12,36 @@ public class PickUp : MonoBehaviour {
     //Name to display
     public string nameToDisplay;
 
+    //Hint
+    private GameObject mHintPointer;
+
+    public string GetHintName()
+    {
+        return nameToDisplay;
+    }
+
+    public GameObject ItemObject()
+    {
+        return gameObject;
+    }
+
+    public bool HasActiveHintObject()
+    {
+        return mHintPointer != null;
+    }
+
+    public void SetHintObject(GameObject hintObject)
+    {
+        mHintPointer = hintObject;
+    }
+
+    public bool DisplayHint()
+    {
+        return true;
+    }
+
+    public HintType GetHintType()
+    {
+        return HintType.FOOD;
+    }
 }

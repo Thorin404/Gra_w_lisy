@@ -48,6 +48,7 @@ public class ItemController : MonoBehaviour
     public float throwAnimationTime;
     public string pickUpTrigger;
     public string throwTrigger;
+    public string toolAnimationTrigger;
 
     public GameObject HoldedItem
     {
@@ -142,7 +143,7 @@ public class ItemController : MonoBehaviour
     private IEnumerator StartItemAction()
     {
         mAcionPending = true;
-        mPlayerController.ableToMove = false;
+        mPlayerController.AbleToMove = false;
         mPlayerAnimator.SetTrigger(throwTrigger);
 
         yield return new WaitForSeconds(throwAnimationTime);
@@ -163,7 +164,7 @@ public class ItemController : MonoBehaviour
             DropItem();
         }
         mAcionPending = false;
-        mPlayerController.ableToMove = true;
+        mPlayerController.AbleToMove = true;
     }
 
     public void DropItem()
@@ -200,7 +201,7 @@ public class ItemController : MonoBehaviour
     private IEnumerator HoldItem(float time)
     {
         mAcionPending = true;
-        mPlayerController.ableToMove = false;
+        mPlayerController.AbleToMove = false;
 
         mPlayerAnimator.SetTrigger(pickUpTrigger);
         //TODO : disable player movements
@@ -215,7 +216,7 @@ public class ItemController : MonoBehaviour
 
         mHoldingItem = true;
         mAcionPending = false;
-        mPlayerController.ableToMove = true;
+        mPlayerController.AbleToMove = true;
     }
 
 }

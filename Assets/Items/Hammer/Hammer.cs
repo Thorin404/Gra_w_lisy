@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Hammer : MonoBehaviour, IItem
+public class Hammer : MonoBehaviour, IItem, IObjectHint
 {
 
     public string itemName;
@@ -14,6 +14,7 @@ public class Hammer : MonoBehaviour, IItem
     private IEvent mEventToTrigger;
 
     private bool mActive;
+    private GameObject mHintObject;
 
     // Use this for initialization
     void Start()
@@ -92,4 +93,33 @@ public class Hammer : MonoBehaviour, IItem
         GameUI.Instance.ItemBar.EnableUseSign = false;
     }
 
+    public string GetHintName()
+    {
+        return itemName;
+    }
+
+    public GameObject ItemObject()
+    {
+        return mHintObject;
+    }
+
+    public void SetHintObject(GameObject hintObject)
+    {
+        mHintObject = hintObject;
+    }
+
+    public bool HasActiveHintObject()
+    {
+        return mHintObject != null;
+    }
+
+    public bool DisplayHint()
+    {
+        return true;
+    }
+
+    public HintType GetHintType()
+    {
+        return HintType.TOOL;
+    }
 }

@@ -13,22 +13,42 @@ public class KeyItemSpawner : MonoBehaviour
     public Transform bonusItemPositionsHolder;
     public float bonusItemsToSpawnPct;
 
+    //Tools
+    public GameObject[] toolItems;
+
     private Transform[] mKeyItemsPositions;
     private Transform[] mBonusItemsPositions;
 
     private static GameObject[] mKeyItems;
     private static GameObject[] mBonusItems;
+    private static GameObject[] mToolItems;
 
     private int mKeyItemsCount = -1;
     private int mBonusItemsCount = -1;
 
+    public static GameObject[] ToolItems
+    {
+        get
+        {
+            return mToolItems;
+        }
+    }
+
     public static GameObject[] KeyItems
     {
-        get { return mKeyItems; }
+        get
+        {
+            mKeyItems = RemoveEmptyElements(mKeyItems);
+            return mKeyItems;
+        }
     }
     public static GameObject[] BonusItems
     {
-        get { return mBonusItems; }
+        get
+        {
+            mBonusItems = RemoveEmptyElements(mBonusItems);
+            return mBonusItems;
+        }
     }
 
     public int KeyItemsCount
@@ -54,6 +74,19 @@ public class KeyItemSpawner : MonoBehaviour
 
     public void Start()
     {
+        Debug.Assert(toolItems != null);
+        mToolItems = new GameObject[toolItems.Length];
+        toolItems.CopyTo(mToolItems, 0);
+    }
+
+    private static GameObject[] RemoveEmptyElements(GameObject[] array)
+    {
+        //Filter empty array elements 
+        if (array != null)
+        {
+            return array.Where(x => x != null).ToArray();
+        }
+        return null;
     }
 
     public void Reset()
@@ -77,11 +110,11 @@ public class KeyItemSpawner : MonoBehaviour
 
     public void SpawnItems()
     {
-        if(mKeyItems == null)
+        if (mKeyItems == null)
         {
             mKeyItems = SpawnPrefabsRandomly(mKeyItemsPositions, keyItemPrefabs, mKeyItemsCount);
         }
-        if(mBonusItems == null)
+        if (mBonusItems == null)
         {
             mBonusItems = SpawnPrefabsRandomly(mBonusItemsPositions, bonusItemsPrefabs, mBonusItemsCount);
         }

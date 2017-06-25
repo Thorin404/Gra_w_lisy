@@ -257,7 +257,7 @@ public class GameController : MonoBehaviour
         arrowPointer.gameObject.SetActive(false);
 
         playerController.enabled = false;
-        playerController.setAnimatorState = 0.0f;
+        playerController.SetAnimatorState = 0.0f;
 
         //Wait for 2 seconds and start score screen
         yield return new WaitForSeconds(2);
