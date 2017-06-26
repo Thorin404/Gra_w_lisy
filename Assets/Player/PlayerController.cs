@@ -38,6 +38,42 @@ public class PlayerController : MonoBehaviour
     private FoxInstinctController mFoxInstinctController;
     private ItemController mItemController;
 
+    //Audio
+    private PlayerSoundManager mSoundManager;
+
+    [Range(0, 1)]
+    public float jumpSoundVolume;
+
+    [Range(0, 1)]
+    public float walkingSoundVolume;
+
+    public float walkingSoundInterval;
+    [Range(0, 1)]
+    public float runningSoundVolume;
+    public float runningSoundInterval;
+
+    private IEnumerator mWalkSoundCorutine;
+
+    private void PlayWalkingSound(bool running)
+    {
+        if (mWalkSoundCorutine == null)
+        {
+            mWalkSoundCorutine = WalingSoundCorutine(running);
+            StartCoroutine(mWalkSoundCorutine);
+        }
+    }
+
+    private IEnumerator WalingSoundCorutine(bool running)
+    {
+        mSoundManager.PlayPlayerSound(running ? PlayerSoundManager.PlayerSoundType.RUN : PlayerSoundManager.PlayerSoundType.WALK,
+            running ? runningSoundVolume : walkingSoundVolume);
+
+        yield return new WaitForSeconds(running ? runningSoundInterval : walkingSoundInterval);
+
+        mWalkSoundCorutine = null;
+        yield return null;
+    }
+
     public bool AbleToMove
     {
         set
@@ -105,6 +141,10 @@ public class PlayerController : MonoBehaviour
         mAnimatior = GetComponentInChildren<Animator>();
         //cameraT = Camera.main.transform;
         mCameraTarget = playerCamera.transform;
+        mSoundManager = GetComponent<PlayerSoundManager>();
+        mWalkSoundCorutine = null;
+
+        Debug.Assert(mAnimatior != null && mCameraTarget != null && mSoundManager != null);
 
         mAnimatior.SetFloat(animatorParamName, 0.0f);
         moving = true;
@@ -164,6 +204,11 @@ public class PlayerController : MonoBehaviour
 
         currentSpeed = Mathf.SmoothDamp(currentSpeed, targetSpeed, ref speedSmoothVelocity, GetModifiedSmoothTime(speedSmoothTime));
 
+        if ((currentSpeed > (running ? runSpeed : walkSpeed) * 0.7f) && mController.isGrounded)
+        {
+            PlayWalkingSound(running);
+        }
+
         velocityY += Time.deltaTime * gravity;
         Vector3 velocity = transform.forward * currentSpeed + Vector3.up * velocityY;
 
@@ -183,7 +228,11 @@ public class PlayerController : MonoBehaviour
     {
         if (mController.isGrounded)
         {
+            //Jump anmation
             mAnimatior.SetTrigger(jumpAnimationTriggerName);
+            //Jump sound
+            mSoundManager.PlayPlayerSound(PlayerSoundManager.PlayerSoundType.JUMP, jumpSoundVolume);
+
             float jumpVelocity = Mathf.Sqrt(-2 * gravity * jumpHeight);
             velocityY = jumpVelocity;
         }

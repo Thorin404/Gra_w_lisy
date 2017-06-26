@@ -21,14 +21,8 @@ public interface IObjectHint
 }
 
 
-
 public class FoxInstinctController : MonoBehaviour
 {
-    //Sound effects
-    public AudioClip[] sounds;
-    public bool randomPitch;
-    public Vector2 pitchMinMax;
-
     //Animations
     public string sniffingAnimationTrigger;
 
@@ -40,10 +34,6 @@ public class FoxInstinctController : MonoBehaviour
 
     //Input
     public string actionButton;
-    //public string objectsOfInterestTag;
-    //public float pointerDistance;
-
-    //public float reloadSpeedPct;
 
     //Parameters
     public float actionTime;
@@ -57,22 +47,13 @@ public class FoxInstinctController : MonoBehaviour
     public GameObject objectiveHintPrefab;
     public GameObject itemUsageHintPrefab;
 
-
-
-    //public GameObject bonusItempointerPrefab;
-    //public GameObject keyItempointerPrefab;
-    //public float slowmoTimeScale;
-
-    //private GameObject[] mKeyItems;
-    //private GameObject[] mBonusItems;
-    //private GameObject[] mAllItems;
-
-    //private GameObject[] lastGeneratedPointers;
-
-    //private float mCurrentTime;
-
     //Corutines 
     private IEnumerator mActionCoroutine;
+
+    //Sound manager
+    private PlayerSoundManager mSoundManager;
+    [Range(0, 1)]
+    public float sniffSoundVolume;
 
     void Start()
     {
@@ -80,9 +61,11 @@ public class FoxInstinctController : MonoBehaviour
         mAnimator = GetComponentInChildren<Animator>();
         mPlayerController = GetComponent<PlayerController>();
         mItemController = GetComponent<ItemController>();
+        mSoundManager = GetComponent<PlayerSoundManager>();
 
-        Debug.Assert(mAudioSource != null && sounds != null && sounds.Length != 0 && mAnimator != null
-            && mPlayerController != null && mItemController != null);
+        Debug.Assert(mAudioSource != null && mAnimator != null
+            && mPlayerController != null && mItemController != null
+            && mSoundManager != null);
 
         mActionCoroutine = null;
 
@@ -173,13 +156,7 @@ public class FoxInstinctController : MonoBehaviour
         //Animation
         mAnimator.SetTrigger(sniffingAnimationTrigger);
 
-        //Sound clip
-        mAudioSource.clip = sounds[Random.Range(0, sounds.Length)];
-        if (randomPitch)
-        {
-            mAudioSource.pitch = Random.Range(pitchMinMax.x, pitchMinMax.y);
-        }
-        mAudioSource.Play();
+        mSoundManager.PlayPlayerSound(PlayerSoundManager.PlayerSoundType.SNIFF, sniffSoundVolume);
     }
 
     private IEnumerator CreateItemHints(GameObject[] objectsWithHints)
@@ -253,106 +230,4 @@ public class FoxInstinctController : MonoBehaviour
         }
     }
 
-    //private void StartAction()
-    //{
-    //    RefreshUi();
-
-
-    //    PlayRandomClip();
-    //    mAnimator.SetTrigger(sniffingAnimationTrigger);
-
-    //    if (mCurrentTime > 0.0f)
-    //    {
-    //        mCurrentTime -= Time.deltaTime;
-    //        GeneratePointers();
-    //    }
-    //    else
-    //    {
-    //        mCurrentTime = 0.0f;
-    //        DestroyPointers();
-    //    }
-
-
-    //}
-
-    //private void StopAction()
-    //{
-    //    RefreshUi();
-    //    if (mCurrentTime < maxActionTime)
-    //    {
-    //        mCurrentTime += Time.deltaTime * reloadSpeedPct;
-    //    }
-    //    else
-    //    {
-    //        mCurrentTime = maxActionTime;
-    //    }
-    //    DestroyPointers();
-    //}
-
-
-    //private void DestroyPointers()
-    //{
-    //    if (lastGeneratedPointers != null)
-    //    {
-    //        for (int i = 0; i < mAllItems.Length; i++)
-    //        {
-    //            Destroy(lastGeneratedPointers[i]);
-    //        }
-    //        lastGeneratedPointers = null;
-    //    }
-    //}
-
-    //private void CreatePrefabs(GameObject prefab, GameObject[] positions, int indexStart)
-    //{
-    //    for (int i = 0; i < positions.Length; i++)
-    //    {
-    //        if (positions[i] != null)
-    //        {
-    //            GameObject gameObject = Instantiate(prefab, transform.position, Quaternion.identity) as GameObject;
-    //            gameObject.GetComponent<ItemPointer>().Target = positions[i].transform;
-    //            gameObject.transform.SetParent(this.transform);
-    //            lastGeneratedPointers[i + indexStart] = gameObject;
-    //        }
-    //        else
-    //        {
-    //            continue;
-    //        }
-    //    }
-    //}
-
-    //private void RefreshUi()
-    //{
-    //    if (GameUI.Instance != null)
-    //    {
-    //        ProgressBar progressBar = GameUI.Instance.GetProgressBar(GameUI.ProgressBars.FOXPOWER);
-    //        if (progressBar != null)
-    //        {
-    //            float pct = mCurrentTime / maxActionTime;
-    //            progressBar.ProgressBarPct = pct;
-    //            progressBar.ValueText = ((int)(pct * 100.0f)) + "%";
-    //        }
-    //    }
-    //}
-
-    //private void GeneratePointers()
-    //{
-    //    if (mKeyItems == null && mBonusItems == null)
-    //    {
-    //        mKeyItems = KeyItemSpawner.KeyItems;
-    //        mBonusItems = KeyItemSpawner.BonusItems;
-
-    //        if (mKeyItems == null || mBonusItems == null)
-    //        {
-    //            return;
-    //        }
-
-    //        mAllItems = mKeyItems.Concat(mBonusItems).ToArray();
-    //    }
-    //    else if (lastGeneratedPointers == null && mAllItems != null)
-    //    {
-    //        lastGeneratedPointers = new GameObject[mAllItems.Length];
-    //        CreatePrefabs(bonusItempointerPrefab, mBonusItems, 0);
-    //        CreatePrefabs(keyItempointerPrefab, mKeyItems, mBonusItems.Length);
-    //    }
-    //}
 }

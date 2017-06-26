@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class AutoDoor : MonoBehaviour, ILockable
 {
+    public BoxCollider triggerCollider;
 
     public string playerTag;
     public string openTriggerName;
@@ -20,6 +21,7 @@ public class AutoDoor : MonoBehaviour, ILockable
         mAnimator = GetComponentInChildren<Animator>();
         Debug.Assert(mAnimator != null);
         mActive = false;
+        triggerCollider.enabled = false;
     }
 
     void OnTriggerEnter(Collider col)
@@ -60,6 +62,7 @@ public class AutoDoor : MonoBehaviour, ILockable
     public void Unlock()
     {
         mActive = true;
+        triggerCollider.enabled = true;
     }
 
     public bool IsLocked()
