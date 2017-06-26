@@ -139,7 +139,7 @@ public class GameController : MonoBehaviour
     {
         IntroUI.Instance.SetText(IntroUI.TextElements.STAGE_NAME, stageName);
 
-        string topScores = GameData.Instance.GetData.GetLevelSave(stageName).GetBestScoresString(10);
+        string topScores = GameData.Instance.GetData.GetLevelSave(stageName).GetBestScoresString(20);
         IntroUI.Instance.SetText(IntroUI.TextElements.TOP_SCORE_LIST, topScores);
 
         while (cameraSystem.SystemIsActive)
@@ -221,7 +221,7 @@ public class GameController : MonoBehaviour
                 //Set stage exit pointer active
                 if (!arrowPointer.gameObject.activeSelf)
                 {
-                    GameUI.Instance.SetText(GameUI.TextElements.OBJECTIVE, "Retreat to exit");
+                    //GameUI.Instance.SetText(GameUI.TextElements.OBJECTIVE, "Retreat to exit");
                     arrowPointer.gameObject.SetActive(true);
                     mGotoExit = true;
                 }
@@ -312,7 +312,7 @@ public class GameController : MonoBehaviour
         }
 
         //Save score
-        scoreCounter.SaveScore(stageName);
+        scoreCounter.SaveScore(stageName, mStageWon);
 
         StopCoroutine(mGamePauseCoroutine);
 

@@ -7,13 +7,21 @@ public class GameUI : MonoBehaviour
 {
     public static GameUI Instance;
 
-    public enum TextElements { INFO, OBJECTIVE, KEY_ITEMS, SCORE, /* FP_NAME, FP_VALUE,*/ IB_NAME, IB_HINT, TIMER_NAME, TIMER_VALUE };
+    public GameObject itemBar;
+    public GameObject objectiveBar;
+    public GameObject timeBar;
+    public GameObject objectivesUI;
+
+    public enum GameUiElement { ITEM, OBJECTIVE, TIME };
+
+    public enum TextElements { INFO,/* OBJECTIVE, KEY_ITEMS, SCORE, FP_NAME, FP_VALUE,*/ IB_NAME, IB_HINT, /*TIMER_NAME,*/ TIMER_VALUE };
     public enum ProgressBars { /* FOXPOWER ,*/ TIMER }
 
     private Text[] mUiTextElements;
     private ProgressBar[] mProgressBars;
     private IEnumerator[] mTextRotationCorutines;
     private ItemBar mItemBar;
+    private ObjectivesUI mObjectivesUI;
 
     public float wiggleSpeed;
     public float wiggleAngle;
@@ -28,7 +36,13 @@ public class GameUI : MonoBehaviour
         }
     }
 
-
+    public ObjectivesUI Objectives
+    {
+        get
+        {
+            return mObjectivesUI;
+        }
+    }
 
     // Use this for initialization
     void Awake()
@@ -36,10 +50,14 @@ public class GameUI : MonoBehaviour
         mUiTextElements = GetComponentsInChildren<Text>();
         mProgressBars = GetComponentsInChildren<ProgressBar>();
         mItemBar = GetComponentInChildren<ItemBar>();
+        mObjectivesUI = GetComponentInChildren<ObjectivesUI>();
 
+        Debug.Assert(mObjectivesUI != null);
         Debug.Assert(mUiTextElements != null);
         Debug.Assert(mProgressBars != null);
         Debug.Assert(mItemBar != null);
+
+        Debug.Assert(itemBar != null && objectiveBar != null && timeBar != null);
 
         mTextRotationCorutines = new IEnumerator[mUiTextElements.Length];
 
@@ -102,6 +120,25 @@ public class GameUI : MonoBehaviour
     public ProgressBar GetProgressBar(ProgressBars bar)
     {
         return mProgressBars[(int)bar];
+    }
+
+    public void SetBarActive(GameUiElement element, bool active)
+    {
+        Debug.Log("Set GameUI element " + element + " state " + active);
+        switch (element)
+        {
+            case GameUiElement.ITEM:
+                itemBar.SetActive(active);
+                break;
+            case GameUiElement.OBJECTIVE:
+                objectiveBar.SetActive(active);
+                break;
+            case GameUiElement.TIME:
+                timeBar.SetActive(active);
+                break;
+            default:
+                break;
+        }
     }
 
 }

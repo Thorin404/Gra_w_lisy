@@ -41,11 +41,11 @@ public class ScoreCounter : MonoBehaviour
         timeBar.ValueText = (int)mPlayerTime + "";
         timeBar.ProgressBarPct = mPlayerTime / mTargetTime;
 
-        GameUI.Instance.SetText(GameUI.TextElements.SCORE, "Score: " + mPlayerScore);
-        GameUI.Instance.SetText(GameUI.TextElements.KEY_ITEMS, "Key items: " + mPlayerItemsCollected + " / " + mItemsToCollect);
+        //GameUI.Instance.SetText(GameUI.TextElements.SCORE, "Score: " + mPlayerScore);
+        //GameUI.Instance.SetText(GameUI.TextElements.KEY_ITEMS, "Key items: " + mPlayerItemsCollected + " / " + mItemsToCollect);
 
 
-        GameUI.Instance.SetText(GameUI.TextElements.KEY_ITEMS, mPlayerItemsCollected + " / " + mItemsToCollect);
+        //GameUI.Instance.SetText(GameUI.TextElements.KEY_ITEMS, mPlayerItemsCollected + " / " + mItemsToCollect);
     }
 
     public bool PlayerHasTime
@@ -72,7 +72,13 @@ public class ScoreCounter : MonoBehaviour
 
     public void HandlePickUp(PickUp pickup)
     {
-        mPlayerItemsCollected += pickup.gameObject.name.Contains(mKeyItemName) ? 1 : 0;
+        bool isKeyItem = pickup.gameObject.name.Contains(mKeyItemName);
+        if (isKeyItem)
+        {
+            mPlayerItemsCollected +=1;
+            GameUI.Instance.Objectives.IncrementObjetiveCounter();
+        }
+      
 
         mPlayerTime += pickup.timeValue;
         mPlayerScore += pickup.scoreValue;
@@ -92,7 +98,9 @@ public class ScoreCounter : MonoBehaviour
         mPlayerScore = 0;
         mPlayerItemsCollected = 0;
 
-        GameUI.Instance.SetText(GameUI.TextElements.OBJECTIVE, "Collect "+ keyItemName+"s");
+        GameUI.Instance.Objectives.CreateObjectives(itemsToCollect);
+
+        //GameUI.Instance.SetText(GameUI.TextElements.OBJECTIVE, "Collect "+ keyItemName+"s");
         //ProgressBar progressBar = GameUI.Instance.GetProgressBar(GameUI.ProgressBars.FOXPOWER);
         //progressBar.ValueText = "100%";
 
@@ -109,9 +117,9 @@ public class ScoreCounter : MonoBehaviour
                 "\nSummary: " + mPlayerScore * (int)mPlayerTime;
     }
 
-    public void SaveScore(string stageName)
+    public void SaveScore(string stageName, bool stageWon)
     {
-        if (ScoreUI.Instance.inputField.gameObject.gameObject.activeSelf)
+        if (stageWon)
         {
             string name = ScoreUI.Instance.inputField.text.Length > 0 ? ScoreUI.Instance.inputField.text : "Player";
             GameData.Instance.GetData.GetLevelSave(stageName).AddScore(name, mPlayerScore * (int)mPlayerTime);

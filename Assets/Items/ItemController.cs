@@ -31,6 +31,9 @@ public class ItemController : MonoBehaviour
     public Transform holdingTarget;
     public float itemUseTime;
 
+    //New elements
+    private GameObject approachedItem = null;
+
     private static bool mHoldingItem = false;
     private static GameObject mHoldedItem;
     private static IItem mItemInterface;
@@ -129,14 +132,46 @@ public class ItemController : MonoBehaviour
 
     void OnTriggerStay(Collider other)
     {
-        if (other.gameObject.tag == itemTagName)
+        if (other.gameObject.tag == itemTagName && !mHoldingItem)
         {
-            if (Input.GetButtonDown(actionButton) && !mHoldedItem)
+            if (approachedItem == null)
+            {
+                approachedItem = other.gameObject;
+                Debug.Log("Approched item [" + other.name + "]");
+                SetItemBar(approachedItem.GetComponentInChildren<IItem>());
+            }
+            else if (Input.GetButtonDown(actionButton) && !mHoldedItem)
             {
                 Debug.Log("Item controller, hold item [" + other.name + "]");
                 mHoldedItem = other.gameObject;
+                approachedItem = null;
                 StartCoroutine(HoldItem(pickAnimationTime));
             }
+            //Debug.Log("Appro" + approachedItem);
+            //if (Input.GetButtonDown(actionButton) && !mHoldedItem)
+            //{
+            //    Debug.Log("Item controller, hold item [" + other.name + "]");
+            //    mHoldedItem = other.gameObject;
+            //    StartCoroutine(HoldItem(pickAnimationTime));
+            //    return;
+            //}
+
+            //if (approachedItem == null && approachedItem != mHoldedItem)
+            //{
+            //    approachedItem = other.gameObject;
+            //    Debug.Log("Approched item [" + other.name + "]");
+            //    SetItemBar(approachedItem.GetComponentInChildren<IItem>());
+            //}
+
+        }
+    }
+
+    void OnTriggerExit(Collider other)
+    {
+        if (approachedItem != null && other.gameObject.tag == itemTagName && !mHoldingItem)
+        {
+            SetItemBar(null);
+            approachedItem = null;
         }
     }
 
@@ -156,7 +191,7 @@ public class ItemController : MonoBehaviour
             }
             else
             {
-                SetItemBar();
+                SetItemBar(mItemInterface);
             }
         }
         else
@@ -177,19 +212,21 @@ public class ItemController : MonoBehaviour
             mHoldedItem = null;
             mItemInterface = null;
 
+            approachedItem = null;
+
             GameUI.Instance.ItemBar.SetDefault();
         }
     }
 
-    private void SetItemBar()
+    private void SetItemBar(IItem itemToShow)
     {
-        if (mItemInterface != null)
+        if (itemToShow != null)
         {
             ItemBar itemBar = GameUI.Instance.ItemBar;
 
-            itemBar.ItemName = mItemInterface.GetName();
-            itemBar.ItemHint = mItemInterface.GetHint();
-            itemBar.ItemSprite = mItemInterface.GetSprite();
+            itemBar.ItemName = itemToShow.GetName();
+            itemBar.ItemHint = itemToShow.GetHint();
+            itemBar.ItemSprite = itemToShow.GetSprite();
         }
         else
         {
@@ -212,7 +249,7 @@ public class ItemController : MonoBehaviour
         mHoldedItem.gameObject.transform.localRotation = Quaternion.identity;
         mHoldedItem.gameObject.GetComponent<Rigidbody>().isKinematic = true;
         mItemInterface = mHoldedItem.GetComponentInChildren<IItem>();
-        SetItemBar();
+        SetItemBar(mItemInterface);
 
         mHoldingItem = true;
         mAcionPending = false;

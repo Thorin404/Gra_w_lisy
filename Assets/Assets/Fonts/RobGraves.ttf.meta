@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: c0c243add90c4a6469d590e999ad2467
+timeCreated: 1498489545
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: RobGraves
+  fontNames:
+  - RobGraves
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

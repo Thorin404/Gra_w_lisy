@@ -29,6 +29,10 @@ public class ItemBar : MonoBehaviour
         set
         {
             mItemName.text = (value == null ? "" : value);
+            if(value != null)
+            {
+                EnableElements(true);
+            }
         }
     }
 
@@ -37,6 +41,10 @@ public class ItemBar : MonoBehaviour
         set
         {
             mItemHint.text = (value == null ? "" : value);
+            if (value != null)
+            {
+                EnableElements(true);
+            }
         }
     }
 
@@ -45,6 +53,10 @@ public class ItemBar : MonoBehaviour
         set
         {
             mItemImage.sprite = (value == null ? defaultSprite : value);
+            if (value != null)
+            {
+                EnableElements(true);
+            }
         }
     }
 
@@ -66,7 +78,17 @@ public class ItemBar : MonoBehaviour
         mItemImage.sprite = defaultSprite;
         mItemName.text = defaultName;
         mItemHint.text = defaultHint;
+
+        //Disable elements
         mUseItemSign.enabled = false;
+        EnableElements(false);
+    }
+
+    private void EnableElements(bool enable)
+    {
+        mItemImage.enabled = enable;
+        mItemName.enabled = enable;
+        mItemHint.enabled = enable;
     }
 
     // Use this for initialization
