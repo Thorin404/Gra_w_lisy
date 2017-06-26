@@ -12,6 +12,9 @@ public class GameController : MonoBehaviour
     public string skipButtonName;
     public string retryButtonName;
 
+    //Sounds
+    private GameSoundController gameSoundController;
+
     //Player related 
     public PlayerController playerController;
     public Camera playerCamera;
@@ -85,6 +88,9 @@ public class GameController : MonoBehaviour
         cameraSystem = GetComponent<CameraSystemController>();
         keyItemSpawner = GetComponent<KeyItemSpawner>();
         scoreCounter = GetComponent<ScoreCounter>();
+        gameSoundController = GetComponent<GameSoundController>();
+
+        Debug.Assert(gameSoundController != null);
 
         pickupHandler = scoreCounter.HandlePickUp;
 
@@ -176,6 +182,9 @@ public class GameController : MonoBehaviour
             yield return new WaitForEndOfFrame();
         }
 
+        //Play sound
+        gameSoundController.PlayGameSound(GameSoundController.GameSounds.START);
+
         StartCoroutine(StartStage());
 
         GameUI.Instance.SetText(GameUI.TextElements.INFO, "Foxels!");
@@ -247,10 +256,13 @@ public class GameController : MonoBehaviour
         if (mStageWon)
         {
             GameUI.Instance.SetText(GameUI.TextElements.INFO, "You won!");
+            gameSoundController.PlayGameSound(GameSoundController.GameSounds.WON);
         }
         else
         {
             GameUI.Instance.SetText(GameUI.TextElements.INFO, mStageLostReason);
+            //Play sound
+            gameSoundController.PlayGameSound(GameSoundController.GameSounds.LOST);
         }
 
         GameUI.Instance.EnableText(GameUI.TextElements.INFO, true);
