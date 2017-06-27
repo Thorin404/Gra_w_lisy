@@ -7,12 +7,13 @@ public class GameSoundController : MonoBehaviour {
     public AudioClip stageStart;
     public AudioClip stageWon;
     public AudioClip stageLost;
+    public AudioClip pickupCollected;
 
     public bool randomPitch;
     public Vector2 pitchMinMax;
     private AudioSource mAudioSource;
 
-    public enum GameSounds { START, WON, LOST };
+    public enum GameSounds { START, WON, LOST, PICKUP_COLLECTED };
 
     void Start () {
         mAudioSource = GetComponent<AudioSource>();
@@ -31,6 +32,9 @@ public class GameSoundController : MonoBehaviour {
                 break;
             case GameSounds.LOST:
                 PlaySound(stageLost);
+                break;
+            case GameSounds.PICKUP_COLLECTED:
+                PlaySound(pickupCollected);
                 break;
 
             default:

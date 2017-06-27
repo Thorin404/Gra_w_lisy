@@ -12,6 +12,8 @@ public class ScoreCounter : MonoBehaviour
     private float mTargetTime;
     private int mPlayerItemsCollected;
 
+    private GameSoundController mSoundController;
+
     public float PlayerTime
     {
         get { return mPlayerTime; }
@@ -61,7 +63,8 @@ public class ScoreCounter : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-
+        mSoundController = GetComponent<GameSoundController>();
+        Debug.Assert(mSoundController != null);
     }
 
     // Update is called once per frame
@@ -72,6 +75,9 @@ public class ScoreCounter : MonoBehaviour
 
     public void HandlePickUp(PickUp pickup)
     {
+        //Play sound
+        mSoundController.PlayGameSound(GameSoundController.GameSounds.PICKUP_COLLECTED);
+
         bool isKeyItem = pickup.gameObject.name.Contains(mKeyItemName);
         if (isKeyItem)
         {
