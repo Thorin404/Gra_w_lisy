@@ -14,14 +14,16 @@ public class ChickenBehavior : MonoBehaviour {
 	public float wanderZMax;
 	public float eatingTime;
 
-	void Start() {
+	Animator anim;
 
+	void Start() {
+		anim = GetComponent<Animator> ();
 	}
 
 	void Update() {
 		Quaternion targetRotation;
 		if (GameObject.FindGameObjectsWithTag ("Seeds").Length >= 1) {
-			GoingToSeeds ();
+			StartCoroutine (GoingToSeeds ());
 		} else {
 			Vector3 chickenWandering = new Vector3 (Random.Range (wanderXMin, wanderXMax), 0, Random.Range (wanderZMin, wanderZMax));
 			targetRotation = Quaternion.LookRotation (chickenWandering - transform.position);
@@ -30,22 +32,26 @@ public class ChickenBehavior : MonoBehaviour {
 		transform.Translate(Vector3.forward * Time.deltaTime * speed, Space.Self);
 	}
 
-	void GoingToSeeds(){
-		Quaternion targetRotation;
+	IEnumerator GoingToSeeds(){
 		Vector3 seeds = GameObject.FindWithTag ("Seeds").transform.position;
-		targetRotation = Quaternion.LookRotation (seeds - transform.position);
+		Quaternion targetRotation = Quaternion.LookRotation (seeds - transform.position);
 		transform.rotation = Quaternion.Lerp (transform.rotation, targetRotation, Time.deltaTime * turnSpeed);
 		if ((Vector3.Distance (seeds, transform.position)) <= 1) {
 			StartCoroutine (EatingSeeds ());
+			yield return new WaitForSeconds (1);
+			StopCoroutine (EatingSeeds ());
+			StopCoroutine (GoingToSeeds ());
 		}
 	}
 
-	IEnumerator EatingSeeds(){
+	private IEnumerator EatingSeeds(){
 		speed = 0;
 		turnSpeed = 0;
+		anim.SetBool ("isEating", true);
 		yield return new WaitForSeconds (eatingTime);
-		GameObject tsd = GameObject.FindGameObjectWithTag ("Seeds");
+		GameObject tsd = GameObject.FindWithTag ("Seeds");
 		Destroy (tsd);
+		anim.SetBool ("isEating", false);
 		speed = chasingSpeed;
 		turnSpeed = chasingTurn;
 	}

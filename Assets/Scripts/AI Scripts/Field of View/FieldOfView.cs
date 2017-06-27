@@ -23,12 +23,18 @@ public class FieldOfView : MonoBehaviour {
 	public MeshFilter viewMeshFilter;
 	Mesh viewMesh;
 
+	private Unit unitScript;
+	private ChasingPlayer chasingScript;
+
 	void Start() {
 		viewMesh = new Mesh ();
 		viewMesh.name = "View Mesh";
 		viewMeshFilter.mesh = viewMesh;
 
 		StartCoroutine ("FindTargetsWithDelay", .2f);
+
+		unitScript = GetComponent<Unit> ();
+		chasingScript = GetComponent<ChasingPlayer> ();
 	}
 
 	void LateUpdate() {
@@ -50,9 +56,6 @@ public class FieldOfView : MonoBehaviour {
 
 		Collider[] targetsInViewRadius = Physics.OverlapSphere (center, viewRadius, targetMask);
 
-		Unit u = GetComponent<Unit> ();
-		ChasingPlayer cp = GetComponent<ChasingPlayer> ();
-
 		for (int i = 0; i < targetsInViewRadius.Length; i++) {
 			Transform target = targetsInViewRadius [i].transform;
 			Vector3 dirToTarget = (target.position - center).normalized;
@@ -61,19 +64,25 @@ public class FieldOfView : MonoBehaviour {
 
 				if (!Physics.Raycast (center, dirToTarget, dstToTarget, obstacleMask)) {
 					visibleTargets.Add (target);
-					u.speed = 0;
-					u.turnSpeed = 0;
-					u.currentTarget++;
-					if (u.currentTarget >= u.target.Length) {
-						u.currentTarget = 0;
-					}
-					cp.speed = cp.chasingSpeed;
-					cp.turnSpeed = cp.chasingTurn;
+//					u.speed = 0;
+//					u.turnSpeed = 0;
+//					u.currentTarget++;
+					//Unit script = GetComponent(Unit);
+//					unitScript.currentTarget++;
+//					if (unitScript.currentTarget >= unitScript.target.Length) {
+//						unitScript.currentTarget = 0;
+//					}
+//					cp.speed = cp.chasingSpeed;
+//					cp.turnSpeed = cp.chasingTurn;
+					unitScript.enabled = false;
+					chasingScript.enabled = true;
 				} else {
-					u.speed = u.followSpeed;
-					u.turnSpeed = u.followTurn;
-					cp.speed = 0;
-					cp.turnSpeed = 0;
+					chasingScript.enabled = false;
+					unitScript.enabled = true;
+//					u.speed = u.followSpeed;
+//					u.turnSpeed = u.followTurn;
+//					cp.speed = 0;
+//					cp.turnSpeed = 0;
 				}
 			}
 		}

@@ -7,7 +7,10 @@ public class Unit : MonoBehaviour {
 	const float pathUpdateMoveThreshold = .5f;
 
 	public bool displayUnitGizmos;
+	public bool isWating = false;
+
 	public Transform[] target;
+
 	public float speed = 2;
 	public float followSpeed = 2;
 	public float turnSpeed = 3;
@@ -19,10 +22,13 @@ public class Unit : MonoBehaviour {
 	public int waitTime;
 	public int currentTarget = 0;
 
+	Animator anim;
+
 	Path path;
 
 	void Start() {
 		StartCoroutine (UpdatePath ());
+		anim = GetComponent<Animator> ();
 	}
 
 	void Update() {
@@ -32,15 +38,31 @@ public class Unit : MonoBehaviour {
 			currentTarget++;
 		}
 		if (currentTarget >= target.Length) {
-			StartCoroutine (Waiting ());
+			if (waitTime != 0) {
+				StartCoroutine (Waiting ());
+			}
 			currentTarget = 0;
 		}
+	}
+
+	void OnEnable() {
+		StartCoroutine("FollowPath");
+		currentTarget++;
+		if (currentTarget >= target.Length) {
+			currentTarget = 0;
+		}
+	}
+
+	void OnDisable(){
+		StopCoroutine ("FollowPath");
 	}
 
 	IEnumerator Waiting(){
 		speed = 0;
 		turnSpeed = 0;
-		yield return new WaitForSeconds (5);
+		isWating = true;
+		yield return new WaitForSeconds (waitTime);
+		isWating = false;
 		speed = followSpeed;
 		turnSpeed = followTurn;
 	}

@@ -77,8 +77,6 @@ ModelImporter:
     resampleCurves: 1
     optimizeGameObjects: 0
     motionNodeName: 
-    rigImportErrors: 
-    rigImportWarnings: 
     animationImportErrors: 
     animationImportWarnings: 
     animationRetargetingWarnings: 
@@ -89,7 +87,417 @@ ModelImporter:
     animationScaleError: 0.5
     animationWrapMode: 0
     extraExposedTransformPaths: []
-    clipAnimations: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Chicken_rig|Grain
+      takeName: Chicken_rig|Grain
+      firstFrame: 0
+      lastFrame: 20
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Chicken_2
+        weight: 1
+      - path: Chicken_rig
+        weight: 1
+      - path: Chicken_rig/Root
+        weight: 1
+      - path: Chicken_rig/Root/Foot_IK_L
+        weight: 1
+      - path: Chicken_rig/Root/Foot_IK_L/Foot_IK_L_end
+        weight: 1
+      - path: Chicken_rig/Root/Foot_IK_R
+        weight: 1
+      - path: Chicken_rig/Root/Foot_IK_R/Foot_IK_R_end
+        weight: 1
+      - path: Chicken_rig/Root/Leg_IK_L
+        weight: 1
+      - path: Chicken_rig/Root/Leg_IK_L/Leg_IK_L_end
+        weight: 1
+      - path: Chicken_rig/Root/Leg_IK_R
+        weight: 1
+      - path: Chicken_rig/Root/Leg_IK_R/Leg_IK_R_end
+        weight: 1
+      - path: Chicken_rig/Root/Spine
+        weight: 1
+      - path: Chicken_rig/Root/Spine/Chest
+        weight: 1
+      - path: Chicken_rig/Root/Spine/Chest/Neck
+        weight: 1
+      - path: Chicken_rig/Root/Spine/Chest/Neck/Head
+        weight: 1
+      - path: Chicken_rig/Root/Spine/Chest/Neck/Head/Head_end
+        weight: 1
+      - path: Chicken_rig/Root/Spine/Leg_Upper_L
+        weight: 1
+      - path: Chicken_rig/Root/Spine/Leg_Upper_L/Leg_Lower_L
+        weight: 1
+      - path: Chicken_rig/Root/Spine/Leg_Upper_L/Leg_Lower_L/Foot_L
+        weight: 1
+      - path: Chicken_rig/Root/Spine/Leg_Upper_L/Leg_Lower_L/Foot_L/Foot_L_end
+        weight: 1
+      - path: Chicken_rig/Root/Spine/Leg_Upper_R
+        weight: 1
+      - path: Chicken_rig/Root/Spine/Leg_Upper_R/Leg_Lower_R
+        weight: 1
+      - path: Chicken_rig/Root/Spine/Leg_Upper_R/Leg_Lower_R/Foot_R
+        weight: 1
+      - path: Chicken_rig/Root/Spine/Leg_Upper_R/Leg_Lower_R/Foot_R/Foot_R_end
+        weight: 1
+      - path: Chicken_rig/Root/Spine/Tail
+        weight: 1
+      - path: Chicken_rig/Root/Spine/Tail/Tail_end
+        weight: 1
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Chicken_rig|Run
+      takeName: Chicken_rig|Run
+      firstFrame: 0
+      lastFrame: 15
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Chicken_2
+        weight: 1
+      - path: Chicken_rig
+        weight: 1
+      - path: Chicken_rig/Root
+        weight: 1
+      - path: Chicken_rig/Root/Foot_IK_L
+        weight: 1
+      - path: Chicken_rig/Root/Foot_IK_L/Foot_IK_L_end
+        weight: 1
+      - path: Chicken_rig/Root/Foot_IK_R
+        weight: 1
+      - path: Chicken_rig/Root/Foot_IK_R/Foot_IK_R_end
+        weight: 1
+      - path: Chicken_rig/Root/Leg_IK_L
+        weight: 1
+      - path: Chicken_rig/Root/Leg_IK_L/Leg_IK_L_end
+        weight: 1
+      - path: Chicken_rig/Root/Leg_IK_R
+        weight: 1
+      - path: Chicken_rig/Root/Leg_IK_R/Leg_IK_R_end
+        weight: 1
+      - path: Chicken_rig/Root/Spine
+        weight: 1
+      - path: Chicken_rig/Root/Spine/Chest
+        weight: 1
+      - path: Chicken_rig/Root/Spine/Chest/Neck
+        weight: 1
+      - path: Chicken_rig/Root/Spine/Chest/Neck/Head
+        weight: 1
+      - path: Chicken_rig/Root/Spine/Chest/Neck/Head/Head_end
+        weight: 1
+      - path: Chicken_rig/Root/Spine/Leg_Upper_L
+        weight: 1
+      - path: Chicken_rig/Root/Spine/Leg_Upper_L/Leg_Lower_L
+        weight: 1
+      - path: Chicken_rig/Root/Spine/Leg_Upper_L/Leg_Lower_L/Foot_L
+        weight: 1
+      - path: Chicken_rig/Root/Spine/Leg_Upper_L/Leg_Lower_L/Foot_L/Foot_L_end
+        weight: 1
+      - path: Chicken_rig/Root/Spine/Leg_Upper_R
+        weight: 1
+      - path: Chicken_rig/Root/Spine/Leg_Upper_R/Leg_Lower_R
+        weight: 1
+      - path: Chicken_rig/Root/Spine/Leg_Upper_R/Leg_Lower_R/Foot_R
+        weight: 1
+      - path: Chicken_rig/Root/Spine/Leg_Upper_R/Leg_Lower_R/Foot_R/Foot_R_end
+        weight: 1
+      - path: Chicken_rig/Root/Spine/Tail
+        weight: 1
+      - path: Chicken_rig/Root/Spine/Tail/Tail_end
+        weight: 1
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Chicken_rig|Stop
+      takeName: Chicken_rig|Stop
+      firstFrame: 0
+      lastFrame: 71
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Chicken_2
+        weight: 1
+      - path: Chicken_rig
+        weight: 1
+      - path: Chicken_rig/Root
+        weight: 1
+      - path: Chicken_rig/Root/Foot_IK_L
+        weight: 1
+      - path: Chicken_rig/Root/Foot_IK_L/Foot_IK_L_end
+        weight: 1
+      - path: Chicken_rig/Root/Foot_IK_R
+        weight: 1
+      - path: Chicken_rig/Root/Foot_IK_R/Foot_IK_R_end
+        weight: 1
+      - path: Chicken_rig/Root/Leg_IK_L
+        weight: 1
+      - path: Chicken_rig/Root/Leg_IK_L/Leg_IK_L_end
+        weight: 1
+      - path: Chicken_rig/Root/Leg_IK_R
+        weight: 1
+      - path: Chicken_rig/Root/Leg_IK_R/Leg_IK_R_end
+        weight: 1
+      - path: Chicken_rig/Root/Spine
+        weight: 1
+      - path: Chicken_rig/Root/Spine/Chest
+        weight: 1
+      - path: Chicken_rig/Root/Spine/Chest/Neck
+        weight: 1
+      - path: Chicken_rig/Root/Spine/Chest/Neck/Head
+        weight: 1
+      - path: Chicken_rig/Root/Spine/Chest/Neck/Head/Head_end
+        weight: 1
+      - path: Chicken_rig/Root/Spine/Leg_Upper_L
+        weight: 1
+      - path: Chicken_rig/Root/Spine/Leg_Upper_L/Leg_Lower_L
+        weight: 1
+      - path: Chicken_rig/Root/Spine/Leg_Upper_L/Leg_Lower_L/Foot_L
+        weight: 1
+      - path: Chicken_rig/Root/Spine/Leg_Upper_L/Leg_Lower_L/Foot_L/Foot_L_end
+        weight: 1
+      - path: Chicken_rig/Root/Spine/Leg_Upper_R
+        weight: 1
+      - path: Chicken_rig/Root/Spine/Leg_Upper_R/Leg_Lower_R
+        weight: 1
+      - path: Chicken_rig/Root/Spine/Leg_Upper_R/Leg_Lower_R/Foot_R
+        weight: 1
+      - path: Chicken_rig/Root/Spine/Leg_Upper_R/Leg_Lower_R/Foot_R/Foot_R_end
+        weight: 1
+      - path: Chicken_rig/Root/Spine/Tail
+        weight: 1
+      - path: Chicken_rig/Root/Spine/Tail/Tail_end
+        weight: 1
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Chicken_rig|Stop_2
+      takeName: Chicken_rig|Stop_2
+      firstFrame: 0
+      lastFrame: 80
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Chicken_2
+        weight: 1
+      - path: Chicken_rig
+        weight: 1
+      - path: Chicken_rig/Root
+        weight: 1
+      - path: Chicken_rig/Root/Foot_IK_L
+        weight: 1
+      - path: Chicken_rig/Root/Foot_IK_L/Foot_IK_L_end
+        weight: 1
+      - path: Chicken_rig/Root/Foot_IK_R
+        weight: 1
+      - path: Chicken_rig/Root/Foot_IK_R/Foot_IK_R_end
+        weight: 1
+      - path: Chicken_rig/Root/Leg_IK_L
+        weight: 1
+      - path: Chicken_rig/Root/Leg_IK_L/Leg_IK_L_end
+        weight: 1
+      - path: Chicken_rig/Root/Leg_IK_R
+        weight: 1
+      - path: Chicken_rig/Root/Leg_IK_R/Leg_IK_R_end
+        weight: 1
+      - path: Chicken_rig/Root/Spine
+        weight: 1
+      - path: Chicken_rig/Root/Spine/Chest
+        weight: 1
+      - path: Chicken_rig/Root/Spine/Chest/Neck
+        weight: 1
+      - path: Chicken_rig/Root/Spine/Chest/Neck/Head
+        weight: 1
+      - path: Chicken_rig/Root/Spine/Chest/Neck/Head/Head_end
+        weight: 1
+      - path: Chicken_rig/Root/Spine/Leg_Upper_L
+        weight: 1
+      - path: Chicken_rig/Root/Spine/Leg_Upper_L/Leg_Lower_L
+        weight: 1
+      - path: Chicken_rig/Root/Spine/Leg_Upper_L/Leg_Lower_L/Foot_L
+        weight: 1
+      - path: Chicken_rig/Root/Spine/Leg_Upper_L/Leg_Lower_L/Foot_L/Foot_L_end
+        weight: 1
+      - path: Chicken_rig/Root/Spine/Leg_Upper_R
+        weight: 1
+      - path: Chicken_rig/Root/Spine/Leg_Upper_R/Leg_Lower_R
+        weight: 1
+      - path: Chicken_rig/Root/Spine/Leg_Upper_R/Leg_Lower_R/Foot_R
+        weight: 1
+      - path: Chicken_rig/Root/Spine/Leg_Upper_R/Leg_Lower_R/Foot_R/Foot_R_end
+        weight: 1
+      - path: Chicken_rig/Root/Spine/Tail
+        weight: 1
+      - path: Chicken_rig/Root/Spine/Tail/Tail_end
+        weight: 1
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Chicken_rig|Walk
+      takeName: Chicken_rig|Walk
+      firstFrame: 0
+      lastFrame: 24
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Chicken_2
+        weight: 1
+      - path: Chicken_rig
+        weight: 1
+      - path: Chicken_rig/Root
+        weight: 1
+      - path: Chicken_rig/Root/Foot_IK_L
+        weight: 1
+      - path: Chicken_rig/Root/Foot_IK_L/Foot_IK_L_end
+        weight: 1
+      - path: Chicken_rig/Root/Foot_IK_R
+        weight: 1
+      - path: Chicken_rig/Root/Foot_IK_R/Foot_IK_R_end
+        weight: 1
+      - path: Chicken_rig/Root/Leg_IK_L
+        weight: 1
+      - path: Chicken_rig/Root/Leg_IK_L/Leg_IK_L_end
+        weight: 1
+      - path: Chicken_rig/Root/Leg_IK_R
+        weight: 1
+      - path: Chicken_rig/Root/Leg_IK_R/Leg_IK_R_end
+        weight: 1
+      - path: Chicken_rig/Root/Spine
+        weight: 1
+      - path: Chicken_rig/Root/Spine/Chest
+        weight: 1
+      - path: Chicken_rig/Root/Spine/Chest/Neck
+        weight: 1
+      - path: Chicken_rig/Root/Spine/Chest/Neck/Head
+        weight: 1
+      - path: Chicken_rig/Root/Spine/Chest/Neck/Head/Head_end
+        weight: 1
+      - path: Chicken_rig/Root/Spine/Leg_Upper_L
+        weight: 1
+      - path: Chicken_rig/Root/Spine/Leg_Upper_L/Leg_Lower_L
+        weight: 1
+      - path: Chicken_rig/Root/Spine/Leg_Upper_L/Leg_Lower_L/Foot_L
+        weight: 1
+      - path: Chicken_rig/Root/Spine/Leg_Upper_L/Leg_Lower_L/Foot_L/Foot_L_end
+        weight: 1
+      - path: Chicken_rig/Root/Spine/Leg_Upper_R
+        weight: 1
+      - path: Chicken_rig/Root/Spine/Leg_Upper_R/Leg_Lower_R
+        weight: 1
+      - path: Chicken_rig/Root/Spine/Leg_Upper_R/Leg_Lower_R/Foot_R
+        weight: 1
+      - path: Chicken_rig/Root/Spine/Leg_Upper_R/Leg_Lower_R/Foot_R/Foot_R_end
+        weight: 1
+      - path: Chicken_rig/Root/Spine/Tail
+        weight: 1
+      - path: Chicken_rig/Root/Spine/Tail/Tail_end
+        weight: 1
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
     isReadable: 1
   meshes:
     lODScreenPercentages: []
