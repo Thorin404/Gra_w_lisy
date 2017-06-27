@@ -22,6 +22,9 @@ public class ThirdPersonCamera : MonoBehaviour
     Vector3 rotationSmoothVelocity;
     Vector3 currentRotation;
 
+    //Camera collision
+    public LayerMask mask;
+
     float yaw;
     float pitch;
 
@@ -34,6 +37,9 @@ public class ThirdPersonCamera : MonoBehaviour
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = true;
         }
+
+
+
     }
 
     void SetToPlayerRotation()
@@ -49,12 +55,20 @@ public class ThirdPersonCamera : MonoBehaviour
         currentRotation = Vector3.SmoothDamp(currentRotation, new Vector3(pitch, yaw), ref rotationSmoothVelocity, rotationSmoothTime);
         transform.eulerAngles = currentRotation;
 
-        transform.position = target.position - (transform.forward * dstFromTarget);
+        transform.position = (target.position - (transform.forward * dstFromTarget));
+
+        //Collision
+        Vector3 displacement = Vector3.zero;
+        RaycastHit wallHit = new RaycastHit();
+        if (Physics.Linecast(target.position, transform.position, out wallHit, mask))
+        {
+            transform.position = new Vector3(wallHit.point.x + wallHit.normal.x * 0.5f, transform.position.y, wallHit.point.z + wallHit.normal.z * 0.5f);
+        }
+
 
         if (Input.GetButton(centerCameraButton))
         {
             SetToPlayerRotation();
-
         }
         else
         {
@@ -62,6 +76,11 @@ public class ThirdPersonCamera : MonoBehaviour
             pitch -= Input.GetAxis(verticalAxis) * mouseSensitivity;
             pitch = Mathf.Clamp(pitch, pitchMinMax.x, pitchMinMax.y);
         }
+
+
+
+
     }
 
 }
+
