@@ -27,14 +27,18 @@ public class PadlockController : MonoBehaviour, IObjectHint
 
     private GameObject mHintObject;
 
+    private AudioSource mAudioSource;
+
     void Start()
     {
         mAnimator = GetComponent<Animator>();
         mRigidbody = GetComponent<Rigidbody>();
+        mAudioSource = GetComponent<AudioSource>();
 
         Debug.Assert(mAnimator != null);
         Debug.Assert(keyHolder != null);
         Debug.Assert(mRigidbody != null);
+        Debug.Assert(mAudioSource != null);
 
         mActivated = false;
     }
@@ -48,6 +52,11 @@ public class PadlockController : MonoBehaviour, IObjectHint
         mKeyItem.GetComponent<Collider>().enabled = false;
     }
 
+    public void Deactivate()
+    {
+        mActivated = true;
+    }
+
     private IEnumerator PadlockAction()
     {
         //Set key parent
@@ -55,6 +64,9 @@ public class PadlockController : MonoBehaviour, IObjectHint
 
         //Start animation
         mAnimator.SetTrigger(animationTriggerName);
+
+        //Play sound
+        mAudioSource.Play();
 
         //Wait for some time
         yield return new WaitForSeconds(actionTime);

@@ -9,7 +9,11 @@ public class Padlock_key : MonoBehaviour, IItem, IObjectHint
     public string itemHint;
     public Sprite itemSprite;
 
-    public GameObject padlock;
+    //public GameObject padlock;
+    private PadlockController padlockController;
+
+    public string padlockTag;
+
     private GameObject mHintObject;
 
     private bool mUsed;
@@ -19,18 +23,17 @@ public class Padlock_key : MonoBehaviour, IItem, IObjectHint
     {
         mActive = false;
         mUsed = false;
-        Debug.Assert(padlock != null);
+       // Debug.Assert(padlock != null);
     }
 
     public bool ItemAction(ItemController c)
     {
         ///throw new NotImplementedException();
-        if (mActive && !mUsed)
+        if (mActive && !mUsed && padlockController != null)
         {
             ItemController.HoldedItem = null;
-            PadlockController padCtrl = padlock.GetComponent<PadlockController>();
-            Debug.Assert(padCtrl != null);
-            padCtrl.Unlock(this.gameObject);
+            Debug.Assert(padlockController != null);
+            padlockController.Unlock(this.gameObject);
             mUsed = true;
         }
         return false;
@@ -53,8 +56,9 @@ public class Padlock_key : MonoBehaviour, IItem, IObjectHint
 
     void ActivateKey(Collider other, bool active)
     {
-        if (other.gameObject == padlock && !mUsed)
+        if (other.gameObject.tag.Contains(padlockTag) && !mUsed)
         {
+            padlockController = other.gameObject.GetComponent<PadlockController>();
             mActive = active;
             GameUI.Instance.ItemBar.EnableUseSign = active;
         }
