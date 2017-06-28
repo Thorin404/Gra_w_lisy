@@ -110,6 +110,7 @@ public class GameController : MonoBehaviour
     {
         //TODO: Reseting scene state, without reloading it / async level loading
 
+
         //Stop all previous coroutines
         StopAllCoroutines();
 
@@ -170,6 +171,9 @@ public class GameController : MonoBehaviour
 
     private IEnumerator StartCountdown()
     {
+        //Disable cursor
+        Cursor.visible = false;
+
         InGameUI.Instance.SetInterfaceGroup(InGameUI.InterfaceGroups.INTRO, false);
         InGameUI.Instance.SetInterfaceGroup(InGameUI.InterfaceGroups.GAME, true);
         scoreCounter.ResetCounter(keyItemSpawner.KeyItemsCount, keyItemSpawner.KeyItemName, targetTime);
@@ -260,6 +264,10 @@ public class GameController : MonoBehaviour
 
             yield return null;
         }
+
+        //Enable cursor visibility
+        Cursor.visible = true;
+
 
         if (mStageWon)
         {
@@ -360,6 +368,7 @@ public class GameController : MonoBehaviour
                 InGameUI.Instance.SetInterfaceGroup(InGameUI.InterfaceGroups.PAUSE, true);
                 Time.timeScale = 0.0f;
                 mGamePaused = true;
+                Cursor.visible = true;
             }
             yield return null;
         }
@@ -367,6 +376,7 @@ public class GameController : MonoBehaviour
 
     public void ResumeGame()
     {
+        Cursor.visible = false;
         Time.timeScale = 1.0f;
         mGamePaused = false;
         InGameUI.Instance.SetInterfaceGroup(InGameUI.InterfaceGroups.PAUSE, false);
