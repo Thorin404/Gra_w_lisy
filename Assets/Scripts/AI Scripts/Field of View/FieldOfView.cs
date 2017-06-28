@@ -23,6 +23,10 @@ public class FieldOfView : MonoBehaviour {
 	public MeshFilter viewMeshFilter;
 	Mesh viewMesh;
 
+	public Light flashLight;
+
+	Color originSpot;
+
 	private Unit unitScript;
 	private ChasingPlayer chasingScript;
 
@@ -35,6 +39,8 @@ public class FieldOfView : MonoBehaviour {
 
 		unitScript = GetComponent<Unit> ();
 		chasingScript = GetComponent<ChasingPlayer> ();
+
+		originSpot = flashLight.color;
 	}
 
 	void LateUpdate() {
@@ -76,9 +82,11 @@ public class FieldOfView : MonoBehaviour {
 //					cp.turnSpeed = cp.chasingTurn;
 					unitScript.enabled = false;
 					chasingScript.enabled = true;
+					flashLight.color = Color.red;
 				} else {
 					chasingScript.enabled = false;
 					unitScript.enabled = true;
+					flashLight.color = originSpot;
 //					u.speed = u.followSpeed;
 //					u.turnSpeed = u.followTurn;
 //					cp.speed = 0;

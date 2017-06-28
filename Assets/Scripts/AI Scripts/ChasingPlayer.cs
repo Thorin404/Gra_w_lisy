@@ -23,7 +23,7 @@ public class ChasingPlayer : MonoBehaviour {
 
 	void OnTriggerEnter(Collider other) {
 		if (other.gameObject.CompareTag ("Player")){
-			gameControl.EndGame("You got caught");
+//			gameControl.EndGame("You got caught");
 		}
 	}
 }

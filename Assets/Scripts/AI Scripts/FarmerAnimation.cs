@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DogAnimation : MonoBehaviour {
+public class FarmerAnimation : MonoBehaviour {
 	
 	private Unit unitScript;
 	private ChasingPlayer chaseScript;
@@ -19,16 +19,18 @@ public class DogAnimation : MonoBehaviour {
 
 	void Update () {
 		if (unitScript.isWating) {
-			anim.SetBool ("isEating", true);
-			fieldScript.enabled = false;
+			anim.SetBool ("isWaiting", true);
+			fieldScript.viewRadius = 20;
 		} else {
-			anim.SetBool ("isEating", false);
-			fieldScript.enabled = true;
+			anim.SetBool ("isWaiting", false);
+			fieldScript.viewRadius = 10;
 		}
 		if (chaseScript.isActiveAndEnabled) {
 			anim.SetBool ("isChasing", true);
+			fieldScript.viewRadius = 20;
 		} else {
 			anim.SetBool ("isChasing", false);
+			fieldScript.viewRadius = 10;
 		}
 	}
 }
