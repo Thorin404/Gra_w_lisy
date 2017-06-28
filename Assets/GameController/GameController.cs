@@ -65,6 +65,8 @@ public class GameController : MonoBehaviour
 
 
     //Gameplay 
+    private VariedGameplayController mVariedGameplay;
+
 
     public bool CheckpointReached
     {
@@ -89,8 +91,10 @@ public class GameController : MonoBehaviour
         keyItemSpawner = GetComponent<KeyItemSpawner>();
         scoreCounter = GetComponent<ScoreCounter>();
         gameSoundController = GetComponent<GameSoundController>();
+        mVariedGameplay = GetComponent<VariedGameplayController>();
 
         Debug.Assert(gameSoundController != null);
+        Debug.Assert(mVariedGameplay != null);
 
         pickupHandler = scoreCounter.HandlePickUp;
 
@@ -108,6 +112,10 @@ public class GameController : MonoBehaviour
 
         //Stop all previous coroutines
         StopAllCoroutines();
+
+        //Randomize map
+        mVariedGameplay.RandomizeMap();
+
 
         //Unpause game
         mGamePaused = false;
