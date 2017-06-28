@@ -7,12 +7,14 @@ public class DogAnimation : MonoBehaviour {
 	bool isEating = false;
 
 	private Unit unitScript;
+	private FieldOfView fieldScript;
 
 	Animator anim;
 
 	void Start() {
 		anim = GetComponent<Animator> ();
 		unitScript = GetComponent<Unit> ();
+		fieldScript = GetComponent<FieldOfView> ();
 	}
 	
 	// Update is called once per frame
@@ -20,8 +22,10 @@ public class DogAnimation : MonoBehaviour {
 		isEating = unitScript.isWating;
 		if (isEating) {
 			anim.SetBool ("isEating", true);
+			fieldScript.enabled = false;
 		} else {
 			anim.SetBool ("isEating", false);
+			fieldScript.enabled = true;
 		}
 	}
 }
