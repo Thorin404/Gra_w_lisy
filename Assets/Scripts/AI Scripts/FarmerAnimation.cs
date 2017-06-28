@@ -25,12 +25,15 @@ public class FarmerAnimation : MonoBehaviour {
 			anim.SetBool ("isWaiting", false);
 			fieldScript.viewRadius = 10;
 		}
-		if (chaseScript.isActiveAndEnabled) {
+		if (chaseScript.isActiveAndEnabled && !chaseScript.caught) {
 			anim.SetBool ("isChasing", true);
 			fieldScript.viewRadius = 20;
 		} else {
 			anim.SetBool ("isChasing", false);
 			fieldScript.viewRadius = 10;
+		}
+		if (chaseScript.caught) {
+			anim.SetBool ("caught", true);
 		}
 	}
 }

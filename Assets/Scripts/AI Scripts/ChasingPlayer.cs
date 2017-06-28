@@ -9,6 +9,8 @@ public class ChasingPlayer : MonoBehaviour {
 	public float speed = 2;
 	public float turnSpeed = 3;
 
+	public bool caught = false;
+
 	public GameController gameControl;
 
 	void Start() {
@@ -23,7 +25,9 @@ public class ChasingPlayer : MonoBehaviour {
 
 	void OnTriggerEnter(Collider other) {
 		if (other.gameObject.CompareTag ("Player")){
-//			gameControl.EndGame("You got caught");
+			caught = true;
+			gameControl.EndGame("You got caught");
+			this.enabled = false;
 		}
 	}
 }

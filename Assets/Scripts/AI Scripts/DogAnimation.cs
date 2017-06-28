@@ -25,10 +25,13 @@ public class DogAnimation : MonoBehaviour {
 			anim.SetBool ("isEating", false);
 			fieldScript.enabled = true;
 		}
-		if (chaseScript.isActiveAndEnabled) {
+		if (chaseScript.isActiveAndEnabled && !chaseScript.caught) {
 			anim.SetBool ("isChasing", true);
 		} else {
 			anim.SetBool ("isChasing", false);
+		}
+		if (chaseScript.caught) {
+			anim.SetBool ("caught", true);
 		}
 	}
 }
