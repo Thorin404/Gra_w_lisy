@@ -13,20 +13,39 @@ public class ChasingPlayer : MonoBehaviour {
 
 	public GameController gameControl;
 
+    private GameObject mTarget = null;
+    private AudioSource mAudioSource;
+
 	void Start() {
-	}
+        mAudioSource = GetComponent<AudioSource>();
+        Debug.Assert(mAudioSource != null);
+
+    }
 
 	void Update() {
-		Vector3 target = GameObject.FindWithTag (tag).transform.position;
-		Quaternion targetRotation = Quaternion.LookRotation (target - transform.position);
-		transform.rotation = Quaternion.Lerp (transform.rotation, targetRotation, Time.deltaTime * turnSpeed);
-		transform.Translate(Vector3.forward * Time.deltaTime * speed, Space.Self);
+        if (!caught)
+        {
+            if(mTarget == null)
+            {
+                mTarget = GameObject.FindWithTag(tag);
+            }
+            else
+            {
+                Quaternion targetRotation = Quaternion.LookRotation(mTarget.transform.position - transform.position);
+                transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * turnSpeed);
+                transform.Translate(Vector3.forward * Time.deltaTime * speed, Space.Self);
+            }
+
+        }
+
+		
 	}
 
 	void OnTriggerEnter(Collider other) {
-		if (other.gameObject.CompareTag ("Player")){
+		if (other.gameObject.CompareTag ("Player") && !caught){
 			caught = true;
-			gameControl.EndGame("You got caught");
+            mAudioSource.Play();
+            gameControl.EndGame("You got caught");
 			this.enabled = false;
 		}
 	}
