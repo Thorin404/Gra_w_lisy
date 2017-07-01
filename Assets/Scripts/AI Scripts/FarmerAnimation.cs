@@ -8,13 +8,20 @@ public class FarmerAnimation : MonoBehaviour {
 	private ChasingPlayer chaseScript;
 	private FieldOfView fieldScript;
 
+	public GameController gameControl;
+
 	Animator anim;
+
+	private AudioSource mAudioSource;
 
 	void Start() {
 		anim = GetComponent<Animator> ();
 		unitScript = GetComponent<Unit> ();
 		chaseScript = GetComponent<ChasingPlayer> ();
 		fieldScript = GetComponent<FieldOfView> ();
+
+		mAudioSource = GetComponent<AudioSource>();
+		Debug.Assert(mAudioSource != null);
 	}
 
 	void Update () {
@@ -32,8 +39,13 @@ public class FarmerAnimation : MonoBehaviour {
 			anim.SetBool ("isChasing", false);
 			fieldScript.viewRadius = 10;
 		}
-		if (chaseScript.caught) {
-			anim.SetBool ("caught", true);
+	}
+
+	void OnTriggerEnter(Collider other) {
+		if (other.gameObject.CompareTag ("Player")){
+			mAudioSource.Play();
+			gameControl.EndGame("You got caught");
+			this.enabled = false;
 		}
 	}
 }

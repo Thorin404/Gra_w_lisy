@@ -8,7 +8,11 @@ public class DogAnimation : MonoBehaviour {
 	private ChasingPlayer chaseScript;
 	private FieldOfView fieldScript;
 
+	public GameController gameControl;
+
 	Animator anim;
+
+	private AudioSource mAudioSource;
 
 	void Start() {
 		anim = GetComponent<Animator> ();
@@ -32,6 +36,14 @@ public class DogAnimation : MonoBehaviour {
 		}
 		if (chaseScript.caught) {
 			anim.SetBool ("caught", true);
+		}
+	}
+
+	void OnTriggerEnter(Collider other) {
+		if (other.gameObject.CompareTag ("Player")){
+			mAudioSource.Play();
+			gameControl.EndGame("You got caught");
+			this.enabled = false;
 		}
 	}
 }
